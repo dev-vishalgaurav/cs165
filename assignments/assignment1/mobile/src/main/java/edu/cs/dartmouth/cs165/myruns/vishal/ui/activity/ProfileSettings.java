@@ -1,8 +1,12 @@
 package edu.cs.dartmouth.cs165.myruns.vishal.ui.activity;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -22,6 +26,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import edu.cs.dartmouth.cs165.myruns.vishal.R;
 import edu.cs.dartmouth.cs165.myruns.vishal.storage.preferences.PreferenceUtils;
@@ -30,7 +36,10 @@ import edu.cs.dartmouth.cs165.myruns.vishal.utils.Validator;
 public class ProfileSettings extends BaseActivity {
 
 
-    private static final int REQUEST_PICK_IMAGE = 1;
+    private static final int REQUEST_PICK_IMAGE_GALLERY = 1;
+    private static final int REQUEST_PICK_IMAGE_CAMERA = 2;
+
+    private static final String EXTRA_DIALOG_SHOWN_GALLERY = "extra_dialog_shown";
 
     private Toolbar mToolBar = null;
     private EditText mEdtName = null;
@@ -47,7 +56,10 @@ public class ProfileSettings extends BaseActivity {
     private ImageView mImgProfile = null;
     private boolean isChecked = false;
     private boolean isMale = false;
+    private boolean isDialogGallery = false;
     private Uri imageUri = null;
+    private AlertDialog mDialogImageChange;
+    private Uri mCurrentCameraFilePath = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +119,44 @@ public class ProfileSettings extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void initDialogChangeImage(){
+        Dialog.OnClickListener mOnDialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                isDialogGallery = false;
+                switch (which) {
+                    case Dialog.BUTTON_POSITIVE: {
+                        openCamera();
+                    }
+                    break;
+
+                    case Dialog.BUTTON_NEGATIVE: {
+                        openGallery();
+                    }
+                    break;
+                    case Dialog.BUTTON_NEUTRAL: {
+                    }
+                    break;
+                }
+            }
+        };
+        if (mDialogImageChange == null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(ProfileSettings.this);
+            builder.setTitle(R.string.dialog_image_picker_title);
+            builder.setMessage(getString(R.string.dialog_image_picker_message));
+            builder.setPositiveButton(getString(R.string.camera), mOnDialogClickListener);
+            builder.setNeutralButton(getString(R.string.cancel), mOnDialogClickListener);
+            builder.setNegativeButton(getString(R.string.gallery), mOnDialogClickListener);
+            mDialogImageChange = builder.create();
+        }
+    }
+
+    private void showDialogChangeImage(){
+        initDialogChangeImage();
+        mDialogImageChange.show();
+        isDialogGallery = true;
+    }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         addValuesToBundle(outState);
@@ -122,6 +172,7 @@ public class ProfileSettings extends BaseActivity {
         bundle.putParcelable(PreferenceUtils.EXTRA_IMAGE, imageUri);
         bundle.putBoolean(PreferenceUtils.EXTRA_GENDER_SELECTED, isChecked);
         bundle.putBoolean(PreferenceUtils.EXTRA_GENDER, isMale);
+        bundle.putBoolean(EXTRA_DIALOG_SHOWN_GALLERY, isDialogGallery);
     }
 
     private void updateValues(Bundle savedInstanceState) {
@@ -134,8 +185,13 @@ public class ProfileSettings extends BaseActivity {
             isChecked = savedInstanceState.getBoolean(PreferenceUtils.EXTRA_GENDER_SELECTED);
             isMale = savedInstanceState.getBoolean(PreferenceUtils.EXTRA_GENDER);
             imageUri = savedInstanceState.getParcelable(PreferenceUtils.EXTRA_IMAGE);
+            isDialogGallery = savedInstanceState.getBoolean(EXTRA_DIALOG_SHOWN_GALLERY);
             updateRadioButton();
             updateImage();
+            if(isDialogGallery){
+                showDialogChangeImage();
+            }
+
         }
     }
 
@@ -170,7 +226,7 @@ public class ProfileSettings extends BaseActivity {
         }
     }
     private void deleteTempFile(){
-        File file = new File(Uri.fromFile(new File(getCacheDir(), "cropped_temp")).getPath());
+        File file = new File(Uri.fromFile(new File(getExternalCacheDir(), "cropped_temp")).getPath());
         if (file.exists()) {
             file.delete();
         }
@@ -178,9 +234,9 @@ public class ProfileSettings extends BaseActivity {
     private void updateImageFile(){
         try {
             if (imageUri != null) {
-                File file = new File(Uri.fromFile(new File(getCacheDir(), "cropped_temp")).getPath());
+                File file = new File(Uri.fromFile(new File(getExternalCacheDir(), "cropped_temp")).getPath());
                 if (file.exists()) {
-                    File origFIle = new File(Uri.fromFile(new File(getCacheDir(), "cropped")).getPath());
+                    File origFIle = new File(Uri.fromFile(new File(getExternalCacheDir(), "cropped")).getPath());
                     if (origFIle.exists()) {
                         origFIle.delete();
                     }
@@ -208,10 +264,10 @@ public class ProfileSettings extends BaseActivity {
 
 
     private void onClickChangeImage() {
-        openGallery();
+        showDialogChangeImage();
     }
     private void beginCrop(Uri source) {
-        Uri destination = Uri.fromFile(new File(getCacheDir(), "cropped_temp"));
+        Uri destination = Uri.fromFile(new File(getExternalCacheDir(), "cropped_temp"));
         Crop.of(source, destination).asSquare().start(this);
     }
 
@@ -226,9 +282,51 @@ public class ProfileSettings extends BaseActivity {
     }
     private void openGallery() {
         Intent gallery = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-        startActivityForResult(gallery, REQUEST_PICK_IMAGE);
+        startActivityForResult(gallery, REQUEST_PICK_IMAGE_GALLERY);
     }
+    private File getCameraFilePath() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentCameraFilePath = Uri.fromFile(image);
+        return image;
+    }
+    private void openCamera(){
+        try {
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                File photoFile = null;
+                try {
+                    photoFile = getCameraFilePath();
+                } catch (IOException ex) {
+                    // Error occurred while creating the File
+                    ex.printStackTrace();
+                }
+                // Continue only if the File was successfully created
+                if (photoFile != null) {
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                    startActivityForResult(takePictureIntent, REQUEST_PICK_IMAGE_CAMERA);
+                } else {
+                    showToast(getString(R.string.error));
+                }
+            } else {
+                showToast(getString(R.string.error));
+            }
+        }catch (Exception ex){
+            showToast(getString(R.string.error));
+            ex.printStackTrace();
+        }
 
+
+    }
     private boolean checkEmail() {
         boolean result = false;
         String text = mEdtEmail.getText().toString().trim();
@@ -240,7 +338,7 @@ public class ProfileSettings extends BaseActivity {
     private boolean checkName() {
         boolean result = false;
         String text = mEdtName.getText().toString().trim();
-        result = Validator.isValidLength(text,Validator.NAME_LENGTH);
+        result = Validator.isValidLength(text, Validator.NAME_LENGTH);
         showError(result,mEdtName,getString(R.string.invalid_entry));
         return result;
     }
@@ -288,6 +386,14 @@ public class ProfileSettings extends BaseActivity {
         isMale = checkedId == (R.id.rbMale);
     }
 
+    private void onActivityResultCamera(int resultCode, Intent data){
+        if(resultCode == RESULT_OK){
+            data.setData(mCurrentCameraFilePath);
+            onActivityResultImagePick(resultCode,data);
+            printTrace(mCurrentCameraFilePath.toString());
+        }
+    }
+
     private void onActivityResultImagePick(int resultCode, Intent data){
         if(resultCode == RESULT_OK){
             Uri imageUri = data.getData();
@@ -301,8 +407,12 @@ public class ProfileSettings extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
-            case REQUEST_PICK_IMAGE:{
+            case REQUEST_PICK_IMAGE_GALLERY:{
                 onActivityResultImagePick(resultCode,data);
+            }
+            break;
+            case REQUEST_PICK_IMAGE_CAMERA:{
+                onActivityResultCamera(resultCode,data);
             }
             break;
             case Crop.REQUEST_CROP:{
@@ -311,9 +421,6 @@ public class ProfileSettings extends BaseActivity {
             break;
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }
-    private void saveToPreferences(Bundle bundle){
-
     }
     private RadioGroup.OnCheckedChangeListener mOnCheckChangedListener = new RadioGroup.OnCheckedChangeListener() {
         @Override

@@ -28,5 +28,10 @@
     <string name="gender_hint">Gender</string>
     <string name="class_hint">Your Class eg (2012)</string>
     <string name="major_hint">Major eg. (Computer Science)</string>
+    <string name="gallery">Gallery</string>
+    <string name="camera">Camera</string>
+    <string name="dialog_image_picker_title">Select one option</string>
+    <string name="dialog_image_picker_message">Please select the mode through which you want to take picture</string>
+
 
 </resources>
