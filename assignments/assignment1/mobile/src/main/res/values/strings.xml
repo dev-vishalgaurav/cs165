@@ -5,6 +5,7 @@
     <string name="ok">Ok</string>
     <string name="yes">Yes</string>
     <string name="value_saved">Value Saved</string>
+    <string name="profile_saved">Profile saved successfully !</string>
     <string name="no">No</string>
     <string name="change">Change</string>
     <string name="error">Error</string>
@@ -23,7 +24,7 @@
     <string name="class_label">Class</string>
     <string name="major_label">Major</string>
     <string name="name_hint">Your full name</string>
-    <string name="email_hint">Email Address</string>
+    <string name="email_hint">Email Address eg.(sample@sample.com)</string>
     <string name="phone_hint">Phone Number</string>
     <string name="gender_hint">Gender</string>
     <string name="class_hint">Your Class eg (2012)</string>
@@ -31,7 +32,6 @@
     <string name="gallery">Gallery</string>
     <string name="camera">Camera</string>
     <string name="dialog_image_picker_title">Select one option</string>
-    <string name="dialog_image_picker_message">Please select the mode through which you want to take picture</string>
-
+    <string name="dialog_image_picker_message">Please select the mode through which you want to take picture.</string>
 
 </resources>
