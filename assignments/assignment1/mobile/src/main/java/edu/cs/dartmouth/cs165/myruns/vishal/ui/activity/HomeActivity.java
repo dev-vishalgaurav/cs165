@@ -33,7 +33,7 @@ public class HomeActivity extends BaseActivity implements OnFragmentInteractionL
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mVpContents = (ViewPager) findViewById(R.id.vpContainer);
-        mTabAdapter = new HomeTabAdapter(getSupportFragmentManager(),getBaseContext());
+        mTabAdapter = new HomeTabAdapter(getFragmentManager(),getBaseContext());
         mVpContents.setAdapter(mTabAdapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mVpContents);

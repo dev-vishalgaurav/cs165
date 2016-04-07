@@ -1,15 +1,14 @@
 package edu.cs.dartmouth.cs165.myruns.vishal.ui.fragments;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import edu.cs.dartmouth.cs165.myruns.vishal.R;
-import edu.cs.dartmouth.cs165.myruns.vishal.ui.adapters.HomeTabAdapter;
 import edu.cs.dartmouth.cs165.myruns.vishal.ui.adapters.HomeTabAdapter.OnFragmentInteractionListener;
 
 /**
