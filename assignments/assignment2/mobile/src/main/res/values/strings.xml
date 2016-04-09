@@ -71,8 +71,8 @@
 
     <string name="pref_cat_account">Account Preferences</string>
 
-    <string name="pref_profile_title">Name, email, class etc.</string>
-    <string name="pref_profile_summary">User Profile</string>
+    <string name="pref_profile_title">User Profile</string>
+    <string name="pref_profile_summary">Name, email, class etc.</string>
     <string name="pref_profile_key">pref_profile</string>
 
     <string name="pref_privacy_title">Privacy Settings</string>
@@ -82,7 +82,7 @@
     <string name="pref_cat_additional">Additional Settings</string>
 
     <string name="pref_unit_title">Unit Preferences</string>
-    <string name="pref_unit_summary">Select the units</string>
+    <string name="pref_unit_summary">Select units of measurement</string>
     <string name="pref_unit_key">pref_units</string>
 
     <string name="pref_comments_title">Comments</string>
