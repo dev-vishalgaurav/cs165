@@ -24,15 +24,15 @@
     <string name="class_label">Class</string>
     <string name="major_label">Major</string>
     <string name="name_hint">Your full name</string>
-    <string name="email_hint">Email Address eg.(sample@sample.com)</string>
-    <string name="phone_hint">Phone Number</string>
-    <string name="gender_hint">Gender</string>
-    <string name="class_hint">Your Class eg (2012)</string>
-    <string name="major_hint">Major eg. (Computer Science)</string>
+    <string name="email_hint">Your email address</string>
+    <string name="phone_hint">Your phone number</string>
+    <string name="gender_hint">Your gender</string>
+    <string name="class_hint">Your class (e.g. 2017)</string>
+    <string name="major_hint">Your major (e.g. Computer Science)</string>
     <string name="gallery">Gallery</string>
     <string name="camera">Camera</string>
     <string name="dialog_image_picker_title">Select one option</string>
-    <string name="dialog_image_picker_message">Please select the mode through which you want to take picture.</string>
+    <string name="dialog_image_picker_message">Please select the mode through which you want to take a picture.</string>
     <string name="tab_label_start">Start</string>
     <string name="tab_label_history">History</string>
     <string name="tab_label_settings">Settings</string>
@@ -71,7 +71,7 @@
 
     <string name="pref_cat_account">Account Preferences</string>
 
-    <string name="pref_profile_title">Name,Email,Class,etc</string>
+    <string name="pref_profile_title">Name, email, class etc.</string>
     <string name="pref_profile_summary">User Profile</string>
     <string name="pref_profile_key">pref_profile</string>
 
