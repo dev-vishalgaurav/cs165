@@ -37,7 +37,7 @@
         </activity>
         <activity
             android:name=".ui.activity.MapActivity"
-            android:label="@string/activity_label_profile_settings"
+            android:label="@string/activity_label_maps"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity

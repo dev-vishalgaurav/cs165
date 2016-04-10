@@ -46,6 +46,7 @@ public class TrackingStartActivity extends BaseActivity {
     }
 
     private void onSaveClicked() {
+        showToast(getString(R.string.saved));
         finish();
     }
 
@@ -82,15 +83,7 @@ public class TrackingStartActivity extends BaseActivity {
             }
             break;
             case 6: {
-                new InputDialogFragment().show(getSupportFragmentManager(), "nothing", mAdapter.getItem(position).toString(), "", InputType.TYPE_CLASS_NUMBER, 1);
-            }
-            break;
-            case 7: {
-                new InputDialogFragment().show(getSupportFragmentManager(), "nothing", mAdapter.getItem(position).toString(), "", InputType.TYPE_CLASS_NUMBER, 1);
-            }
-            break;
-            case 8: {
-                new InputDialogFragment().show(getSupportFragmentManager(), "nothing", mAdapter.getItem(position).toString(), "", InputType.TYPE_CLASS_NUMBER, 1);
+                new InputDialogFragment().show(getSupportFragmentManager(), "nothing", mAdapter.getItem(position).toString(), getString(R.string.hint_track_comments), InputType.TYPE_CLASS_NUMBER, 1);
             }
             break;
         }
