@@ -33,8 +33,10 @@ import edu.cs.dartmouth.cs165.myruns.vishal.R;
 import edu.cs.dartmouth.cs165.myruns.vishal.storage.preferences.PreferenceUtils;
 import edu.cs.dartmouth.cs165.myruns.vishal.utils.Validator;
 
+/**
+ * Implements the user profile and its settings.
+ */
 public class ProfileSettings extends BaseActivity {
-
 
     private static final int REQUEST_PICK_IMAGE_GALLERY = 1;
     private static final int REQUEST_PICK_IMAGE_CAMERA = 2;
@@ -69,6 +71,11 @@ public class ProfileSettings extends BaseActivity {
         savedInstanceState = (savedInstanceState!=null) ? savedInstanceState : PreferenceUtils.getProfileSettings(getBaseContext()) ;
         updateValues(savedInstanceState);
     }
+
+    /**
+     * Updates the profile picture to the stored image.
+     * If nothing stored, updates it to the default Dartmouth picture.
+     */
     private void updateImage(){
         if(imageUri != null){
             mImgProfile.setImageURI(imageUri);
@@ -76,6 +83,10 @@ public class ProfileSettings extends BaseActivity {
             mImgProfile.setImageResource(R.drawable.dartmouth);
         }
     }
+
+    /**
+     * Main setup
+     */
     private void initViews() {
         mToolBar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolBar);
@@ -119,6 +130,9 @@ public class ProfileSettings extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Handles dialog for picture-taking according to the user's choice of camera or gallery.
+     */
     private void initDialogChangeImage(){
         Dialog.OnClickListener mOnDialogClickListener = new DialogInterface.OnClickListener() {
             @Override
@@ -151,6 +165,9 @@ public class ProfileSettings extends BaseActivity {
         }
     }
 
+    /**
+     * Inits dialog for picture-taking, showing user option of camera or gallery.
+     */
     private void showDialogChangeImage(){
         initDialogChangeImage();
         mDialogImageChange.show();
@@ -163,6 +180,10 @@ public class ProfileSettings extends BaseActivity {
         super.onSaveInstanceState(outState);
     }
 
+    /**
+     * Saves user-entered data.
+     * @param bundle
+     */
     private void addValuesToBundle(Bundle bundle) {
         bundle.putString(PreferenceUtils.EXTRA_NAME, mEdtName.getText().toString());
         bundle.putString(PreferenceUtils.EXTRA_EMAIL, mEdtEmail.getText().toString());
@@ -175,6 +196,10 @@ public class ProfileSettings extends BaseActivity {
         bundle.putBoolean(EXTRA_DIALOG_SHOWN_GALLERY, isDialogGallery);
     }
 
+    /**
+     * Loads user-entered data.
+     * @param savedInstanceState
+     */
     private void updateValues(Bundle savedInstanceState) {
         if(savedInstanceState!=null) {
             mEdtName.setText(savedInstanceState.getString(PreferenceUtils.EXTRA_NAME));
@@ -195,6 +220,9 @@ public class ProfileSettings extends BaseActivity {
         }
     }
 
+    /**
+     * Helper function for updating the stored gender.
+     */
     private void updateRadioButton() {
         if (isChecked) {
             if (isMale) {
@@ -207,11 +235,17 @@ public class ProfileSettings extends BaseActivity {
         }
     }
 
+    /**
+     * Exits the user profile activity upon clicking cancel.
+     */
     private void onClickCancel() {
         deleteTempFile();
         finish();
     }
 
+    /**
+     * Saves user profile information upon clicking save.
+     */
     private void onClickSave() {
         if (isValidationPassed()) {
             // Success save to preferences
@@ -225,12 +259,20 @@ public class ProfileSettings extends BaseActivity {
             // fail
         }
     }
+
+    /**
+     * Deletes temporary image file.
+     */
     private void deleteTempFile(){
         File file = new File(Uri.fromFile(new File(getExternalCacheDir(), "cropped_temp")).getPath());
         if (file.exists()) {
             file.delete();
         }
     }
+
+    /**
+     * Updates uri with the stored image file.
+     */
     private void updateImageFile(){
         try {
             if (imageUri != null) {
@@ -249,6 +291,12 @@ public class ProfileSettings extends BaseActivity {
             ex.printStackTrace();
         }
     }
+
+    /**
+     * @param src
+     * @param dst
+     * @throws IOException
+     */
     public void copy(File src, File dst) throws IOException {
         InputStream in = new FileInputStream(src);
         OutputStream out = new FileOutputStream(dst);
@@ -262,15 +310,27 @@ public class ProfileSettings extends BaseActivity {
         out.close();
     }
 
-
+    /**
+     * Show change image dialogue when "change image" clicked.
+     */
     private void onClickChangeImage() {
         showDialogChangeImage();
     }
+
+    /**
+     * Begin crop
+     * @param source
+     */
     private void beginCrop(Uri source) {
         Uri destination = Uri.fromFile(new File(getExternalCacheDir(), "cropped_temp"));
         Crop.of(source, destination).asSquare().start(this);
     }
 
+    /**
+     * Handle crop
+     * @param resultCode
+     * @param result
+     */
     private void handleCrop(int resultCode, Intent result) {
         if (resultCode == RESULT_OK) {
             imageUri = Crop.getOutput(result);
@@ -282,10 +342,20 @@ public class ProfileSettings extends BaseActivity {
            showToast(Crop.getError(result).getMessage());
         }
     }
+
+    /**
+     * Open gallery and select image
+     */
     private void openGallery() {
         Intent gallery = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(gallery, REQUEST_PICK_IMAGE_GALLERY);
     }
+
+    /**
+     * Get file path of camera image
+     * @return
+     * @throws IOException
+     */
     private File getCameraFilePath() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -301,6 +371,10 @@ public class ProfileSettings extends BaseActivity {
         mCurrentCameraFilePath = Uri.fromFile(image);
         return image;
     }
+
+    /**
+     * Open camera activity for picture-taking
+     */
     private void openCamera(){
         try {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
