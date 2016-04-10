@@ -18,7 +18,6 @@ import edu.cs.dartmouth.cs165.myruns.vishal.ui.fragments.dialogs.InputDialogFrag
 import edu.cs.dartmouth.cs165.myruns.vishal.ui.fragments.dialogs.TimeDialogFragment;
 
 
-
 public class MapActivity extends BaseActivity {
 
     private Button mBtnSave = null;
@@ -31,6 +30,9 @@ public class MapActivity extends BaseActivity {
         initViews();
     }
 
+    /**
+     * Main setup
+     */
     private void initViews() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -40,14 +42,24 @@ public class MapActivity extends BaseActivity {
         mBtnSave.setOnClickListener(mOnClickListener);
     }
 
+    /**
+     * Exit map activity when save clicked
+     */
     private void onSaveClicked() {
         finish();
     }
 
+    /**
+     * Exit map activity when cancel clicked
+     */
     private void onCancelClicked() {
         //showToast(getString(R.string.discarded));
         finish();
     }
+
+    /**
+     * Listener for the save and cancel buttons
+     */
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -63,5 +75,4 @@ public class MapActivity extends BaseActivity {
             }
         }
     };
-
 }

@@ -18,10 +18,6 @@ import edu.cs.dartmouth.cs165.myruns.vishal.ui.fragments.dialogs.InputDialogFrag
 import edu.cs.dartmouth.cs165.myruns.vishal.ui.fragments.dialogs.TimeDialogFragment;
 
 
-/**
- * Common parent for most of the activities of this app.
- * should not be used as an activity to display layouts.
- */
 public class TrackingStartActivity extends BaseActivity {
 
     private ListView mLstTrack = null;

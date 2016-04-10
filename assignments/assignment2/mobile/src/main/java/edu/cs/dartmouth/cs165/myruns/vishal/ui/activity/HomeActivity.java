@@ -16,7 +16,7 @@ import edu.cs.dartmouth.cs165.myruns.vishal.ui.adapters.HomeTabAdapter.OnFragmen
 
 /**
  * Common parent for most of the activities of this app.
- * should not be used as an activity to display layouts.
+ * Should not be used as an activity to display layouts.
  */
 public class HomeActivity extends BaseActivity implements OnFragmentInteractionListener{
     public static final int COUNT_TABS_HOME_SCREEN = 3;
