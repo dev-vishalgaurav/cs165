@@ -89,7 +89,7 @@ public class InputDialogFragment extends DialogFragment {
             mEdtInput.setInputType(mInputType);
             builder.setView(dialogView);
             builder.setTitle(mTitle);
-            builder.setPositiveButton(getString(R.string.start), mOnDialogClickPatientId);
+            builder.setPositiveButton(getString(R.string.ok), mOnDialogClickPatientId);
             builder.setNegativeButton(getString(R.string.cancel), mOnDialogClickPatientId);
             mInputDialog = builder.create();
         }

@@ -13,7 +13,9 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import edu.cs.dartmouth.cs165.myruns.vishal.R;
+import edu.cs.dartmouth.cs165.myruns.vishal.ui.fragments.dialogs.DateDialogFragment;
 import edu.cs.dartmouth.cs165.myruns.vishal.ui.fragments.dialogs.InputDialogFragment;
+import edu.cs.dartmouth.cs165.myruns.vishal.ui.fragments.dialogs.TimeDialogFragment;
 
 
 /**
@@ -48,7 +50,7 @@ public class TrackingStartActivity extends BaseActivity {
     }
 
     private void onSaveClicked() {
-
+        finish();
     }
 
     private void onCancelClicked() {
@@ -59,39 +61,40 @@ public class TrackingStartActivity extends BaseActivity {
     private void onTrackingClicked(View view, int position) {
         switch (position) {
             case 0: {
-
+                new DateDialogFragment().show(getSupportFragmentManager(),"date");
             }
             break;
             case 1: {
+                new TimeDialogFragment().show(getSupportFragmentManager(),"time");
 
             }
             break;
             case 2: {
-
+                new InputDialogFragment().show(getSupportFragmentManager(),"nothing",mAdapter.getItem(position).toString(),"", InputType.TYPE_CLASS_NUMBER,1);
             }
             break;
             case 3: {
-
+                new InputDialogFragment().show(getSupportFragmentManager(), "nothing", mAdapter.getItem(position).toString(), "", InputType.TYPE_CLASS_NUMBER, 1);
             }
             break;
             case 4: {
-
+                new InputDialogFragment().show(getSupportFragmentManager(), "nothing", mAdapter.getItem(position).toString(), "", InputType.TYPE_CLASS_NUMBER, 1);
             }
             break;
             case 5: {
-
+                new InputDialogFragment().show(getSupportFragmentManager(), "nothing", mAdapter.getItem(position).toString(), "", InputType.TYPE_CLASS_NUMBER, 1);
             }
             break;
             case 6: {
-
+                new InputDialogFragment().show(getSupportFragmentManager(), "nothing", mAdapter.getItem(position).toString(), "", InputType.TYPE_CLASS_NUMBER, 1);
             }
             break;
             case 7: {
-
+                new InputDialogFragment().show(getSupportFragmentManager(), "nothing", mAdapter.getItem(position).toString(), "", InputType.TYPE_CLASS_NUMBER, 1);
             }
             break;
             case 8: {
-
+                new InputDialogFragment().show(getSupportFragmentManager(), "nothing", mAdapter.getItem(position).toString(), "", InputType.TYPE_CLASS_NUMBER, 1);
             }
             break;
         }
@@ -100,7 +103,7 @@ public class TrackingStartActivity extends BaseActivity {
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            new InputDialogFragment().show(getSupportFragmentManager(),"nothing","Title","hint", InputType.TYPE_CLASS_NUMBER,1);
+            onTrackingClicked(view,position);
         }
     };
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {

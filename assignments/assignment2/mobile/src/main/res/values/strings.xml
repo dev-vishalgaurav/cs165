@@ -97,7 +97,7 @@
     <string name="metric_km">Metric (Kilometers)</string>
     <string name="metric_imp">Imperial (Miles)</string>
 
-
+    <string name="chooser_web">Choose an application to browse</string>
 
 
 </resources>
