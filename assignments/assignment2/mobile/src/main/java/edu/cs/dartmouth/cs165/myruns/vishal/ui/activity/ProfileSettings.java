@@ -275,6 +275,8 @@ public class ProfileSettings extends BaseActivity {
         if (resultCode == RESULT_OK) {
             imageUri = Crop.getOutput(result);
             printTrace("Image Uri = " + imageUri);
+            mImgProfile.setImageURI(null);
+            mImgProfile.invalidate();
             mImgProfile.setImageURI(imageUri);
         } else if (resultCode == Crop.RESULT_ERROR) {
            showToast(Crop.getError(result).getMessage());
