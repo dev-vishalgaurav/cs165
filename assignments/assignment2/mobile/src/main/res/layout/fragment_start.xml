@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -6,54 +6,62 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:orientation="vertical"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text="@string/label_input_type" />
-
-        <Spinner
-            android:id="@+id/spnInputType"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text="@string/label_activity_type" />
-
-        <Spinner
-            android:id="@+id/spnActivityType"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-       android:layout_margin="15dp"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btnStart"
-            android:text="@string/start"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:padding="5dp" />
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="35dp"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btnSync"
-            android:text="@string/sync"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="@string/label_input_type" />
+
+            <Spinner
+                android:id="@+id/spnInputType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="@string/label_activity_type" />
+
+            <Spinner
+                android:id="@+id/spnActivityType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp" />
+            android:layout_alignParentBottom="true"
+            android:layout_margin="15dp"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnStart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:padding="5dp"
+                android:text="@string/start" />
+
+            <Button
+                android:id="@+id/btnSync"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="@string/sync" />
+        </LinearLayout>
     </LinearLayout>
-</RelativeLayout>
+</ScrollView>
