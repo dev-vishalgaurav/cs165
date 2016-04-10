@@ -14,7 +14,7 @@ import edu.cs.dartmouth.cs165.myruns.vishal.global.MyRunsApp;
 
 /**
  * Common parent for most of the activities of this app.
- * should not be used as an activity to display layouts.
+ * Should not be used as an activity to display layouts.
  */
 public class BaseActivity extends AppCompatActivity {
 
@@ -23,8 +23,9 @@ public class BaseActivity extends AppCompatActivity {
     private AlertDialog mAlertDialog = null;
 
     /**
-     * @param progressMessage
-     * @param isCancelable
+     * Display progress message to the user
+     * @param progressMessage main message
+     * @param isCancelable whether the dialog is cancelable
      */
     protected void showProgressDialog(String progressMessage, boolean isCancelable) {
         if (mProgressDialog == null) {
@@ -35,16 +36,26 @@ public class BaseActivity extends AppCompatActivity {
         mProgressDialog.setMessage(progressMessage);
         mProgressDialog.show();
     }
+
+    /**
+     *  /**
+     * Display error message if something goes wrong
+     * @param result
+     * @param editText
+     * @param errorMessage
+     */
     protected void showError(boolean result,EditText editText,String errorMessage){
         if(!result) {
             editText.setError(errorMessage);
             editText.requestFocus();
         }
     }
+
     /**
-     * @param title
-     * @param alertMessage
-     * @param isCancelable
+     * Show alert to the user
+     * @param title the title of the alert
+     * @param alertMessage the main message of the alert
+     * @param isCancelable whether the dialog is cancelable
      */
     protected void showAlertDialog(String title, String alertMessage, boolean isCancelable) {
         if (mAlertDialog == null) {
@@ -73,6 +84,9 @@ public class BaseActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    /**
+     * Dismiss alert to the user
+     */
     protected void dismissAlertDialog() {
         if (mAlertDialog != null && mAlertDialog.isShowing()) {
             mAlertDialog.dismiss();
@@ -80,6 +94,9 @@ public class BaseActivity extends AppCompatActivity {
         mAlertDialog = null;
     }
 
+    /**
+     * Dismiss progress message to the user
+     */
     protected void dismissProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
@@ -88,8 +105,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * method to return simple name of class. Override this to return your own custom tag.
-     *
+     * Return simple name of class. Override this to return your own custom tag.
      * @return returns simple name of class.
      */
     protected String getTag() {
@@ -98,8 +114,7 @@ public class BaseActivity extends AppCompatActivity {
 
 
     /**
-     * prints trace in Log.v format . warps the implementation to pass TAG as a parameter and provides a single point to print logs.
-     *
+     * Print trace in Log.v format. Warp the implementation to pass TAG as a parameter and provide a single point to print logs.
      * @param traceMessage message to be printed
      */
     public void printTrace(String traceMessage) {
@@ -112,6 +127,10 @@ public class BaseActivity extends AppCompatActivity {
         ex.printStackTrace();
     }
 
+    /**
+     * Display toast to the user
+     * @param msg the message to be displayed
+     */
     public void showToast(String msg) {
         Toast.makeText(BaseActivity.this, msg, Toast.LENGTH_SHORT).show();
     }
