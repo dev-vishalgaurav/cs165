@@ -30,3 +30,8 @@ proguard/
 
 # Android Studio captures folder
 captures/
+assignments/assignment2/.idea/gradle.xml
+assignments/assignment2/.idea/misc.xml
+.DS_Store
+.DS_Store
+*.DS_Store
