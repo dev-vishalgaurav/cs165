@@ -18,7 +18,7 @@ import edu.cs.dartmouth.cs165.myruns.vishal.global.MyRunsApp;
  */
 public class BaseActivity extends AppCompatActivity {
 
-    
+
     private ProgressDialog mProgressDialog = null;
     private AlertDialog mAlertDialog = null;
 

@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 import edu.cs.dartmouth.cs165.myruns.vishal.R;
+import edu.cs.dartmouth.cs165.myruns.vishal.ui.activity.MapActivity;
 import edu.cs.dartmouth.cs165.myruns.vishal.ui.activity.TrackingStartActivity;
 import edu.cs.dartmouth.cs165.myruns.vishal.ui.adapters.HomeTabAdapter.OnFragmentInteractionListener;
 
@@ -122,8 +123,13 @@ public class StartFragment extends Fragment {
     }
 
     private void onStartClicked() {
-        Intent intent = new Intent(getActivity(), TrackingStartActivity.class);
-        startActivity(intent);
+        if(mSpnInputType.getSelectedItemPosition() > 0){
+            Intent intent = new Intent(getActivity(), MapActivity.class);
+            startActivity(intent);
+        }else {
+            Intent intent = new Intent(getActivity(), TrackingStartActivity.class);
+            startActivity(intent);
+        }
     }
 
     private void onSyncClicked() {
