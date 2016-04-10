@@ -50,6 +50,9 @@ public class StartFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * Main setup
+     */
     private void initViews() {
         mBtnStart = (Button) mRootView.findViewById(R.id.btnStart);
         mBtnSYnc = (Button) mRootView.findViewById(R.id.btnSync);
@@ -122,25 +125,32 @@ public class StartFragment extends Fragment {
         mListener = null;
     }
 
+    /**
+     * Start new activity when start button clicked.
+     * If input type is manual entry, start tracking activity
+     * If input type is GPS or automatic, start map activity
+     */
     private void onStartClicked() {
         if(mSpnInputType.getSelectedItemPosition() > 0){
             Intent intent = new Intent(getActivity(), MapActivity.class);
             startActivity(intent);
-        }else {
+        }
+        else {
             Intent intent = new Intent(getActivity(), TrackingStartActivity.class);
             startActivity(intent);
         }
     }
 
     private void onSyncClicked() {
-
+        //nothing for now
     }
+
     private void onItemClickInputType(View view, int position, long id){
-
     }
+
     private void onItemClickActivityType(View view, int position, long id){
-
     }
+
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -157,6 +167,7 @@ public class StartFragment extends Fragment {
             }
         }
     };
+
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {

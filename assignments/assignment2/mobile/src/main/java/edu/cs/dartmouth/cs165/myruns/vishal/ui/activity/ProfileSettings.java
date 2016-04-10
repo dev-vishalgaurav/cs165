@@ -363,9 +363,9 @@ public class ProfileSettings extends BaseActivity {
         File storageDir = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
+                imageFileName,  // prefix
+                ".jpg",         // suffix
+                storageDir      // directory
         );
         // Save a file: path for use with ACTION_VIEW intents
         mCurrentCameraFilePath = Uri.fromFile(image);
@@ -400,9 +400,12 @@ public class ProfileSettings extends BaseActivity {
             showToast(getString(R.string.error));
             ex.printStackTrace();
         }
-
-
     }
+
+    /**
+     * Check validity of user input
+     * @return boolean to indicate whether valid (true) or not (false)
+     */
     private boolean checkEmail() {
         boolean result = false;
         String text = mEdtEmail.getText().toString().trim();
@@ -498,6 +501,7 @@ public class ProfileSettings extends BaseActivity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
     private RadioGroup.OnCheckedChangeListener mOnCheckChangedListener = new RadioGroup.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -509,6 +513,7 @@ public class ProfileSettings extends BaseActivity {
             }
         }
     };
+
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {

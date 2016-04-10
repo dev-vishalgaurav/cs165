@@ -37,6 +37,7 @@ public class SettingsFragment extends PreferenceFragment {
         }
     };
 
+    // Open webpage when clicked
     private void onPreferenceClickWeb() {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         Uri uri = Uri.parse(getString(R.string.pref_webpage_summary));
@@ -47,9 +48,10 @@ public class SettingsFragment extends PreferenceFragment {
             ((BaseActivity) getActivity()).showToast(getString(R.string.error));
         }
     }
+
+    // Open user profile when clicked
     private void onPreferenceClickProfile() {
         Intent intent = new Intent(getActivity(), ProfileSettings.class);
         startActivity(intent);
     }
-
 }
