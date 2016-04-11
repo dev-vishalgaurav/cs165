@@ -17,7 +17,9 @@ import edu.cs.dartmouth.cs165.myruns.vishal.ui.fragments.dialogs.DateDialogFragm
 import edu.cs.dartmouth.cs165.myruns.vishal.ui.fragments.dialogs.InputDialogFragment;
 import edu.cs.dartmouth.cs165.myruns.vishal.ui.fragments.dialogs.TimeDialogFragment;
 
-
+/**
+ * Start activity for the manual entry mode
+ */
 public class TrackingStartActivity extends BaseActivity {
 
     private ListView mLstTrack = null;
@@ -32,6 +34,9 @@ public class TrackingStartActivity extends BaseActivity {
         initViews();
     }
 
+    /**
+     * Main setup
+     */
     private void initViews() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -45,16 +50,27 @@ public class TrackingStartActivity extends BaseActivity {
         mLstTrack.setOnItemClickListener(mOnItemClickListener);
     }
 
+    /**
+     * Show toast and exit when save clicked
+     */
     private void onSaveClicked() {
         showToast(getString(R.string.saved));
         finish();
     }
 
+    /**
+     * Show toast and exit when cancel clicked
+     */
     private void onCancelClicked() {
         showToast(getString(R.string.discarded));
         finish();
     }
 
+    /**
+     * Opens appropriate activities when item clicked
+     * @param view
+     * @param position indicates what item was clicked
+     */
     private void onTrackingClicked(View view, int position) {
         switch (position) {
             case 0: {
