@@ -2,23 +2,16 @@ package edu.cs.dartmouth.cs165.myruns.vishal.ui.fragments.dialogs;
 
 
 import android.app.Dialog;
-import android.support.v4.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.DialogFragment;
 import android.text.format.DateFormat;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
 
-import edu.cs.dartmouth.cs165.myruns.vishal.R;
-
 /**
- * A simple {@link Fragment} subclass.
+ * wrapper to time dialog
  */
 public class TimeDialogFragment extends DialogFragment {
 

@@ -2,7 +2,6 @@ package edu.cs.dartmouth.cs165.myruns.vishal.storage.File;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,6 +12,12 @@ import java.io.OutputStream;
  */
 public class FIleUtils {
 
+    /**
+     * It will copy source file from the destination files
+     * @param src
+     * @param dst
+     * @throws IOException
+     */
     public static void copyFile(File src, File dst) throws IOException {
         InputStream in = new FileInputStream(src);
         OutputStream out = new FileOutputStream(dst);

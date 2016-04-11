@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -16,7 +15,7 @@ import android.widget.EditText;
 import edu.cs.dartmouth.cs165.myruns.vishal.R;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Wrapper to edittext input dialog
  */
 public class InputDialogFragment extends DialogFragment {
 

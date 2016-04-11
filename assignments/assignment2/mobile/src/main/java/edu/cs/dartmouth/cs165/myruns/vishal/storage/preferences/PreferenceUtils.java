@@ -7,7 +7,9 @@ import android.os.Bundle;
 
 import edu.cs.dartmouth.cs165.myruns.vishal.global.MyRunsApp;
 
-
+/**
+ * Helper class to wrap the operations on shared preferences.
+ */
 public class PreferenceUtils {
     public static final String TAG = "PrefUtils";
     private static final String PREF_NAME = "myruns_prefs";
@@ -21,6 +23,11 @@ public class PreferenceUtils {
     public static final String EXTRA_IMAGE = "extra_image";
     public static final String EXTRA_PROFILE_EXISTS = "extra_profile_exists";
 
+    /**
+     * Save all the preferences of profile settings to Shared preferences
+     * @param context
+     * @param bundle
+     */
     public static void saveProfileSettings(Context context, Bundle bundle) {
         putBoolean(context, EXTRA_PROFILE_EXISTS, true);
         putString(context, EXTRA_NAME, bundle.getString(EXTRA_NAME));
@@ -37,6 +44,11 @@ public class PreferenceUtils {
         }
     }
 
+    /**
+     * get all the preferences for profile settings in Bundle
+     * @param context
+     * @return
+     */
     public static Bundle getProfileSettings(Context context) {
         Bundle bundle = null;
         if (getBoolean(context, EXTRA_PROFILE_EXISTS, false)) {
@@ -62,6 +74,12 @@ public class PreferenceUtils {
         return bundle;
     }
 
+    /**
+     * put a string in preferences
+     * @param context
+     * @param key
+     * @param value
+     */
     public static void putString(Context context, String key, String value) {
         SharedPreferences preferences = context.getSharedPreferences(PREF_NAME, Context.MODE_WORLD_WRITEABLE);
         SharedPreferences.Editor edit = preferences.edit();
@@ -69,16 +87,36 @@ public class PreferenceUtils {
         edit.commit();
     }
 
+    /**
+     * get a string from prefernce
+     * @param context
+     * @param key
+     * @param defaultValue
+     * @return
+     */
     public static String getString(Context context, String key, String defaultValue) {
         SharedPreferences preferences = context.getSharedPreferences(PREF_NAME, Context.MODE_WORLD_WRITEABLE);
         return preferences.getString(key, defaultValue);
     }
 
+    /**
+     * put boolean into shared preferences
+     * @param context
+     * @param key
+     * @param defaultValue
+     * @return
+     */
     public static boolean getBoolean(Context context, String key, boolean defaultValue) {
         SharedPreferences preferences = context.getSharedPreferences(PREF_NAME, 0);
         return preferences.getBoolean(key, defaultValue);
     }
 
+    /**
+     * get boolean from shared preferences
+     * @param context
+     * @param key
+     * @param value
+     */
     public static void putBoolean(Context context, String key, boolean value) {
         SharedPreferences preferences = context.getSharedPreferences(PREF_NAME, 0);
         SharedPreferences.Editor edit = preferences.edit();

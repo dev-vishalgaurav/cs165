@@ -49,7 +49,7 @@ public class StartFragment extends Fragment {
     }
 
     /**
-     * Main setup
+     * Main setup for views
      */
     private void initViews() {
         mBtnStart = (Button) mRootView.findViewById(R.id.btnStart);
