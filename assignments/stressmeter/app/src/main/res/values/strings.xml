@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">StressMeter</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="nav_title_stress_meter">Stress Meter</string>
+    <string name="nav_title_results">Results</string>
+    <string name="more_images">More Images</string>
+    <string name="stress_grid_title">Touch the image that best captures how stressed you feel right now</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="cancel">Cancel</string>
+    <string name="submit">Submit</string>
+
+
+
+</resources>
