@@ -1,10 +1,88 @@
 package cs.dartmouth.edu.cs165.vm.stressmeter;
 
+import android.os.Environment;
+import android.util.Log;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by ruiwang on 8/23/15.
  */
 public class PSM {
 
+    public static String getLoggerFIlePath(){
+        return Environment.getExternalStorageDirectory().getAbsolutePath() + "/stress_data.csv";
+    }
+
+    public static boolean saveRecordSuccess(int imagePosition){
+        printSavedDataToLogs();
+        boolean result = false;
+        String file = PSM.getLoggerFIlePath();
+        Log.e("VVV", "will write to file - " + file);
+        StressData data = new StressData(System.currentTimeMillis(),imagePosition);
+        try (PrintWriter writer = new PrintWriter(new FileWriter(new File(file),true))){
+            writer.append(data.toString());
+            Log.e("VVV", "writing :- " + data.toString());
+            writer.close();
+            result = true;
+        }catch (Exception ex){
+            ex.printStackTrace();
+            Log.e("VVV", "writing :- " + data.toString());
+        }
+        return result;
+    }
+    private static void printSavedDataToLogs(){
+        List<StressData> data = getStressData();
+        for (StressData item : data){
+            Log.e("VVV","Data = " + item  );
+        }
+    }
+    public static List<StressData> getStressData(){
+        List<StressData> list = new ArrayList<>();
+        String file = PSM.getLoggerFIlePath();
+        Log.e("VVV", "will read from file - " + file);
+        String line = null;
+        try(BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)))) {
+            while ((line = reader.readLine()) != null){
+                StressData data = new StressData(line);
+                list.add(data);
+            }
+        }catch (Exception ex){
+            Log.e("VVV","Error in reading stress data file " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        return list;
+    }
+
+    public static int getScore(int position){
+        int score = 0 ;
+        switch (position){
+            case 0 : score = 6; break;
+            case 1 : score = 8; break;
+            case 2 : score = 14; break;
+            case 3 : score = 16; break;
+            case 4 : score = 5; break;
+            case 5 : score = 7; break;
+            case 6 : score = 13; break;
+            case 7 : score = 15; break;
+            case 8 : score = 2; break;
+            case 9 : score = 4; break;
+            case 10 : score = 10; break;
+            case 11 : score = 12; break;
+            case 12 : score = 1; break;
+            case 13 : score = 3; break;
+            case 14 : score = 9; break;
+            case 15 : score = 11; break;
+        }
+        return score;
+    }
     public static int[] getGridById(int id) {
         switch (id) {
             case 1:

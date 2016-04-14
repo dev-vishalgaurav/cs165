@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class ImageDetailActivity extends AppCompatActivity {
 
@@ -52,8 +53,13 @@ public class ImageDetailActivity extends AppCompatActivity {
     }
 
     private void onClickSubmit() {
-        setResult(RESULT_OK);
+        if(PSM.saveRecordSuccess(imagePosition)) {
+            setResult(RESULT_OK);
+        }else{
+            Toast.makeText(getBaseContext(),getString(R.string.error_in_recording),Toast.LENGTH_SHORT).show();
+        }
         finish();
+
     }
 
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -65,10 +71,11 @@ public class ImageDetailActivity extends AppCompatActivity {
                 }
                 break;
                 case R.id.btnSubmit: {
-                    onClickSubmit();
+                        onClickSubmit();
                 }
                 break;
             }
         }
     };
+
 }

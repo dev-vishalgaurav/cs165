@@ -14,6 +14,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="cancel">Cancel</string>
     <string name="submit">Submit</string>
+    <string name="error_in_recording">Error in recording stress data!</string>
 
 
 

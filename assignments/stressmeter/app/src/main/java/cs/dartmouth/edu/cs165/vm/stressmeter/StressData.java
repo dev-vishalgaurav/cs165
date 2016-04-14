@@ -1,0 +1,33 @@
+package cs.dartmouth.edu.cs165.vm.stressmeter;
+
+import android.util.Log;
+
+/**
+ * Created by Vishal Gaurav on 4/13/16.
+ */
+public class StressData {
+
+    private long time;
+    private int gridScore;
+
+    public StressData(long time, int gridScore){
+        this.time = time;
+        this.gridScore = gridScore;
+    }
+    public StressData(String line){
+        Log.e("VVV","Line = " + line);
+        String[] csvs = line.split(",");
+        if(csvs.length >= 2){
+            this.time = Long.parseLong(csvs[0]);
+            this.gridScore = Integer.parseInt(csvs[1]);
+        }else{
+            Log.e("VVV","Error in init StressData");
+        }
+
+    }
+
+    @Override
+    public String toString(){
+        return time + "," + gridScore + "\n";
+    }
+}
