@@ -55,7 +55,10 @@ public class StressMeter extends AppCompatActivity implements NavigationView.OnN
         fragTrans.commit();
     }
     private void addResultsFragment(){
-        addStressFragment();
+        ResultsFragment fragment = ResultsFragment.newInstance();
+        FragmentTransaction fragTrans = getSupportFragmentManager().beginTransaction();
+        fragTrans.replace(R.id.flFragmentContainer,fragment);
+        fragTrans.commit();
     }
 
     @Override

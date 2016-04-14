@@ -15,6 +15,8 @@
     <string name="cancel">Cancel</string>
     <string name="submit">Submit</string>
     <string name="error_in_recording">Error in recording stress data!</string>
+    <string name="time">Time</string>
+    <string name="stress_Value">Stress Value</string>
 
 
 

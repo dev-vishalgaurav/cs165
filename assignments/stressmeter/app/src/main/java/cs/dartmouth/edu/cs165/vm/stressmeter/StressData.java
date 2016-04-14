@@ -26,6 +26,22 @@ public class StressData {
 
     }
 
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
+    }
+
+    public int getGridScore() {
+        return gridScore;
+    }
+
+    public void setGridScore(int gridScore) {
+        this.gridScore = gridScore;
+    }
+
     @Override
     public String toString(){
         return time + "," + gridScore + "\n";
