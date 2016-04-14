@@ -17,7 +17,9 @@
     <string name="error_in_recording">Error in recording stress data!</string>
     <string name="time">Time</string>
     <string name="stress_Value">Stress Value</string>
-
-
+    <string name="summary_of_results">Summary of Results</string>
+    <string name="graph_title">A graph showing your stress Levels</string>
+    <string name="stress_level">Stress Level</string>
+    <string name="instances">Instances</string>
 
 </resources>

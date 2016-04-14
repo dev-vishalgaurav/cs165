@@ -3,21 +3,56 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="11"
+    android:weightSum="4"
     tools:context="cs.dartmouth.edu.cs165.vm.stressmeter.ResultsFragment">
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="6"></FrameLayout>
+        android:layout_weight="2"
+        android:orientation="vertical">
 
-    <ListView
-        android:id="@+id/lstStressData"
+        <TextView
+            android:id="@+id/txtGraphCaption"
+            style="@android:style/TextAppearance.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@string/graph_title"
+            android:textColor="@android:color/darker_gray"
+            android:textStyle="bold" />
+
+        <lecho.lib.hellocharts.view.LineChartView
+            android:id="@+id/chart"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/txtGraphCaption"
+            android:layout_height="300dp"></lecho.lib.hellocharts.view.LineChartView>
+    </RelativeLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:dividerHeight="0dp"
-        android:divider="@android:color/transparent"
         android:layout_height="0dp"
-        android:layout_weight="5">
-    </ListView>
+        android:layout_weight="2"
+        android:orientation="vertical">
+
+        <TextView
+            style="@android:style/TextAppearance.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@string/summary_of_results"
+            android:textColor="@android:color/darker_gray"
+            android:textStyle="bold" />
+
+        <ListView
+            android:id="@+id/lstStressData"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="0dp"></ListView>
+    </LinearLayout>
+
 
 </LinearLayout>
