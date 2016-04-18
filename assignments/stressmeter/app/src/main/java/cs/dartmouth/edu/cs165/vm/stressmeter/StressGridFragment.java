@@ -15,6 +15,7 @@ import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 /**
@@ -66,7 +67,9 @@ public class StressGridFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_stress_grid, container, false);
+        mCurrentGridId = new Random().nextInt(1000) % 3 + 1; // generating a random id for the grid among 3
         initViews(view);
+        updateGrid();
         return view;
     }
 
@@ -80,7 +83,6 @@ public class StressGridFragment extends Fragment {
         mAdapter = new ImageAdapter(getActivity(),mList);
         mGvStressImages.setAdapter(mAdapter);
         mGvStressImages.setOnItemClickListener(mOnItemClickListener);
-        updateGrid();
     }
 
     @Override
