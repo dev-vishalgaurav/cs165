@@ -3,6 +3,7 @@ package cs.dartmouth.edu.cs165.vm.stressmeter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -42,13 +43,15 @@ public class ImageDetailActivity extends AppCompatActivity {
 
     private void updateView() {
         mImgDetail.setImageResource(imageId);
+        Log.e("VVV","updateView");
     }
 
     private boolean updateDateFromIntent() {
         Intent intent = getIntent();
         imageId = intent.getIntExtra(EXTRA_IMAGE_ID, -1);
         imagePosition = intent.getIntExtra(EXTRA_IMAGE_POSITION, -1);
-        if (imageId > 0 && imagePosition > 0) {
+        Log.e("VVV", "Grid position = " + imagePosition + " resId = " + imageId);
+        if (imageId > 0 && imagePosition >= 0) {
             updateView();
             return true;
         }

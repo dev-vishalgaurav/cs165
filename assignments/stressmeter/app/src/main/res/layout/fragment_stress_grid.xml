@@ -17,18 +17,18 @@
     <GridView
         android:id="@+id/gvStressImages"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/btnMoreImages"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/txtStressTitle"
         android:numColumns="4"
         android:text="@string/hello_blank_fragment" />
 
     <Button
+        android:layout_below="@+id/gvStressImages"
         android:id="@+id/btnMoreImages"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="30dp"
         android:padding="12dp"
         android:textAllCaps="true"
         android:text="@string/more_images" />

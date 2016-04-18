@@ -12,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 public class StressMeter extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -125,6 +126,7 @@ public class StressMeter extends AppCompatActivity implements NavigationView.OnN
         @Override
         public void onImageSelected(int gridPosition, int resId) {
             stopMediaAndVibration();
+            Log.e("VVV","Grid position = " + gridPosition + " resId = " + resId );
             Intent intent = new Intent(StressMeter.this,ImageDetailActivity.class);
             intent.putExtra(ImageDetailActivity.EXTRA_IMAGE_POSITION,gridPosition);
             intent.putExtra(ImageDetailActivity.EXTRA_IMAGE_ID,resId);
