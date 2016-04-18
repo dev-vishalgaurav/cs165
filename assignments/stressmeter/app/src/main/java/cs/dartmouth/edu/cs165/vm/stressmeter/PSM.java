@@ -21,6 +21,9 @@ public class PSM {
         return Environment.getExternalStorageDirectory().getAbsolutePath() + "/stress_data.csv";
     }
 
+    /*
+    Save stress position in file
+     */
     public static boolean saveRecordSuccess(int imagePosition){
         //printSavedDataToLogs();
         boolean result = false;
@@ -38,12 +41,20 @@ public class PSM {
         }
         return result;
     }
+
+    /*
+    Print log of saved data
+     */
     private static void printSavedDataToLogs(){
         List<StressData> data = getStressData();
         for (StressData item : data){
             Log.e("VVV","Data = " + item  );
         }
     }
+
+    /*
+    Get the list of stress data
+     */
     public static List<StressData> getStressData(){
         List<StressData> list = new ArrayList<>();
         String file = PSM.getLoggerFIlePath();
@@ -61,6 +72,9 @@ public class PSM {
         return list;
     }
 
+    /*
+    Get the corresponding score with each position
+     */
     public static int getScore(int position){
         int score = 0 ;
         switch (position){
@@ -83,6 +97,10 @@ public class PSM {
         }
         return score;
     }
+
+    /*
+    Get grid using ID
+     */
     public static int[] getGridById(int id) {
         switch (id) {
             case 1:
@@ -96,6 +114,9 @@ public class PSM {
         return null;
     }
 
+    /*
+    Get first grid of images
+     */
     public static int[] getGrid1() {
         int[] grid = new int[16];
         grid[0] = R.drawable.psm_talking_on_phone2;
@@ -118,6 +139,9 @@ public class PSM {
         return grid;
     }
 
+    /*
+    Get second grid of images
+     */
     public static int[] getGrid2() {
         int[] grid = new int[16];
 
@@ -141,6 +165,9 @@ public class PSM {
         return grid;
     }
 
+    /*
+    Get third grid of images
+     */
     public static int[] getGrid3() {
         int[] grid = new int[16];
 

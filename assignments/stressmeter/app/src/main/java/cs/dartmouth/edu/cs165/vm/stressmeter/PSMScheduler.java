@@ -15,8 +15,8 @@ import java.util.Calendar;
 public class PSMScheduler {
 
     public static void setSchedule(Context context) {
-        setSchedule(context,12,30,0);
-        setSchedule(context, 18, 30, 0);
+        setSchedule(context, 17, 24, 0);
+        setSchedule(context, 17, 26, 0);
     }
 
     private static void setSchedule(Context context, int hour, int min, int sec) {
