@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ImageDetailActivity"
+            android:name=".ImageDetailActivity" android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"></activity>
 
         <receiver
