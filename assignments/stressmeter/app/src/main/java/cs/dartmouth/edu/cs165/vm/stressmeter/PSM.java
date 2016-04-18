@@ -22,7 +22,7 @@ public class PSM {
     }
 
     public static boolean saveRecordSuccess(int imagePosition){
-        printSavedDataToLogs();
+        //printSavedDataToLogs();
         boolean result = false;
         String file = PSM.getLoggerFIlePath();
         Log.e("VVV", "will write to file - " + file);
