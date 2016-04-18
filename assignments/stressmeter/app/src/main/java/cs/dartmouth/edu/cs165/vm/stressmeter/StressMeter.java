@@ -1,7 +1,10 @@
 package cs.dartmouth.edu.cs165.vm.stressmeter;
 
+import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -14,14 +17,45 @@ import android.view.MenuItem;
 public class StressMeter extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final int REQUEST_IMAGE_DETAIL = 1;
+    private MediaPlayer mMediaPlayer = null;
+    private Vibrator mVibrator = null;
+    private boolean isMediaPlaying = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stress_meter);
         initViews();
+        if(!isMediaPlaying){
+            startMediaAndVibrate();
+        }
     }
-
+    @Override
+    protected void onDestroy(){
+        PSMScheduler.setSchedule(this); // setting the alarm
+        super.onDestroy();
+    }
+    private void startMediaAndVibrate(){
+        /*Media source = http://soundbible.com/2070-Railroad-Crossing-Bell.html*/
+        isMediaPlaying = true;
+        mMediaPlayer  = MediaPlayer.create(getBaseContext(), R.raw.rail_sound);
+        mMediaPlayer.start();
+        mVibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
+        long[] pattern = {0, 100, 1000, 300, 200, 100, 500, 200, 100};
+        mVibrator.vibrate(pattern, 0);
+    }
+    private void stopMediaAndVibration(){
+        if(isMediaPlaying) {
+            isMediaPlaying = false;
+            if (mMediaPlayer != null) {
+                mMediaPlayer.stop();
+                mMediaPlayer.release();
+            }
+            if (mVibrator != null) {
+                mVibrator.cancel();
+            }
+        }
+    }
     private void initViews(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -84,14 +118,21 @@ public class StressMeter extends AppCompatActivity implements NavigationView.OnN
     private StressGridFragment.OnImageSelectedListener mOnImageSelectedListener = new StressGridFragment.OnImageSelectedListener() {
         @Override
         public void onImageSelected(int gridPosition, int resId) {
+            stopMediaAndVibration();
             Intent intent = new Intent(StressMeter.this,ImageDetailActivity.class);
             intent.putExtra(ImageDetailActivity.EXTRA_IMAGE_POSITION,gridPosition);
             intent.putExtra(ImageDetailActivity.EXTRA_IMAGE_ID,resId);
             startActivityForResult(intent,REQUEST_IMAGE_DETAIL);
         }
+
+        @Override
+        public void onMoreClicked() {
+            stopMediaAndVibration();
+        }
     };
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        stopMediaAndVibration();
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 

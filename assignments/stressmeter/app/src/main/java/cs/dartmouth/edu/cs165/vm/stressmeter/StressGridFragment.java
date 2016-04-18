@@ -26,6 +26,7 @@ public class StressGridFragment extends Fragment {
 
     public interface OnImageSelectedListener{
         void onImageSelected(int gridPosition, int resId);
+        void onMoreClicked();
     }
 
     private GridView mGvStressImages = null;
@@ -93,6 +94,9 @@ public class StressGridFragment extends Fragment {
     }
     private void onClickMoreImages(){
         updateGrid();
+        if(mOnImageSelectedListener != null){
+            mOnImageSelectedListener.onMoreClicked();
+        }
     }
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
