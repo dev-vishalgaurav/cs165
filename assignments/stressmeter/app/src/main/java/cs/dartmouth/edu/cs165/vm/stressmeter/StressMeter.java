@@ -33,20 +33,27 @@ public class StressMeter extends AppCompatActivity implements NavigationView.OnN
     }
     @Override
     protected void onDestroy(){
-        PSMScheduler.setSchedule(this); // setting the alarm
+        //Every time main activity (launcher) will destroy
+        PSMScheduler.setSchedule(this); // we will set the alarm
         super.onDestroy();
     }
 
+    /*
+    Play alarm sound and vibrate phone
+     */
     private void startMediaAndVibrate(){
         /*Media source = http://soundbible.com/2070-Railroad-Crossing-Bell.html*/
         isMediaPlaying = true;
         mMediaPlayer  = MediaPlayer.create(getBaseContext(), R.raw.rail_sound);
         mMediaPlayer.start();
         mVibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
-        long[] pattern = {0, 100, 1000, 300, 200, 100, 500, 200, 100};
+        long[] pattern = {0, 100, 400, 300, 200, 100, 500, 200, 100}; //random pattern for validation
         mVibrator.vibrate(pattern, 0);
     }
 
+    /*
+    Stop playing alarm sound and vibration
+     */
     private void stopMediaAndVibration(){
         if(isMediaPlaying) {
             isMediaPlaying = false;
@@ -89,12 +96,19 @@ public class StressMeter extends AppCompatActivity implements NavigationView.OnN
         }
     }
 
+    /*
+    Add stress fragment
+     */
     private void addStressFragment(){
         StressGridFragment fragment = StressGridFragment.newInstance(mOnImageSelectedListener);
         FragmentTransaction fragTrans = getSupportFragmentManager().beginTransaction();
         fragTrans.replace(R.id.flFragmentContainer,fragment);
         fragTrans.commit();
     }
+
+    /*
+    Add results fragment
+     */
     private void addResultsFragment(){
         ResultsFragment fragment = ResultsFragment.newInstance();
         FragmentTransaction fragTrans = getSupportFragmentManager().beginTransaction();
@@ -122,6 +136,9 @@ public class StressMeter extends AppCompatActivity implements NavigationView.OnN
 
     }
 
+    /*
+    When image selected, inflate it for the user to confirm/cancel, and stop alarm/vibration
+     */
     private StressGridFragment.OnImageSelectedListener mOnImageSelectedListener = new StressGridFragment.OnImageSelectedListener() {
         @Override
         public void onImageSelected(int gridPosition, int resId) {

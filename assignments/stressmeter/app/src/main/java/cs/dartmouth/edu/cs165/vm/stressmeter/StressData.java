@@ -14,6 +14,10 @@ public class StressData {
         this.time = time;
         this.gridScore = gridScore;
     }
+
+    /*
+    Init stress data
+     */
     public StressData(String line){
         Log.e("VVV","Line = " + line);
         String[] csvs = line.split(",");
@@ -26,6 +30,9 @@ public class StressData {
 
     }
 
+    /*
+    Get variables
+     */
     public long getTime() {
         return time;
     }
