@@ -4,7 +4,7 @@
     <ImageView
         android:id="@+id/imgStress"
         android:scaleType="fitXY"
-        android:layout_width="82dp"
-        android:layout_height="82dp" />
+        android:layout_width="95dp"
+        android:layout_height="85dp" />
 
 </RelativeLayout>

@@ -27,7 +27,7 @@
             android:id="@+id/chart"
             android:layout_width="match_parent"
             android:layout_below="@+id/txtGraphCaption"
-            android:layout_height="300dp"></lecho.lib.hellocharts.view.LineChartView>
+            android:layout_height="450dp"></lecho.lib.hellocharts.view.LineChartView>
     </RelativeLayout>
 
     <LinearLayout
