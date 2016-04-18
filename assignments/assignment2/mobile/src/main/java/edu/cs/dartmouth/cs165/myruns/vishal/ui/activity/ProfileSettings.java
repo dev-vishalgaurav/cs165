@@ -42,6 +42,8 @@ public class ProfileSettings extends BaseActivity {
     private static final int REQUEST_PICK_IMAGE_CAMERA = 2;
 
     private static final String EXTRA_DIALOG_SHOWN_GALLERY = "extra_dialog_shown";
+    private static final String EXTRA_CURRENT_CAMERA_PATH = "extra_current_camera_path";
+
 
     private Toolbar mToolBar = null;
     private EditText mEdtName = null;
@@ -194,6 +196,7 @@ public class ProfileSettings extends BaseActivity {
         bundle.putBoolean(PreferenceUtils.EXTRA_GENDER_SELECTED, isChecked);
         bundle.putBoolean(PreferenceUtils.EXTRA_GENDER, isMale);
         bundle.putBoolean(EXTRA_DIALOG_SHOWN_GALLERY, isDialogGallery);
+        bundle.putParcelable(EXTRA_CURRENT_CAMERA_PATH, mCurrentCameraFilePath);
     }
 
     /**
@@ -211,6 +214,7 @@ public class ProfileSettings extends BaseActivity {
             isMale = savedInstanceState.getBoolean(PreferenceUtils.EXTRA_GENDER);
             imageUri = savedInstanceState.getParcelable(PreferenceUtils.EXTRA_IMAGE);
             isDialogGallery = savedInstanceState.getBoolean(EXTRA_DIALOG_SHOWN_GALLERY);
+            mCurrentCameraFilePath = savedInstanceState.getParcelable(EXTRA_CURRENT_CAMERA_PATH);
             updateRadioButton();
             updateImage();
             if(isDialogGallery){
@@ -466,10 +470,12 @@ public class ProfileSettings extends BaseActivity {
     }
 
     private void onActivityResultCamera(int resultCode, Intent data){
-        if(resultCode == RESULT_OK){
+        if(resultCode == RESULT_OK && mCurrentCameraFilePath != null){
             data.setData(mCurrentCameraFilePath);
             onActivityResultImagePick(resultCode,data);
             printTrace(mCurrentCameraFilePath.toString());
+        }else{
+            showToast(getString(R.string.error));
         }
     }
 
@@ -478,8 +484,11 @@ public class ProfileSettings extends BaseActivity {
             Uri imageUri = data.getData();
             if (imageUri!=null){
                 beginCrop(imageUri);
+                printTrace(imageUri.toString());
             }
-            printTrace(imageUri.toString());
+            else {
+                showToast(getString(R.string.error));
+            }
         }
     }
 

@@ -3,15 +3,14 @@ package edu.cs.dartmouth.cs165.myruns.vishal.ui.fragments.dialogs;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
 
 import java.util.Calendar;
 
 /**
- * A simple {@link Fragment} subclass.
+ * wrapper to date dialog
  */
 public class DateDialogFragment extends DialogFragment {
 

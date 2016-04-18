@@ -1,0 +1,36 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="cs.dartmouth.edu.cs165.vm.stressmeter.StressGridFragment">
+
+    <TextView
+        android:id="@+id/txtStressTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:gravity="center"
+        android:text="@string/stress_grid_title"
+        android:textAppearance="@android:style/TextAppearance.Medium" />
+
+    <GridView
+        android:id="@+id/gvStressImages"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btnMoreImages"
+        android:layout_below="@+id/txtStressTitle"
+        android:numColumns="4"
+        android:text="@string/hello_blank_fragment" />
+
+    <Button
+        android:id="@+id/btnMoreImages"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="20dp"
+        android:padding="12dp"
+        android:textAllCaps="true"
+        android:text="@string/more_images" />
+
+</RelativeLayout>

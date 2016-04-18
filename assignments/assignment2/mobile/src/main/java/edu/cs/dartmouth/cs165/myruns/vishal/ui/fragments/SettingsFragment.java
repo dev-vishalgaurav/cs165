@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.widget.BaseAdapter;
 
 import edu.cs.dartmouth.cs165.myruns.vishal.R;
 import edu.cs.dartmouth.cs165.myruns.vishal.ui.activity.BaseActivity;
@@ -19,10 +18,14 @@ public class SettingsFragment extends PreferenceFragment {
         getString(R.string.pref_profile_key);
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.pref_start_settings);
+        // set click listeners to the preferences for which we need to take actions manually
         findPreference(getString(R.string.pref_profile_key)).setOnPreferenceClickListener(mOnPreferenceClicked);
         findPreference(getString(R.string.pref_webpage_key)).setOnPreferenceClickListener(mOnPreferenceClicked);
     }
 
+    /**
+     * handle preferences clicks
+     */
     private Preference.OnPreferenceClickListener mOnPreferenceClicked = new Preference.OnPreferenceClickListener() {
         @Override
         public boolean onPreferenceClick(Preference preference) {
