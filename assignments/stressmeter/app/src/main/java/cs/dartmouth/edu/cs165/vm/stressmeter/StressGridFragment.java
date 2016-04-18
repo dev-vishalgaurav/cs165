@@ -21,7 +21,10 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  * Use the {@link StressGridFragment#newInstance} factory method to
  * create an instance of this fragment.
+ *
+ * Display and activity of the images grid
  */
+
 public class StressGridFragment extends Fragment {
 
     public interface OnImageSelectedListener{
@@ -67,6 +70,9 @@ public class StressGridFragment extends Fragment {
         return view;
     }
 
+    /*
+    Main setup
+     */
     private void initViews(View rootView){
         mGvStressImages = (GridView)rootView.findViewById(R.id.gvStressImages);
         mBtnMoreImages = (Button)rootView.findViewById(R.id.btnMoreImages);
@@ -92,6 +98,10 @@ public class StressGridFragment extends Fragment {
             mCurrentGridId = 1;
         }
     }
+
+    /*
+    Update grid with new images
+     */
     private void onClickMoreImages(){
         updateGrid();
         if(mOnImageSelectedListener != null){

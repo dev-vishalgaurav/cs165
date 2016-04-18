@@ -35,6 +35,7 @@ public class StressMeter extends AppCompatActivity implements NavigationView.OnN
         PSMScheduler.setSchedule(this); // setting the alarm
         super.onDestroy();
     }
+
     private void startMediaAndVibrate(){
         /*Media source = http://soundbible.com/2070-Railroad-Crossing-Bell.html*/
         isMediaPlaying = true;
@@ -44,6 +45,7 @@ public class StressMeter extends AppCompatActivity implements NavigationView.OnN
         long[] pattern = {0, 100, 1000, 300, 200, 100, 500, 200, 100};
         mVibrator.vibrate(pattern, 0);
     }
+
     private void stopMediaAndVibration(){
         if(isMediaPlaying) {
             isMediaPlaying = false;
@@ -56,6 +58,10 @@ public class StressMeter extends AppCompatActivity implements NavigationView.OnN
             }
         }
     }
+
+    /*
+    Main setup
+     */
     private void initViews(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

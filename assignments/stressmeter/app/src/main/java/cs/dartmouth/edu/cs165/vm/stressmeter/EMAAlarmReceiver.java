@@ -9,7 +9,7 @@ import android.content.Intent;
  */
 
 public class EMAAlarmReceiver extends BroadcastReceiver {
-    //Receive broadcas
+    //Receive broadcast, upon which start the stress meter
     @Override
     public void onReceive(final Context context, Intent intent) {
         startPSM(context);

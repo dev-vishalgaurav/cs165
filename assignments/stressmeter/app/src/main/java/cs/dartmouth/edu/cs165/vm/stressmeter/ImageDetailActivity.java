@@ -28,6 +28,9 @@ public class ImageDetailActivity extends AppCompatActivity {
         updateDateFromIntent();
     }
 
+    /*
+     Main setup
+      */
     private void initViews() {
         mImgDetail = (ImageView) findViewById(R.id.imgDetail);
         mBtnCancel = (Button) findViewById(R.id.btnCancel);
@@ -52,6 +55,9 @@ public class ImageDetailActivity extends AppCompatActivity {
         return false;
     }
 
+    /*
+     Save info upon user submission
+      */
     private void onClickSubmit() {
         if(PSM.saveRecordSuccess(imagePosition)) {
             setResult(RESULT_OK);
@@ -62,6 +68,9 @@ public class ImageDetailActivity extends AppCompatActivity {
 
     }
 
+    /*
+    Exit when cancel clicked, save info when submit clicked
+     */
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {

@@ -22,13 +22,16 @@ import lecho.lib.hellocharts.model.ValueShape;
 import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.LineChartView;
 
+/*
+To display user results and stress data graph with timestamp
+ */
 
 public class ResultsFragment extends Fragment {
 
     private ListView mLstStress = null;
     private StressAdapter mStressAdapter = null;
     private List<StressData> mStressData = new ArrayList<>();
-    /*char stuffs*/
+    // char stuff
     private LineChartView chart;
     private LineChartData data;
 
@@ -64,6 +67,9 @@ public class ResultsFragment extends Fragment {
         generateChartData();
     }
 
+    /*
+    Chart setup for results
+     */
     private void generateChartData() {
 
         List<Line> lines = new ArrayList<Line>();
@@ -102,6 +108,9 @@ public class ResultsFragment extends Fragment {
         return rootView;
     }
 
+    /*
+    Main setup
+     */
     private void initViews(View rootView) {
         mLstStress = (ListView) rootView.findViewById(R.id.lstStressData);
         View header = LayoutInflater.from(getActivity()).inflate(R.layout.row_stress_data_header, null);
