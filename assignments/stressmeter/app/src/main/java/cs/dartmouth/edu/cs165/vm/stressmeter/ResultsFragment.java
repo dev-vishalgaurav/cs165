@@ -39,6 +39,9 @@ public class ResultsFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /*
+    Init new fragment
+     */
     public static ResultsFragment newInstance() {
         ResultsFragment fragment = new ResultsFragment();
         Bundle args = new Bundle();
@@ -60,6 +63,9 @@ public class ResultsFragment extends Fragment {
         super.onResume();
     }
 
+    /*
+    Update stress data
+     */
     private void updateData() {
         mStressData.clear();
         mStressData.addAll(PSM.getStressData());
@@ -123,6 +129,9 @@ public class ResultsFragment extends Fragment {
 
     }
 
+    /*
+    Custom image adaptor for GridView; only accessed in this fragment
+     */
     private static class StressAdapter extends BaseAdapter {
 
         private List<StressData> mList = null;

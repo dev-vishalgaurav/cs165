@@ -22,7 +22,7 @@ import java.util.List;
  * Use the {@link StressGridFragment#newInstance} factory method to
  * create an instance of this fragment.
  *
- * Display and activity of the images grid
+ * For the display and activity of the image grids
  */
 
 public class StressGridFragment extends Fragment {
@@ -43,10 +43,17 @@ public class StressGridFragment extends Fragment {
     public StressGridFragment() {
         // Required empty public constructor
     }
+
+    /*
+    Listener for which image is clicked
+     */
     public void setOnImageSelectedListener(OnImageSelectedListener listener){
         this.mOnImageSelectedListener = listener;
     }
 
+    /*
+    Init new stress grid fragment
+     */
     public static StressGridFragment newInstance(OnImageSelectedListener listener) {
         StressGridFragment fragment = new StressGridFragment();
         fragment.setOnImageSelectedListener(listener);
@@ -128,6 +135,9 @@ public class StressGridFragment extends Fragment {
         }
     };
 
+    /*
+    Image adaptor class; will only be accessed in this fragment
+     */
     private static class ImageAdapter extends BaseAdapter{
 
         private List<Integer> mList = null;
