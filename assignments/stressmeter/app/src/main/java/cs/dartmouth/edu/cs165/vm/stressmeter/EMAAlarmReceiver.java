@@ -15,7 +15,7 @@ public class EMAAlarmReceiver extends BroadcastReceiver {
         startPSM(context);
     }
 
-    // start the stress meter
+    // Start the stress meter
     private void startPSM(Context context) {
         Intent emaIntent = new Intent(context, StressMeter.class); //The activity you  want to start.
         emaIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

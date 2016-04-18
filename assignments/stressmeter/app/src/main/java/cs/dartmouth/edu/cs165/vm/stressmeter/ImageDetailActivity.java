@@ -41,11 +41,17 @@ public class ImageDetailActivity extends AppCompatActivity {
 
     }
 
+    /*
+    Update view
+     */
     private void updateView() {
         mImgDetail.setImageResource(imageId);
         Log.e("VVV","updateView");
     }
 
+    /*
+    Update date from intent
+     */
     private boolean updateDateFromIntent() {
         Intent intent = getIntent();
         imageId = intent.getIntExtra(EXTRA_IMAGE_ID, -1);

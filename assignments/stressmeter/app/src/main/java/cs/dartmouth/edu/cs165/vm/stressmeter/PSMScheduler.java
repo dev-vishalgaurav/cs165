@@ -14,11 +14,17 @@ import java.util.Calendar;
  */
 public class PSMScheduler {
 
+    /*
+    Set up alarm schedule by altering the numbers (hours, minutes, seconds)
+     */
     public static void setSchedule(Context context) {
         setSchedule(context, 17, 24, 0);
         setSchedule(context, 17, 26, 0);
     }
 
+    /*
+    Set up alarm schedule using the given hours, minutes, seconds
+     */
     private static void setSchedule(Context context, int hour, int min, int sec) {
 
         // the request code distinguish different stress meter schedule instances
