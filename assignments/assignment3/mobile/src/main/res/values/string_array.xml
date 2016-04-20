@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="input_type">
+        <item>@string/manual</item>
+        <item>@string/gps</item>
+        <item>@string/automatic</item>
+    </string-array>
+
+    <string-array name="activity_type">
+        <item>@string/running</item>
+        <item>@string/walking</item>
+        <item>@string/standing</item>
+        <item>@string/cycling</item>
+        <item>@string/hiking</item>
+        <item>@string/d_skiing</item>
+        <item>@string/c_skiing</item>
+        <item>@string/snowboarding</item>
+        <item>@string/skating</item>
+        <item>@string/swimming</item>
+        <item>@string/biking</item>
+        <item>@string/wheel_chair</item>
+        <item>@string/elliptical</item>
+        <item>@string/other</item>
+    </string-array>
+    <string-array name="tract_start">
+        <item>@string/date</item>
+        <item>@string/time</item>
+        <item>@string/duration</item>
+        <item>@string/distance</item>
+        <item>@string/calories</item>
+        <item>@string/heart_Rate</item>
+        <item>@string/comment</item>
+    </string-array>
+
+    <string-array name="units">
+        <item>@string/metric_km</item>
+        <item>@string/metric_imp</item>
+    </string-array>
+    <string-array name="units_values">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+</resources>
