@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 
+import edu.cs.dartmouth.cs165.myruns.vishal.R;
 import edu.cs.dartmouth.cs165.myruns.vishal.global.MyRunsApp;
 
 /**
@@ -12,7 +14,6 @@ import edu.cs.dartmouth.cs165.myruns.vishal.global.MyRunsApp;
  */
 public class PreferenceUtils {
     public static final String TAG = "PrefUtils";
-    private static final String PREF_NAME = "myruns_prefs";
     public static final String EXTRA_NAME = "extra_name";
     public static final String EXTRA_EMAIL = "extra_email";
     public static final String EXTRA_PHONE = "extra_phone";
@@ -61,7 +62,7 @@ public class PreferenceUtils {
             bundle.putBoolean(EXTRA_GENDER_SELECTED, getBoolean(context, EXTRA_GENDER_SELECTED, true));
             bundle.putBoolean(EXTRA_GENDER, getBoolean(context, EXTRA_GENDER, false));
             String image = getString(context,EXTRA_IMAGE,null);
-            MyRunsApp.printTrace(TAG,"Image uri = " + image);
+            MyRunsApp.printTrace(TAG, "Image uri = " + image);
             if (image != null && !image.isEmpty()) {
                 try {
                     Uri imageUri = Uri.parse(image);
@@ -81,7 +82,7 @@ public class PreferenceUtils {
      * @param value
      */
     public static void putString(Context context, String key, String value) {
-        SharedPreferences preferences = context.getSharedPreferences(PREF_NAME, Context.MODE_WORLD_WRITEABLE);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = preferences.edit();
         edit.putString(key, value);
         edit.commit();
@@ -95,7 +96,7 @@ public class PreferenceUtils {
      * @return
      */
     public static String getString(Context context, String key, String defaultValue) {
-        SharedPreferences preferences = context.getSharedPreferences(PREF_NAME, Context.MODE_WORLD_WRITEABLE);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.getString(key, defaultValue);
     }
 
@@ -107,7 +108,7 @@ public class PreferenceUtils {
      * @return
      */
     public static boolean getBoolean(Context context, String key, boolean defaultValue) {
-        SharedPreferences preferences = context.getSharedPreferences(PREF_NAME, 0);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.getBoolean(key, defaultValue);
     }
 
@@ -118,10 +119,21 @@ public class PreferenceUtils {
      * @param value
      */
     public static void putBoolean(Context context, String key, boolean value) {
-        SharedPreferences preferences = context.getSharedPreferences(PREF_NAME, 0);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = preferences.edit();
         edit.putBoolean(key, value);
         edit.commit();
     }
+    public static int getUnitType(Context context){
+        try{
+            String unit = getString(context,context.getString(R.string.pref_unit_key),"1");
+            return Integer.parseInt(unit);
+        }catch (NumberFormatException ex){
+            return 1;
+        }
+    }
 
+    public static String getDistanceUnit(Context context) {
+        return (getUnitType(context) == 1) ? context.getString(R.string.kms) : context.getString(R.string.miles);
+    }
 }

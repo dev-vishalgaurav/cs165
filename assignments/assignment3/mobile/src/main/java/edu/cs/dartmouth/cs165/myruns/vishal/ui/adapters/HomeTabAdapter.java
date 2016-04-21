@@ -24,10 +24,12 @@ public class HomeTabAdapter extends FragmentPagerAdapter {
     }
 
     private Context mContext;
+    private HistoryFragment.OnItemSelectedListener onItemSelectedListener = null;
 
-    public HomeTabAdapter(FragmentManager fm, Context context) {
+    public HomeTabAdapter(FragmentManager fm, Context context, HistoryFragment.OnItemSelectedListener onItemSelectedListener) {
         super(fm);
         this.mContext = context;
+        this.onItemSelectedListener = onItemSelectedListener;
     }
 
     @Override
@@ -38,7 +40,7 @@ public class HomeTabAdapter extends FragmentPagerAdapter {
             case 0:
                 return new StartFragment();
             case 1:
-                return new HistoryFragment();
+                return HistoryFragment.newInstance(onItemSelectedListener);
             case 2:
                 return new SettingsFragment();
         }

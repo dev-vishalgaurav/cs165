@@ -92,6 +92,7 @@ public class ProfileSettings extends BaseActivity {
     private void initViews() {
         mToolBar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolBar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mEdtName = (EditText) findViewById(R.id.edtName);
         mEdtEmail = (EditText) findViewById(R.id.edtEmail);
         mEdtPhone = (EditText) findViewById(R.id.edtPhone);
@@ -114,7 +115,7 @@ public class ProfileSettings extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
 //        getMenuInflater().inflate(R.menu.menu_profile_settings, menu);
-        return false;
+        return true;
     }
 
     @Override

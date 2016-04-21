@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -36,6 +37,7 @@ public class InputDialogFragment extends DialogFragment {
     private int identifier;
     private String mHint;
     private String mTitle;
+    private String mDefaultText = "";
     private AlertDialog mInputDialog = null;
     private OnTextEntered mOnTextEntered = null;
 
@@ -78,14 +80,17 @@ public class InputDialogFragment extends DialogFragment {
     }
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
+        Log.e("VVV","onCreateDialog ");
         initInputDialog();
         updateViews(savedInstanceState);
         return mInputDialog;
     }
+
     private void updateViews(Bundle savedInstanceState){
         mEdtInput.setInputType(mInputType);
         mEdtInput.setHint(mHint);
-        mEdtInput.setText((savedInstanceState != null) ? savedInstanceState.getString(EXTRA_INPUT_TEXT, "") : "");
+        mDefaultText = (savedInstanceState != null) ? savedInstanceState.getString(EXTRA_INPUT_TEXT, mDefaultText) : mDefaultText ;
+        mEdtInput.setText(mDefaultText);
     }
     private void initInputDialog() {
         if (mInputDialog == null) {
@@ -104,11 +109,13 @@ public class InputDialogFragment extends DialogFragment {
     public void setOnTextEnteredListener(OnTextEntered onTextEntered){
         mOnTextEntered = onTextEntered;
     }
-    public void show(FragmentManager manager, String tag, String title, String hint, int inputType, int identifier){
+    public void show(FragmentManager manager, String tag, String title, String hint,String defaultText, int inputType, int identifier){
+        Log.e("VVV","show, tag =  " + tag + " default = " + defaultText);
         this.mInputType = inputType;
         this.mHint = hint;
         this.mTitle = title;
         this.identifier = identifier;
+        this.mDefaultText = defaultText;
         show(manager,tag);
         setArguments(getUpdatedBundle());
     }

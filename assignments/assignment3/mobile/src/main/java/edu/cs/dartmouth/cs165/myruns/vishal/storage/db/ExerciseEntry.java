@@ -1,6 +1,7 @@
 package edu.cs.dartmouth.cs165.myruns.vishal.storage.db;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -9,13 +10,18 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
+
+import edu.cs.dartmouth.cs165.myruns.vishal.R;
+import edu.cs.dartmouth.cs165.myruns.vishal.storage.preferences.PreferenceUtils;
 
 
 /**
  * Created by Vishal Gaurav
  */
-public class ExerciseEntry {
+public class ExerciseEntry implements Serializable {
 
     private Long id;
     private int mInputType;        // Manual, GPS or automatic
@@ -31,7 +37,7 @@ public class ExerciseEntry {
     private String mComment;       // Comments
     private ArrayList<LatLng> mLocationList = new ArrayList<>(); // Location list
 
-    public ExerciseEntry(Cursor cursor){
+    public ExerciseEntry(Cursor cursor) {
         id = cursor.getLong(cursor.getColumnIndexOrThrow(DBConstants.ExerciseEntryColumns._ID));
         mInputType = cursor.getInt(cursor.getColumnIndexOrThrow(DBConstants.ExerciseEntryColumns.INPUT_TYPE));
         mActivityType = cursor.getInt(cursor.getColumnIndexOrThrow(DBConstants.ExerciseEntryColumns.ACTIVITY_TYPE));
@@ -45,11 +51,136 @@ public class ExerciseEntry {
         mHeartRate = cursor.getInt(cursor.getColumnIndexOrThrow(DBConstants.ExerciseEntryColumns.HEART_RATE));
         mComment = cursor.getString(cursor.getColumnIndexOrThrow(DBConstants.ExerciseEntryColumns.COMMENT));
         mLocationList = getListFromBlob(cursor.getBlob(cursor.getColumnIndexOrThrow(DBConstants.ExerciseEntryColumns.GPS_DATA)));
-
     }
-    private ArrayList<LatLng> getListFromBlob(byte[] data){
+
+    public ExerciseEntry(Long id, int mInputType, int mActivityType, long mDateTime, int mDuration, double mDistance, double mAvgPace, double mAvgSpeed, int mCalorie, double mClimb, int mHeartRate, String mComment) {
+        this.id = id;
+        this.mInputType = mInputType;
+        this.mActivityType = mActivityType;
+        this.mDateTime = mDateTime;
+        this.mDuration = mDuration;
+        this.mDistance = mDistance;
+        this.mAvgPace = mAvgPace;
+        this.mAvgSpeed = mAvgSpeed;
+        this.mCalorie = mCalorie;
+        this.mClimb = mClimb;
+        this.mHeartRate = mHeartRate;
+        this.mComment = mComment;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public int getInputType() {
+        return mInputType;
+    }
+
+    public void setInputType(int mInputType) {
+        this.mInputType = mInputType;
+    }
+
+    public int getActivityType() {
+        return mActivityType;
+    }
+
+    public void setActivityType(int mActivityType) {
+        this.mActivityType = mActivityType;
+    }
+
+    public long getDateTime() {
+        return mDateTime;
+    }
+
+    public void setDateTime(long mDateTime) {
+        this.mDateTime = mDateTime;
+    }
+
+    public int getDuration() {
+        return mDuration;
+    }
+
+    public void setDuration(int mDuration) {
+        this.mDuration = mDuration;
+    }
+
+    public double getDistance() {
+        return mDistance;
+    }
+
+    public void setDistance(double mDistance) {
+        this.mDistance = mDistance;
+    }
+
+    public double getAvgPace() {
+        return mAvgPace;
+    }
+
+    public void setAvgPace(double mAvgPace) {
+        this.mAvgPace = mAvgPace;
+    }
+
+    public double getAvgSpeed() {
+        return mAvgSpeed;
+    }
+
+    public void setAvgSpeed(double mAvgSpeed) {
+        this.mAvgSpeed = mAvgSpeed;
+    }
+
+    public int getCalorie() {
+        return mCalorie;
+    }
+
+    public void setCalorie(int mCalorie) {
+        this.mCalorie = mCalorie;
+    }
+
+    public double getClimb() {
+        return mClimb;
+    }
+
+    public void setClimb(double mClimb) {
+        this.mClimb = mClimb;
+    }
+
+    public int getHeartRate() {
+        return mHeartRate;
+    }
+
+    public void setHeartRate(int mHeartRate) {
+        this.mHeartRate = mHeartRate;
+    }
+
+    public String getComment() {
+        return mComment;
+    }
+
+    public void setComment(String mComment) {
+        this.mComment = mComment;
+    }
+
+    public ArrayList<LatLng> getLocationList() {
+        return mLocationList;
+    }
+
+    public void setLocationList(ArrayList<LatLng> mLocationList) {
+        this.mLocationList = mLocationList;
+    }
+
+
+    public String getFormattedString(Context context, int unitType) {
+        return context.getResources().getStringArray(R.array.input_type)[mInputType] + ":" + context.getResources().getStringArray(R.array.activity_type)[mActivityType] +
+                ", " + new Date(mDateTime).toString() + " " +  mDistance + " " + PreferenceUtils.getDistanceUnit(context) + " , " + mDuration + " " + context.getString(R.string.secs);
+    }
+
+    private ArrayList<LatLng> getListFromBlob(byte[] data) {
         ArrayList<LatLng> result = new ArrayList<>();
-        if(data!=null) {
+        if (data != null) {
             try (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(data))) {
                 ArrayList<LatLng> list = (ArrayList<LatLng>) ois.readObject();
                 if (list != null)
@@ -58,25 +189,27 @@ public class ExerciseEntry {
                 ex.printStackTrace();
             }
         }
-        return  result;
+        return result;
     }
-    public ContentValues toContentValues(){
+
+    public ContentValues toContentValues() {
         ContentValues cv = new ContentValues();
-        cv.put(DBConstants.ExerciseEntryColumns.INPUT_TYPE,mInputType);
-        cv.put(DBConstants.ExerciseEntryColumns.ACTIVITY_TYPE,mInputType);
-        cv.put(DBConstants.ExerciseEntryColumns.DATE_TIME,mDateTime);
-        cv.put(DBConstants.ExerciseEntryColumns.DURATION,mDuration);
-        cv.put(DBConstants.ExerciseEntryColumns.DISTANCE,mDistance);
-        cv.put(DBConstants.ExerciseEntryColumns.AVG_PACE,mAvgPace);
-        cv.put(DBConstants.ExerciseEntryColumns.AVG_SPEED,mAvgSpeed);
-        cv.put(DBConstants.ExerciseEntryColumns.CALORIE,mCalorie);
-        cv.put(DBConstants.ExerciseEntryColumns.CLIMB,mClimb);
-        cv.put(DBConstants.ExerciseEntryColumns.HEART_RATE,mHeartRate);
-        cv.put(DBConstants.ExerciseEntryColumns.COMMENT,mComment);
-        cv.put(DBConstants.ExerciseEntryColumns.GPS_DATA,getGpsBlob());
-        return  cv;
+        cv.put(DBConstants.ExerciseEntryColumns.INPUT_TYPE, mInputType);
+        cv.put(DBConstants.ExerciseEntryColumns.ACTIVITY_TYPE, mInputType);
+        cv.put(DBConstants.ExerciseEntryColumns.DATE_TIME, mDateTime);
+        cv.put(DBConstants.ExerciseEntryColumns.DURATION, mDuration);
+        cv.put(DBConstants.ExerciseEntryColumns.DISTANCE, mDistance);
+        cv.put(DBConstants.ExerciseEntryColumns.AVG_PACE, mAvgPace);
+        cv.put(DBConstants.ExerciseEntryColumns.AVG_SPEED, mAvgSpeed);
+        cv.put(DBConstants.ExerciseEntryColumns.CALORIE, mCalorie);
+        cv.put(DBConstants.ExerciseEntryColumns.CLIMB, mClimb);
+        cv.put(DBConstants.ExerciseEntryColumns.HEART_RATE, mHeartRate);
+        cv.put(DBConstants.ExerciseEntryColumns.COMMENT, mComment);
+        cv.put(DBConstants.ExerciseEntryColumns.GPS_DATA, getGpsBlob());
+        return cv;
     }
-    private byte[] getGpsBlob(){
+
+    private byte[] getGpsBlob() {
         byte[] result = null;
         try {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -85,15 +218,15 @@ public class ExerciseEntry {
             // mArrayList is the ArrayList you want to store
             oos.writeObject(mLocationList);
             result = bos.toByteArray();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return result;
     }
 
-    public static ArrayList<ExerciseEntry> getListFromCursorList(Cursor cursor){
+    public static ArrayList<ExerciseEntry> getListFromCursorList(Cursor cursor) {
         ArrayList<ExerciseEntry> result = new ArrayList<>();
-        while(cursor.moveToNext()){
+        while (cursor.moveToNext()) {
             result.add(new ExerciseEntry(cursor));
         }
         return result;

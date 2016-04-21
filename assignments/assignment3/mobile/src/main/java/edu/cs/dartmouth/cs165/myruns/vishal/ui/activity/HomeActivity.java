@@ -3,22 +3,23 @@
  */
 package edu.cs.dartmouth.cs165.myruns.vishal.ui.activity;
 
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 
 import edu.cs.dartmouth.cs165.myruns.vishal.R;
 import edu.cs.dartmouth.cs165.myruns.vishal.ui.adapters.HomeTabAdapter;
-import edu.cs.dartmouth.cs165.myruns.vishal.ui.adapters.HomeTabAdapter.OnFragmentInteractionListener;
+import edu.cs.dartmouth.cs165.myruns.vishal.ui.fragments.HistoryFragment;
 
 
 /**
  * Common parent for most of the activities of this app.
  * Should not be used as an activity to display layouts.
  */
-public class HomeActivity extends BaseActivity implements OnFragmentInteractionListener{
+public class HomeActivity extends BaseActivity{
     public static final int COUNT_TABS_HOME_SCREEN = 3;
     private ViewPager mVpContents = null;
     private HomeTabAdapter mTabAdapter = null;
@@ -33,14 +34,19 @@ public class HomeActivity extends BaseActivity implements OnFragmentInteractionL
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mVpContents = (ViewPager) findViewById(R.id.vpContainer);
-        mTabAdapter = new HomeTabAdapter(getFragmentManager(),getBaseContext());
+        mTabAdapter = new HomeTabAdapter(getFragmentManager(),getBaseContext(),onItemSelectedListener);
         mVpContents.setAdapter(mTabAdapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mVpContents);
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
+    private HistoryFragment.OnItemSelectedListener onItemSelectedListener = new HistoryFragment.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(long rowid) {
+            Log.e("VVV","onItemSelected, ID = " + rowid);
+            Intent intent = new Intent(getBaseContext(),EntryDetailActivity.class);
+            intent.putExtra(EntryDetailActivity.EXTRA_ENTRY_ID,rowid);
+            startActivity(intent);
+        }
+    };
 }

@@ -133,6 +133,8 @@ public class StartFragment extends Fragment {
         }
         else {
             Intent intent = new Intent(getActivity(), TrackingStartActivity.class);
+            intent.putExtra(TrackingStartActivity.EXTRA_INPUT_TYPE,mSpnInputType.getSelectedItemPosition());
+            intent.putExtra(TrackingStartActivity.EXTRA_ACTIVITY_TYPE,mSpnActivityType.getSelectedItemPosition());
             startActivity(intent);
         }
     }

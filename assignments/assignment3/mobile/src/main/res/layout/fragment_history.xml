@@ -3,4 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="edu.cs.dartmouth.cs165.myruns.vishal.ui.fragments.StartFragment">
+
+    <ListView
+        android:id="@+id/lstHistory"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></ListView>
+
 </RelativeLayout>
