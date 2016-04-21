@@ -9,9 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.sql.Blob;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 
 /**
@@ -89,6 +87,14 @@ public class ExerciseEntry {
             result = bos.toByteArray();
         }catch (Exception ex){
             ex.printStackTrace();
+        }
+        return result;
+    }
+
+    public static ArrayList<ExerciseEntry> getListFromCursorList(Cursor cursor){
+        ArrayList<ExerciseEntry> result = new ArrayList<>();
+        while(cursor.moveToNext()){
+            result.add(new ExerciseEntry(cursor));
         }
         return result;
     }

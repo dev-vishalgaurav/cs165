@@ -14,11 +14,19 @@ import java.util.Calendar;
  */
 public class DateDialogFragment extends DialogFragment {
 
+    public interface OnDateSelectedListener{
+        void onDateSelected(String tag, int year, int month, int dayOfMonth);
+    }
+
+    private OnDateSelectedListener mOnDateSelectedListener = null;
 
     public DateDialogFragment() {
         // Required empty public constructor
     }
 
+    public void setOnDateSelectedListener(OnDateSelectedListener onDateSelectedListener){
+        this.mOnDateSelectedListener = onDateSelectedListener;
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -33,7 +41,9 @@ public class DateDialogFragment extends DialogFragment {
     private DatePickerDialog.OnDateSetListener mOnDateSetListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-
+            if(mOnDateSelectedListener!=null){
+                mOnDateSelectedListener.onDateSelected(getTag(),year,monthOfYear,dayOfMonth);
+            }
         }
     };
 }

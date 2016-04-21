@@ -15,9 +15,15 @@ import android.widget.EditText;
 import edu.cs.dartmouth.cs165.myruns.vishal.R;
 
 /**
- * Wrapper to edittext input dialog
+ * Wrapper to edit text input dialog
  */
 public class InputDialogFragment extends DialogFragment {
+
+    public interface OnTextEntered{
+         void onTextEntered(String tag, String text);
+         void onTextCancelled(String tag);
+    }
+
 
     public static final String EXTRA_TITLE = "extra_title";
     public static final String EXTRA_HINT = "extra_hint";
@@ -31,6 +37,7 @@ public class InputDialogFragment extends DialogFragment {
     private String mHint;
     private String mTitle;
     private AlertDialog mInputDialog = null;
+    private OnTextEntered mOnTextEntered = null;
 
 
     public InputDialogFragment() {
@@ -54,9 +61,10 @@ public class InputDialogFragment extends DialogFragment {
             mTitle = getArguments().getString(EXTRA_TITLE,"");
         }
     }
+
     @Override
     public void onSaveInstanceState(Bundle bundle){
-        bundle.putString(EXTRA_INPUT_TEXT,mEdtInput.getText().toString());
+        bundle.putString(EXTRA_INPUT_TEXT, mEdtInput.getText().toString());
     }
     private Bundle getUpdatedBundle(){
         Bundle bundle = getArguments();
@@ -77,7 +85,7 @@ public class InputDialogFragment extends DialogFragment {
     private void updateViews(Bundle savedInstanceState){
         mEdtInput.setInputType(mInputType);
         mEdtInput.setHint(mHint);
-        mEdtInput.setText((savedInstanceState!=null) ? savedInstanceState.getString(EXTRA_INPUT_TEXT,""): "");
+        mEdtInput.setText((savedInstanceState != null) ? savedInstanceState.getString(EXTRA_INPUT_TEXT, "") : "");
     }
     private void initInputDialog() {
         if (mInputDialog == null) {
@@ -92,6 +100,9 @@ public class InputDialogFragment extends DialogFragment {
             builder.setNegativeButton(getString(R.string.cancel), mOnDialogClickPatientId);
             mInputDialog = builder.create();
         }
+    }
+    public void setOnTextEnteredListener(OnTextEntered onTextEntered){
+        mOnTextEntered = onTextEntered;
     }
     public void show(FragmentManager manager, String tag, String title, String hint, int inputType, int identifier){
         this.mInputType = inputType;
@@ -114,12 +125,16 @@ public class InputDialogFragment extends DialogFragment {
         public void onClick(DialogInterface dialog, int which) {
             switch (which) {
                 case Dialog.BUTTON_POSITIVE: {
-
+                    if(mOnTextEntered!=null){
+                        mOnTextEntered.onTextEntered(getTag(),mEdtInput.getText().toString());
+                    }
                 }
                 break;
 
                 case Dialog.BUTTON_NEGATIVE: {
-
+                    if(mOnTextEntered!=null){
+                        mOnTextEntered.onTextCancelled(getTag());
+                    }
                 }
                 break;
             }

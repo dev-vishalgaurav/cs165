@@ -15,11 +15,19 @@ import java.util.Calendar;
  */
 public class TimeDialogFragment extends DialogFragment {
 
+    public interface OnTimeSelectedListener{
+            void onTimeSelected(String tag, int hourOfDay, int minute);
+    }
+
+    private OnTimeSelectedListener mOnTimeSelectedListener = null;
 
     public TimeDialogFragment() {
         // Required empty public constructor
     }
 
+    public void setOnTimeSelectedListener(OnTimeSelectedListener onTimeSelectedListener){
+        this.mOnTimeSelectedListener = onTimeSelectedListener;
+    }
 
    @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
@@ -32,7 +40,9 @@ public class TimeDialogFragment extends DialogFragment {
     private TimePickerDialog.OnTimeSetListener mOnTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-
+            if(mOnTimeSelectedListener!=null){
+                mOnTimeSelectedListener.onTimeSelected(getTag(),hourOfDay,minute);
+            }
         }
     };
 }

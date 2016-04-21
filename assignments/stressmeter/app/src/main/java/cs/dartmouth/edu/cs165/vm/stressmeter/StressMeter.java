@@ -35,6 +35,7 @@ public class StressMeter extends AppCompatActivity implements NavigationView.OnN
     protected void onDestroy(){
         //Every time main activity (launcher) will destroy
         PSMScheduler.setSchedule(this); // we will set the alarm
+        stopMediaAndVibration();
         super.onDestroy();
     }
 
