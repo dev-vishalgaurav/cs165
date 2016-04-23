@@ -34,7 +34,7 @@ import edu.cs.dartmouth.cs165.myruns.vishal.ui.adapters.HomeTabAdapter.OnFragmen
  */
 public class HistoryFragment extends Fragment implements LoaderManager.LoaderCallbacks<ArrayList<ExerciseEntry>>, SharedPreferences.OnSharedPreferenceChangeListener {
 
-    public interface OnItemSelectedListener{
+    public interface OnItemSelectedListener {
         void onItemSelected(long rowid);
     }
 
@@ -45,6 +45,7 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
     ArrayList<ExerciseEntry> historyData = new ArrayList<>();
     private HistoryAdapter historyAdapter = null;
     private OnItemSelectedListener onItemSelectedListener = null;
+
     public HistoryFragment() {
         // Required empty public constructor
     }
@@ -81,7 +82,7 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
 
     private void initViews(View rootView) {
         mLstHistory = (ListView) rootView.findViewById(R.id.lstHistory);
-        historyAdapter = new HistoryAdapter(getActivity(),historyData);
+        historyAdapter = new HistoryAdapter(getActivity(), historyData);
         mLstHistory.setAdapter(historyAdapter);
         mLstHistory.setOnItemClickListener(mOnItemClickListener);
         PreferenceManager.getDefaultSharedPreferences(getActivity()).registerOnSharedPreferenceChangeListener(this);
@@ -89,6 +90,9 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
 
     @Override
     public void onAttach(Context context) {
+        if (getActivity() instanceof OnItemSelectedListener) {
+            onItemSelectedListener = (OnItemSelectedListener) getActivity();
+        }
         super.onAttach(context);
 
     }
@@ -131,14 +135,16 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         historyAdapter.notifyDataSetChanged();
     }
+
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if(onItemSelectedListener!=null){
+            if (onItemSelectedListener != null) {
                 onItemSelectedListener.onItemSelected(id);
             }
         }
     };
+
     private static class HistoryLoader extends AsyncTaskLoader<ArrayList<ExerciseEntry>> {
 
         public HistoryLoader(Context context) {
@@ -167,7 +173,8 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
 
         private Context context;
         private ArrayList<ExerciseEntry> data = null;
-        public HistoryAdapter(Context context, ArrayList<ExerciseEntry> data ) {
+
+        public HistoryAdapter(Context context, ArrayList<ExerciseEntry> data) {
             this.context = context;
             this.data = data;
         }
@@ -189,12 +196,12 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            if(convertView == null){
-                convertView = LayoutInflater.from(context).inflate(R.layout.row_history,null);
+            if (convertView == null) {
+                convertView = LayoutInflater.from(context).inflate(R.layout.row_history, null);
             }
             ExerciseEntry entry = getItem(position);
             TextView txtHistory = (TextView) convertView.findViewById(R.id.txtHistoryData);
-            txtHistory.setText(entry.getFormattedString(context,PreferenceUtils.getUnitType(context)));
+            txtHistory.setText(entry.getFormattedString(context, PreferenceUtils.getUnitType(context)));
             return convertView;
         }
 

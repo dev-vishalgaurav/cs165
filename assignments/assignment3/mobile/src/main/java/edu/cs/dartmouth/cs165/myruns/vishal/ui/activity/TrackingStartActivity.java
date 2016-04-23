@@ -3,6 +3,7 @@
  */
 package edu.cs.dartmouth.cs165.myruns.vishal.ui.activity;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
@@ -79,12 +80,24 @@ public class TrackingStartActivity extends BaseActivity {
         setContentView(R.layout.activity_tracking_start);
         initViews();
         getIntentData();
+        updateDate();
         if (savedInstanceState != null) {
             updateValues(savedInstanceState);
             updateFragments(savedInstanceState);
         }
     }
 
+    /**
+     * to update current time in the values
+     */
+    private void updateDate(){
+        Calendar cal = Calendar.getInstance();
+        year = cal.get(Calendar.YEAR);
+        month = cal.get(Calendar.MONTH);
+        day = cal.get(Calendar.DAY_OF_MONTH);
+        hour = cal.get(Calendar.HOUR_OF_DAY);
+        min = cal.get(Calendar.MINUTE);
+    }
     private void getIntentData(){
         if(getIntent()!=null){
             inputType = getIntent().getIntExtra(EXTRA_INPUT_TYPE,inputType);
@@ -163,7 +176,7 @@ public class TrackingStartActivity extends BaseActivity {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR,year);
         cal.set(Calendar.MONTH,month);
-        cal.set(Calendar.DAY_OF_MONTH,month);
+        cal.set(Calendar.DAY_OF_MONTH,day);
         cal.set(Calendar.HOUR_OF_DAY,hour);
         cal.set(Calendar.MINUTE, min);
         return cal.getTimeInMillis();
@@ -172,15 +185,10 @@ public class TrackingStartActivity extends BaseActivity {
     /**
      * Show toast and exit when save clicked
      */
-    private void onSaveClicked() {
+    private long onSaveClicked() {
         ExerciseEntry entry = new ExerciseEntry(-1l,inputType,activityType,getDate(),duration,distance,0,0,calories,0,heartRate,comments);
         long id = MyRunsApp.getDb(getBaseContext()).insertEntry(entry);
-        if(id > 0) {
-            showToast(getString(R.string.saved) + "#" + id);
-        }else{
-            showToast(getString(R.string.error));
-        }
-        finish();
+        return id;
     }
 
     /**
@@ -349,7 +357,7 @@ public class TrackingStartActivity extends BaseActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.btnSave: {
-                    onSaveClicked();
+                    new SaveEntryTask().execute();
                 }
                 break;
                 case R.id.btnCancel: {
@@ -359,5 +367,29 @@ public class TrackingStartActivity extends BaseActivity {
             }
         }
     };
+    private class SaveEntryTask extends AsyncTask<Void,Void,Long> {
 
+        @Override
+        protected void onPreExecute() {
+            showProgressDialog(getString(R.string.deleting_message),false);
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Long doInBackground(Void... params) {
+            return onSaveClicked();
+        }
+
+        @Override
+        protected void onPostExecute(Long result) {
+            dismissAlertDialog();
+            if(result > 0) {
+                showToast(getString(R.string.saved) + "#" + result);
+            }else{
+                showToast(getString(R.string.error));
+            }
+            finish();
+            super.onPostExecute(result);
+        }
+    }
 }
