@@ -3,6 +3,7 @@ package edu.cs.dartmouth.cs165.myruns.vishal.ui.activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -72,7 +73,7 @@ public class EntryDetailActivity extends BaseActivity {
         getMenuInflater().inflate(R.menu.menu_entry_details, menu);
         return true;
     }
-    private boolean onDeleteEntry(){
+    private boolean onDeleteEntry(long id){
         if(MyRunsApp.getDb(getBaseContext()).removeEntry(id) > 0){
             return true;
         }
@@ -89,6 +90,7 @@ public class EntryDetailActivity extends BaseActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
     private void showDiscardConfirmDialog() {
         initDiscardConfirmDialog();
         mDeleteConfirmDialog.show();
@@ -100,13 +102,8 @@ public class EntryDetailActivity extends BaseActivity {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case Dialog.BUTTON_POSITIVE: {
-                        if(onDeleteEntry()){
-                            showToast(getString(R.string.success));
-                            finish();
-                        }else{
-                            showToast(getString(R.string.error_in_delete));
-                            finish();
-                        }                    }
+                        new DeleteTask().execute(id);
+                    }
                     break;
                     case Dialog.BUTTON_NEGATIVE: {
                     }
@@ -121,6 +118,32 @@ public class EntryDetailActivity extends BaseActivity {
             builder.setPositiveButton(getString(R.string.yes), mOnDialogClickDiscardConfirm);
             builder.setNegativeButton(getString(R.string.no), mOnDialogClickDiscardConfirm);
             mDeleteConfirmDialog = builder.create();
+        }
+    }
+
+    private class DeleteTask extends AsyncTask<Long,Void,Boolean>{
+        @Override
+        protected void onPreExecute() {
+            showProgressDialog(getString(R.string.deleting_message),false);
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            dismissAlertDialog();
+            if(result){
+                showToast(getString(R.string.success));
+                finish();
+            }else{
+                showToast(getString(R.string.error_in_delete));
+                finish();
+            }
+            super.onPostExecute(result);
+        }
+
+        @Override
+        protected Boolean doInBackground(Long... params) {
+            return onDeleteEntry(params[0]);
         }
     }
 }

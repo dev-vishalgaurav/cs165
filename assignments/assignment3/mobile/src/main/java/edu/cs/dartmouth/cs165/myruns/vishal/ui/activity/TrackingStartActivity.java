@@ -228,7 +228,7 @@ public class TrackingStartActivity extends BaseActivity {
                     mInputDistance = new InputDialogFragment();
                 }
                 mInputDistance.setOnTextEnteredListener(mOnTextEntered);
-                mInputDistance.show(getSupportFragmentManager(), TAG_DISTANCE, mAdapter.getItem(position).toString(), "",String.valueOf(distance), InputType.TYPE_CLASS_NUMBER, 1);
+                mInputDistance.show(getSupportFragmentManager(), TAG_DISTANCE, mAdapter.getItem(position).toString() + " " + getString(R.string.in_miles), "", String.valueOf(distance), InputType.TYPE_CLASS_NUMBER, 1);
             }
             break;
             case 4: {

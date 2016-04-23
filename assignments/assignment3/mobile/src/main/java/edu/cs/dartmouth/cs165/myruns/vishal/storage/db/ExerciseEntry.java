@@ -112,6 +112,13 @@ public class ExerciseEntry implements Serializable {
         return mDistance;
     }
 
+    public double getDistance(int unitType) {
+        if(unitType == 2) {// miles\
+            return getDistance();
+        }else{
+            return getDistance() * 1.6 ; // convert to KMs
+        }
+    }
     public void setDistance(double mDistance) {
         this.mDistance = mDistance;
     }
@@ -175,7 +182,7 @@ public class ExerciseEntry implements Serializable {
 
     public String getFormattedString(Context context, int unitType) {
         return context.getResources().getStringArray(R.array.input_type)[mInputType] + ":" + context.getResources().getStringArray(R.array.activity_type)[mActivityType] +
-                ", " + new Date(mDateTime).toString() + " " +  mDistance + " " + PreferenceUtils.getDistanceUnit(context) + " , " + mDuration + " " + context.getString(R.string.secs);
+                ", " + new Date(mDateTime).toString() + " " +  getDistance(unitType) + " " + PreferenceUtils.getDistanceUnit(context) + " , " + mDuration + " " + context.getString(R.string.secs);
     }
 
     private ArrayList<LatLng> getListFromBlob(byte[] data) {
