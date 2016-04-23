@@ -79,7 +79,7 @@
     <string name="comment">Comment</string>
     <string name="discarded">Discarded</string>
     <string name="dialog_title_delete_confirm">Are you Sure ?</string>
-    <string name="dialog_message_delete_confirm">Do you want to discard Entry with id %1$s ?</string>
+    <string name="dialog_message_delete_confirm">Do you want to discard entry with ID %1$s ?</string>
     <string name="pref_cat_account">Account Preferences</string>
 
     <string name="pref_profile_title">User Profile</string>
