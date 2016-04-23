@@ -3,6 +3,7 @@
  */
 package edu.cs.dartmouth.cs165.myruns.vishal.ui.activity;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
@@ -172,15 +173,10 @@ public class TrackingStartActivity extends BaseActivity {
     /**
      * Show toast and exit when save clicked
      */
-    private void onSaveClicked() {
+    private long onSaveClicked() {
         ExerciseEntry entry = new ExerciseEntry(-1l,inputType,activityType,getDate(),duration,distance,0,0,calories,0,heartRate,comments);
         long id = MyRunsApp.getDb(getBaseContext()).insertEntry(entry);
-        if(id > 0) {
-            showToast(getString(R.string.saved) + "#" + id);
-        }else{
-            showToast(getString(R.string.error));
-        }
-        finish();
+        return id;
     }
 
     /**
@@ -349,7 +345,7 @@ public class TrackingStartActivity extends BaseActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.btnSave: {
-                    onSaveClicked();
+                    new SaveEntryTask().execute();
                 }
                 break;
                 case R.id.btnCancel: {
@@ -359,5 +355,29 @@ public class TrackingStartActivity extends BaseActivity {
             }
         }
     };
+    private class SaveEntryTask extends AsyncTask<Void,Void,Long> {
 
+        @Override
+        protected void onPreExecute() {
+            showProgressDialog(getString(R.string.deleting_message),false);
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Long doInBackground(Void... params) {
+            return onSaveClicked();
+        }
+
+        @Override
+        protected void onPostExecute(Long result) {
+            dismissAlertDialog();
+            if(result > 0) {
+                showToast(getString(R.string.saved) + "#" + result);
+            }else{
+                showToast(getString(R.string.error));
+            }
+            finish();
+            super.onPostExecute(result);
+        }
+    }
 }
