@@ -12,10 +12,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 
 import edu.cs.dartmouth.cs165.myruns.vishal.R;
 import edu.cs.dartmouth.cs165.myruns.vishal.storage.preferences.PreferenceUtils;
+import edu.cs.dartmouth.cs165.myruns.vishal.utils.DateTimeUtils;
 
 
 /**
@@ -113,12 +113,13 @@ public class ExerciseEntry implements Serializable {
     }
 
     public double getDistance(int unitType) {
-        if(unitType == 2) {// miles\
+        if (unitType == 2) {// miles\
             return getDistance();
-        }else{
-            return getDistance() * 1.6 ; // convert to KMs
+        } else {
+            return getDistance() * 1.6; // convert to KMs
         }
     }
+
     public void setDistance(double mDistance) {
         this.mDistance = mDistance;
     }
@@ -182,7 +183,7 @@ public class ExerciseEntry implements Serializable {
 
     public String getFormattedString(Context context, int unitType) {
         return context.getResources().getStringArray(R.array.input_type)[mInputType] + ":" + context.getResources().getStringArray(R.array.activity_type)[mActivityType] +
-                ", " + new Date(mDateTime).toString() + " " +  getDistance(unitType) + " " + PreferenceUtils.getDistanceUnit(context) + " , " + mDuration + " " + context.getString(R.string.secs);
+                ", " + DateTimeUtils.getFormattedDate(mDateTime, DateTimeUtils.EXCERCISE_ENTRY_FORMAT) + " " + getDistance(unitType) + " " + PreferenceUtils.getDistanceUnit(context) + " , " + mDuration + " " + context.getString(R.string.secs);
     }
 
     private ArrayList<LatLng> getListFromBlob(byte[] data) {

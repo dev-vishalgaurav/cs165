@@ -80,12 +80,24 @@ public class TrackingStartActivity extends BaseActivity {
         setContentView(R.layout.activity_tracking_start);
         initViews();
         getIntentData();
+        updateDate();
         if (savedInstanceState != null) {
             updateValues(savedInstanceState);
             updateFragments(savedInstanceState);
         }
     }
 
+    /**
+     * to update current time in the values
+     */
+    private void updateDate(){
+        Calendar cal = Calendar.getInstance();
+        year = cal.get(Calendar.YEAR);
+        month = cal.get(Calendar.MONTH);
+        day = cal.get(Calendar.DAY_OF_MONTH);
+        hour = cal.get(Calendar.HOUR_OF_DAY);
+        min = cal.get(Calendar.MINUTE);
+    }
     private void getIntentData(){
         if(getIntent()!=null){
             inputType = getIntent().getIntExtra(EXTRA_INPUT_TYPE,inputType);
@@ -164,7 +176,7 @@ public class TrackingStartActivity extends BaseActivity {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR,year);
         cal.set(Calendar.MONTH,month);
-        cal.set(Calendar.DAY_OF_MONTH,month);
+        cal.set(Calendar.DAY_OF_MONTH,day);
         cal.set(Calendar.HOUR_OF_DAY,hour);
         cal.set(Calendar.MINUTE, min);
         return cal.getTimeInMillis();
