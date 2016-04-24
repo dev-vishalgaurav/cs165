@@ -7,17 +7,17 @@ import android.provider.BaseColumns;
  */
 public class DBConstants {
     /**
-     * DB name for my runs app
+     * DB name for MyRuns app
      */
     public static final String DATABASE_NAME = "myruns.db";
     /**
-     * db version
+     * DB version
      */
     public static final int DATABASE_VERSION = 1;
 
 
     /**
-     * column structure for ExerciseEntry table
+     * Column structure for ExerciseEntry table
      * <p/>
      * <p/>
      * CREATE TABLE IF NOT EXISTS ENTRIES (

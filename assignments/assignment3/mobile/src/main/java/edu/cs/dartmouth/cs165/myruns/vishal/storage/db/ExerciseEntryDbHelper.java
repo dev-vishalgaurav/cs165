@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class ExerciseEntryDbHelper extends SQLiteOpenHelper {
     /**
-     * constructor for DB helper. only context is required in this wrapper.
+     * Constructor for DB helper. Only context is required in this wrapper.
      *
      * @param context
      */
@@ -35,6 +35,9 @@ public class ExerciseEntryDbHelper extends SQLiteOpenHelper {
         db.execSQL(DBConstants.ExerciseEntryColumns.QUERY_CREATE);
     }
 
+    /**
+     * Insert values into table
+     */
     protected long insert(String tableName, ContentValues values) {
         SQLiteDatabase writableDB = getWritableDatabase();
         long rowId = -1;
@@ -44,6 +47,9 @@ public class ExerciseEntryDbHelper extends SQLiteOpenHelper {
         return rowId;
     }
 
+    /**
+     * Delete from table
+     */
     protected long delete(String tableName, String whereClause, String[] selectionArgs) {
         SQLiteDatabase writableDB = getWritableDatabase();
         int updatedRows = 0;
@@ -62,6 +68,9 @@ public class ExerciseEntryDbHelper extends SQLiteOpenHelper {
         return resultCursor;
     }
 
+    /**
+     * Update table
+     */
     protected int update(String tableName, ContentValues values, String whereClause, String[] whereArgs) {
         SQLiteDatabase writableDB = getWritableDatabase();
         int updatedRows = 0;
@@ -71,19 +80,25 @@ public class ExerciseEntryDbHelper extends SQLiteOpenHelper {
         return updatedRows;
     }
 
-    // Insert a item given each column value
+    /**
+     * Insert a item given each column value
+     */
     public long insertEntry(ExerciseEntry entry) {
        return  insert(DBConstants.ExerciseEntryColumns.TABLE_NAME,entry.toContentValues());
     }
 
-    // Remove an entry by giving its index
+    /**
+     * Remove an entry by giving its index
+     */
     public long removeEntry(long rowIndex) {
         String selection = DBConstants.ExerciseEntryColumns._ID +  " = ? " ;
         String[] selectionArgs = {String.valueOf(rowIndex)};
         return delete(DBConstants.ExerciseEntryColumns.TABLE_NAME, selection, selectionArgs);
     }
 
-    // Query a specific entry by its index.
+    /**
+     * Query a specific entry by its index
+     */
     public ExerciseEntry fetchEntryByIndex(long rowId) {
         String selection = DBConstants.ExerciseEntryColumns._ID +  " = ? " ;
         String[] selectionArgs = {String.valueOf(rowId)};
@@ -93,7 +108,10 @@ public class ExerciseEntryDbHelper extends SQLiteOpenHelper {
     public Cursor fetchAllEntryCursor(){
         return query(DBConstants.ExerciseEntryColumns.TABLE_NAME, null, null, null, null, null, null);
     }
-    // Query the entire table, return all rows
+
+    /**
+     * Query the entire table, return all rows
+     */
     public ArrayList<ExerciseEntry> fetchEntries() {
         return ExerciseEntry.getListFromCursorList(fetchAllEntryCursor());
     }

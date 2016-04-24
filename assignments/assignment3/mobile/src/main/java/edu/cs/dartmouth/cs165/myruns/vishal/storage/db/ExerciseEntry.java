@@ -68,6 +68,10 @@ public class ExerciseEntry implements Serializable {
         this.mComment = mComment;
     }
 
+    /**
+     * Getter and setter methoods
+     */
+
     public Long getId() {
         return id;
     }
@@ -180,7 +184,9 @@ public class ExerciseEntry implements Serializable {
         this.mLocationList = mLocationList;
     }
 
-
+    /**
+     * Get formatted string
+     */
     public String getFormattedString(Context context, int unitType) {
         return context.getResources().getStringArray(R.array.input_type)[mInputType] + ":" + context.getResources().getStringArray(R.array.activity_type)[mActivityType] +
                 ", " + DateTimeUtils.getFormattedDate(mDateTime, DateTimeUtils.EXCERCISE_ENTRY_FORMAT) + " " + getDistance(unitType) + " " + PreferenceUtils.getDistanceUnit(context) + " , " + mDuration + " " + context.getString(R.string.secs);
