@@ -87,7 +87,7 @@ public class ProfileSettings extends BaseActivity {
     }
 
     /**
-     * Main setup
+     * Main setup for display
      */
     private void initViews() {
         mToolBar = (Toolbar) findViewById(R.id.toolbar);

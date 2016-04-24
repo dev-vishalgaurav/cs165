@@ -18,13 +18,13 @@ public class SettingsFragment extends PreferenceFragment {
         getString(R.string.pref_profile_key);
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.pref_start_settings);
-        // set click listeners to the preferences for which we need to take actions manually
+        // Set click listeners to the preferences for which we need to take actions manually
         findPreference(getString(R.string.pref_profile_key)).setOnPreferenceClickListener(mOnPreferenceClicked);
         findPreference(getString(R.string.pref_webpage_key)).setOnPreferenceClickListener(mOnPreferenceClicked);
     }
 
     /**
-     * handle preferences clicks
+     * Handle preferences clicks
      */
     private Preference.OnPreferenceClickListener mOnPreferenceClicked = new Preference.OnPreferenceClickListener() {
         @Override

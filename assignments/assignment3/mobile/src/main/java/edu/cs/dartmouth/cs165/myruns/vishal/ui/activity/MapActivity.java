@@ -31,7 +31,7 @@ public class MapActivity extends BaseActivity {
     }
 
     /**
-     * Main setup
+     * Main display setup
      */
     private void initViews() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

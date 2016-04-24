@@ -88,7 +88,7 @@ public class TrackingStartActivity extends BaseActivity {
     }
 
     /**
-     * to update current time in the values
+     * Update current time in the values
      */
     private void updateDate(){
         Calendar cal = Calendar.getInstance();
@@ -98,12 +98,20 @@ public class TrackingStartActivity extends BaseActivity {
         hour = cal.get(Calendar.HOUR_OF_DAY);
         min = cal.get(Calendar.MINUTE);
     }
+
+    /**
+     * Get intent data
+     */
     private void getIntentData(){
         if(getIntent()!=null){
             inputType = getIntent().getIntExtra(EXTRA_INPUT_TYPE,inputType);
             activityType = getIntent().getIntExtra(EXTRA_ACTIVITY_TYPE,activityType);
         }
     }
+
+    /**
+     * Update the user-entered values
+     */
     private void updateValues(Bundle onSavedInstanceState) {
         year = onSavedInstanceState.getInt(TAG_YEAR, year);
         month = onSavedInstanceState.getInt(TAG_MONTH, month);
@@ -117,6 +125,9 @@ public class TrackingStartActivity extends BaseActivity {
         comments = onSavedInstanceState.getString(TAG_COMMENTS, comments);
     }
 
+    /**
+     * Save the user-entered values
+     */
     private void saveValues(Bundle savedInstanceState) {
         savedInstanceState.putInt(TAG_YEAR, year);
         savedInstanceState.putInt(TAG_MONTH, month);
@@ -137,6 +148,9 @@ public class TrackingStartActivity extends BaseActivity {
         saveValues(onSavedInstanceState);
     }
 
+    /**
+     * Update fragments
+     */
     private void updateFragments(Bundle onSavedInstanceState) {
         if (onSavedInstanceState != null) {
             mInputDate = (DateDialogFragment) getSupportFragmentManager().findFragmentByTag(TAG_DATE);
@@ -157,7 +171,7 @@ public class TrackingStartActivity extends BaseActivity {
     }
 
     /**
-     * Main setup
+     * Main display setup
      */
     private void initViews() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -172,6 +186,9 @@ public class TrackingStartActivity extends BaseActivity {
         mLstTrack.setOnItemClickListener(mOnItemClickListener);
     }
 
+    /**
+     * Get date
+     */
     private long getDate(){
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR,year);
@@ -201,7 +218,6 @@ public class TrackingStartActivity extends BaseActivity {
 
     /**
      * Opens appropriate activities when item clicked
-     *
      * @param view
      * @param position indicates what item was clicked
      */
@@ -266,6 +282,9 @@ public class TrackingStartActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Listener for date
+     */
     private DateDialogFragment.OnDateSelectedListener mOnDateSelectedListener = new DateDialogFragment.OnDateSelectedListener() {
         @Override
         public void onDateSelected(String tag, int year, int month, int dayOfMonth) {
@@ -281,6 +300,9 @@ public class TrackingStartActivity extends BaseActivity {
         }
     };
 
+    /**
+     * Listener for time
+     */
     private TimeDialogFragment.OnTimeSelectedListener mOnTimeSelectedListener = new TimeDialogFragment.OnTimeSelectedListener() {
         @Override
         public void onTimeSelected(String tag, int hourOfDay, int minute) {
@@ -294,6 +316,9 @@ public class TrackingStartActivity extends BaseActivity {
         }
     };
 
+    /**
+     * Get double value for given text
+     */
     private double getDoubleValue(String text){
         double result = 0;
         if(text!= null && !text.isEmpty()){
@@ -305,6 +330,10 @@ public class TrackingStartActivity extends BaseActivity {
         }
         return result;
     }
+
+    /**
+     * Get int value for given text
+     */
     private int getIntValue(String text){
         int result = 0;
         if(text!= null && !text.isEmpty()){
@@ -316,6 +345,7 @@ public class TrackingStartActivity extends BaseActivity {
         }
         return result;
     }
+
     private InputDialogFragment.OnTextEntered mOnTextEntered = new InputDialogFragment.OnTextEntered() {
         @Override
         public void onTextEntered(String tag, String text) {
@@ -367,6 +397,10 @@ public class TrackingStartActivity extends BaseActivity {
             }
         }
     };
+
+    /**
+     * Private class
+     */
     private class SaveEntryTask extends AsyncTask<Void,Void,Long> {
 
         @Override

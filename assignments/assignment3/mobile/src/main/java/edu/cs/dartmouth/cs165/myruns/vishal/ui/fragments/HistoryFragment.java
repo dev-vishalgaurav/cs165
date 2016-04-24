@@ -55,7 +55,6 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
-     *
      * @return A new instance of fragment StartFragment.
      */
     public static HistoryFragment newInstance() {
@@ -83,6 +82,9 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
         return mRootView;
     }
 
+    /**
+     * Main setup display
+     */
     private void initViews(View rootView) {
         mLstHistory = (ListView) rootView.findViewById(R.id.lstHistory);
         historyAdapter = new HistoryAdapter(getActivity(), historyData);
@@ -161,6 +163,9 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
         }
     };
 
+    /**
+     * Private class
+     */
     private static class HistoryLoader extends AsyncTaskLoader<ArrayList<ExerciseEntry>> {
 
         public HistoryLoader(Context context) {
@@ -185,6 +190,9 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
         }
     }
 
+    /**
+     * Private class
+     */
     private class HistoryAdapter extends BaseAdapter {
 
         private Context context;

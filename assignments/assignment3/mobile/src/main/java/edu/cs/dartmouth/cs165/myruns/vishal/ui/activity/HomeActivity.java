@@ -31,6 +31,9 @@ public class HomeActivity extends BaseActivity implements HistoryFragment.OnItem
         initViews();
     }
 
+    /**
+     * Main display setup
+     */
     private void initViews() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
