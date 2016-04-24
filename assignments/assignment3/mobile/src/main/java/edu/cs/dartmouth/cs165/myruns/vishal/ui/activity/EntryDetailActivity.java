@@ -17,6 +17,10 @@ import edu.cs.dartmouth.cs165.myruns.vishal.global.MyRunsApp;
 import edu.cs.dartmouth.cs165.myruns.vishal.storage.db.ExerciseEntry;
 import edu.cs.dartmouth.cs165.myruns.vishal.storage.preferences.PreferenceUtils;
 
+
+/**
+ * For the entry details saved by the user
+ */
 public class EntryDetailActivity extends BaseActivity {
 
     public static final String EXTRA_ENTRY_ID = "extra_entry_id";
@@ -39,6 +43,9 @@ public class EntryDetailActivity extends BaseActivity {
         updateData();
     }
 
+    /**
+     * Update the entry data to the user input
+     */
     private void updateData() {
         id = getIntent().getLongExtra(EXTRA_ENTRY_ID, id);
         ExerciseEntry entry = MyRunsApp.getDb(getBaseContext()).fetchEntryByIndex(id);
@@ -55,6 +62,9 @@ public class EntryDetailActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Main setup for display
+     */
     private void initViews() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -73,6 +83,10 @@ public class EntryDetailActivity extends BaseActivity {
         getMenuInflater().inflate(R.menu.menu_entry_details, menu);
         return true;
     }
+
+    /**
+     * Delete entry associated with the provided ID
+     */
     private boolean onDeleteEntry(long id){
         if(MyRunsApp.getDb(getBaseContext()).removeEntry(id) > 0){
             return true;
@@ -91,11 +105,17 @@ public class EntryDetailActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Show message upon entry discarding
+     */
     private void showDiscardConfirmDialog() {
         initDiscardConfirmDialog();
         mDeleteConfirmDialog.show();
     }
 
+    /**
+     * Confirm entry deletion by the user
+     */
     private void initDiscardConfirmDialog() {
         Dialog.OnClickListener mOnDialogClickDiscardConfirm = new DialogInterface.OnClickListener() {
             @Override
@@ -121,6 +141,9 @@ public class EntryDetailActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Entry deletion
+     */
     private class DeleteTask extends AsyncTask<Long,Void,Boolean>{
         @Override
         protected void onPreExecute() {
