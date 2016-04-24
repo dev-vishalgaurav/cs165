@@ -371,7 +371,7 @@ public class TrackingStartActivity extends BaseActivity {
 
         @Override
         protected void onPreExecute() {
-            showProgressDialog(getString(R.string.deleting_message),false);
+            showProgressDialog(getString(R.string.saving_entry),false);
             super.onPreExecute();
         }
 

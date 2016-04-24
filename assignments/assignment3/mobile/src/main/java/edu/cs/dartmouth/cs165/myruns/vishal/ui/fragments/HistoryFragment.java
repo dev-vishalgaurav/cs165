@@ -1,5 +1,6 @@
 package edu.cs.dartmouth.cs165.myruns.vishal.ui.fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.AsyncTaskLoader;
@@ -8,6 +9,7 @@ import android.content.Loader;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,9 +58,8 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
      *
      * @return A new instance of fragment StartFragment.
      */
-    public static HistoryFragment newInstance(OnItemSelectedListener mOnItemSelectedListener) {
+    public static HistoryFragment newInstance() {
         HistoryFragment fragment = new HistoryFragment();
-        fragment.onItemSelectedListener = mOnItemSelectedListener;
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -67,6 +68,7 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e("VVV", "History : onCreate");
         if (getArguments() != null) {
         }
     }
@@ -74,6 +76,7 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.e("VVV", "History : onCreateView");
         // Inflate the layout for this fragment
         mRootView = inflater.inflate(R.layout.fragment_history, container, false);
         initViews(mRootView);
@@ -88,13 +91,22 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
         PreferenceManager.getDefaultSharedPreferences(getActivity()).registerOnSharedPreferenceChangeListener(this);
     }
 
+
     @Override
     public void onAttach(Context context) {
-        if (getActivity() instanceof OnItemSelectedListener) {
-            onItemSelectedListener = (OnItemSelectedListener) getActivity();
-        }
         super.onAttach(context);
-
+        Log.e("VVV", "History : onAttach");
+        if (context instanceof OnItemSelectedListener) {
+            onItemSelectedListener = (OnItemSelectedListener) context;
+        }
+    }
+    @Override
+    public void onAttach(Activity context) {
+        super.onAttach(context);
+        Log.e("VVV", "History : onAttach");
+        if (context instanceof OnItemSelectedListener) {
+            onItemSelectedListener = (OnItemSelectedListener) context;
+        }
     }
 
     @Override
@@ -104,12 +116,15 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
 
     @Override
     public void onResume() {
+        Log.e("VVV", "History : onAttach");
         super.onResume();
         getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
     public void onDetach() {
+        Log.e("VVV", "History : onDeAttach");
+        mOnItemClickListener = null;
         super.onDetach();
     }
 
@@ -139,6 +154,7 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Log.e("VVV","OnItemClick History fragment :- " + position);
             if (onItemSelectedListener != null) {
                 onItemSelectedListener.onItemSelected(id);
             }
