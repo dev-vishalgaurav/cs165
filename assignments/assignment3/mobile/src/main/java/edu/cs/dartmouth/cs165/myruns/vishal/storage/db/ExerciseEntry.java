@@ -69,7 +69,7 @@ public class ExerciseEntry implements Serializable {
     }
 
     /**
-     * Getter and setter methoods
+     * Getter and setter methods
      */
 
     public Long getId() {
@@ -185,7 +185,7 @@ public class ExerciseEntry implements Serializable {
     }
 
     /**
-     * Get formatted string
+     * Get formatted string for an entry
      */
     public String getFormattedString(Context context, int unitType) {
         return context.getResources().getStringArray(R.array.input_type)[mInputType] + ":" + context.getResources().getStringArray(R.array.activity_type)[mActivityType] +
