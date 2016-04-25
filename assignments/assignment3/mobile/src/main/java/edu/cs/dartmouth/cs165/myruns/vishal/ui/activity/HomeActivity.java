@@ -27,6 +27,7 @@ public class HomeActivity extends BaseActivity implements HistoryFragment.OnItem
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e("VVV","HomeActivity :- onCreate");
         setContentView(R.layout.activity_home);
         initViews();
     }
@@ -49,6 +50,19 @@ public class HomeActivity extends BaseActivity implements HistoryFragment.OnItem
         Log.e("VVV", "onItemSelected, ID = " + rowid);
         Intent intent = new Intent(getBaseContext(), EntryDetailActivity.class);
         intent.putExtra(EntryDetailActivity.EXTRA_ENTRY_ID, rowid);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        Log.e("VVV","HomeActivity :- onNewIntent");
+        super.onNewIntent(intent);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        Log.e("VVV","HomeActivity :- onSaveInstanceState");
+        super.onSaveInstanceState(outState);
     }
 }
