@@ -191,7 +191,10 @@ public class ExerciseEntry implements Serializable {
         return context.getResources().getStringArray(R.array.input_type)[mInputType] + ":" + context.getResources().getStringArray(R.array.activity_type)[mActivityType] +
                 ", " + DateTimeUtils.getFormattedDate(mDateTime, DateTimeUtils.EXCERCISE_ENTRY_FORMAT) + " " + getDistance(unitType) + " " + PreferenceUtils.getDistanceUnit(context) + " , " + mDuration + " " + context.getString(R.string.secs);
     }
-
+    /**
+     * returns the list from byte array for location list
+     * @return
+     */
     private ArrayList<LatLng> getListFromBlob(byte[] data) {
         ArrayList<LatLng> result = new ArrayList<>();
         if (data != null) {
@@ -223,6 +226,10 @@ public class ExerciseEntry implements Serializable {
         return cv;
     }
 
+    /**
+     * returns the byte array for location list
+     * @return
+     */
     private byte[] getGpsBlob() {
         byte[] result = null;
         try {

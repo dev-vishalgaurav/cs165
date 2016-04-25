@@ -200,7 +200,7 @@ public class TrackingStartActivity extends BaseActivity {
     }
 
     /**
-     * Show toast and exit when save clicked
+     * save the entry in data base and return the id of saved entry,
      */
     private long onSaveClicked() {
         ExerciseEntry entry = new ExerciseEntry(-1l,inputType,activityType,getDate(),duration,distance,0,0,calories,0,heartRate,comments);
@@ -217,7 +217,7 @@ public class TrackingStartActivity extends BaseActivity {
     }
 
     /**
-     * Opens appropriate activities when item clicked
+     * Opens appropriate dialog fragments when item clicked
      * @param view
      * @param position indicates what item was clicked
      */
@@ -345,7 +345,7 @@ public class TrackingStartActivity extends BaseActivity {
         }
         return result;
     }
-
+    // handle the text entry callbacks from InputDialogFragment .
     private InputDialogFragment.OnTextEntered mOnTextEntered = new InputDialogFragment.OnTextEntered() {
         @Override
         public void onTextEntered(String tag, String text) {
@@ -387,6 +387,7 @@ public class TrackingStartActivity extends BaseActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.btnSave: {
+                    // start a new async task to save entry
                     new SaveEntryTask().execute();
                 }
                 break;
@@ -399,7 +400,7 @@ public class TrackingStartActivity extends BaseActivity {
     };
 
     /**
-     * Private class
+     * Asynctask for saving entry to database
      */
     private class SaveEntryTask extends AsyncTask<Void,Void,Long> {
 

@@ -55,8 +55,13 @@ public class DBConstants {
         public static final String COMMENT = "comment";
         public static final String PRIVACY = "privacy";
         public static final String GPS_DATA = "gps_data";
-
+        /**
+         * drop query for entry table.
+         */
         public static final String QUERY_DROP = "DROP TABLE IF EXISTS " + TABLE_NAME;
+        /**
+         * create query for entry table.
+         */
         public static final String QUERY_CREATE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME +
                 " (" +
                 _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -74,8 +79,6 @@ public class DBConstants {
                 PRIVACY + " INTEGER, " +
                 GPS_DATA + " BLOB " +
                 " ) ;";
-
-
     }
 
 }
