@@ -50,7 +50,6 @@ public class HomeActivity extends BaseActivity implements HistoryFragment.OnItem
         Log.e("VVV", "onItemSelected, ID = " + rowid);
         Intent intent = new Intent(getBaseContext(), EntryDetailActivity.class);
         intent.putExtra(EntryDetailActivity.EXTRA_ENTRY_ID, rowid);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
