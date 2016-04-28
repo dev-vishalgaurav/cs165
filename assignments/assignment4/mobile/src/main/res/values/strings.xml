@@ -1,0 +1,120 @@
+<resources>
+    <string name="app_name">MyRuns</string>
+    <string name="activity_label_home">MyRuns 3</string>
+    <string name="activity_label_profile_settings">Set Profile</string>
+    <string name="activity_label_maps">Maps</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_delete">Delete</string>
+    <string name="ok">Ok</string>
+    <string name="yes">Yes</string>
+    <string name="value_saved">Value Saved</string>
+    <string name="profile_saved">Profile saved successfully!</string>
+    <string name="no">No</string>
+    <string name="change">Change</string>
+    <string name="error">Error</string>
+    <string name="invalid_entry">Invalid entry!</string>
+    <string name="required_message">This field is required!</string>
+    <string name="required_message_gender">Please select your gender!</string>
+    <string name="save">Save</string>
+    <string name="saved">Saved</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="cancel">Cancel</string>
+    <string name="discard">Discard</string>
+    <string name="name_label">Name</string>
+    <string name="email_label">Email</string>
+    <string name="phone_label">Phone Number</string>
+    <string name="gender_label">Gender</string>
+    <string name="class_label">Class</string>
+    <string name="major_label">Major</string>
+    <string name="name_hint">Your full name</string>
+    <string name="email_hint">Your email address</string>
+    <string name="phone_hint">Your phone number</string>
+    <string name="gender_hint">Your gender</string>
+    <string name="class_hint">Your class (e.g. 2017)</string>
+    <string name="major_hint">Your major (e.g. Computer Science)</string>
+    <string name="gallery">Gallery</string>
+    <string name="camera">Camera</string>
+    <string name="dialog_image_picker_title">Select one option</string>
+    <string name="dialog_image_picker_message">Please select the mode through which you want to take a picture.</string>
+    <string name="tab_label_start">Start</string>
+    <string name="tab_label_history">History</string>
+    <string name="tab_label_settings">Settings</string>
+    <string name="label_input_type">Input type</string>
+    <string name="label_activity_type">Activity type</string>
+    <string name="start">Start</string>
+    <string name="sync">Sync</string>
+    <string name="in_miles">in miles</string>
+    <string name="date_time">Date and Time</string>
+    <string name="deleting_message">Deleting...</string>
+    <string name="saving_entry">Saving entry...</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="automatic">Automatic</string>
+    <string name="gps">GPS</string>
+    <string name="manual">Manual Entry</string>
+    <string name="running">Running</string>
+    <string name="walking">Walking</string>
+    <string name="standing">Standing</string>
+    <string name="cycling">Cycling</string>
+    <string name="hiking">Hiking</string>
+    <string name="d_skiing">Downhill Skiing</string>
+    <string name="c_skiing">Cross-Country Skiing</string>
+    <string name="snowboarding">Snowboarding</string>
+    <string name="skating">Skating</string>
+    <string name="swimming">Swimming</string>
+    <string name="biking">Mountain Biking</string>
+    <string name="wheel_chair">Wheel Chair</string>
+    <string name="elliptical">Elliptical</string>
+    <string name="other">Other</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="duration">Duration</string>
+    <string name="distance">Distance</string>
+    <string name="calories">Calories</string>
+    <string name="heart_Rate">Heart Rate</string>
+    <string name="cals">cals</string>
+    <string name="bpm">bpm</string>
+    <string name="success">Success</string>
+    <string name="error_in_delete">Error in deleting record</string>
+    <string name="comment">Comment</string>
+    <string name="discarded">Discarded</string>
+    <string name="dialog_title_delete_confirm">Are you sure?</string>
+    <string name="dialog_message_delete_confirm">Do you want to discard entry with ID %1$s ?</string>
+    <string name="pref_cat_account">Account Preferences</string>
+
+    <string name="pref_profile_title">User Profile</string>
+    <string name="pref_profile_summary">Name, email, class etc.</string>
+    <string name="pref_profile_key">pref_profile</string>
+
+    <string name="pref_privacy_title">Privacy Settings</string>
+    <string name="pref_privacy_summary">Posting your records anonymously</string>
+    <string name="pref_privacy_key">pref_privacy</string>
+
+    <string name="pref_cat_additional">Additional Settings</string>
+
+    <string name="pref_unit_title">Unit Preferences</string>
+    <string name="pref_unit_summary">Select units of measurement</string>
+    <string name="pref_unit_key">pref_units</string>
+
+    <string name="pref_comments_title">Comments</string>
+    <string name="pref_comments_summary">Please enter your comments</string>
+    <string name="pref_comments_key">pref_comments</string>
+
+    <string name="pref_cat_misc">Misc.</string>
+    <string name="pref_webpage_title">Webpage</string>
+    <string name="pref_webpage_summary">http://www.cs.dartmouth.edu/~campbell/cs65/cs65.html</string>
+    <string name="pref_webpage_key">pref_web</string>
+
+    <string name="metric_km">Metric (Kilometers)</string>
+    <string name="metric_imp">Imperial (Miles)</string>
+    <string name="miles">miles</string>
+    <string name="kms">kms</string>
+    <string name="secs">secs</string>
+    <string name="chooser_web">Choose an application to browse</string>
+    <string name="hint_track_comments">How did it go? Notes here</string>
+    <string name="title_activity_entry_detail">Entry Detail</string>
+    <string name="title_activity_map_display">Excersice Map</string>
+
+
+</resources>
