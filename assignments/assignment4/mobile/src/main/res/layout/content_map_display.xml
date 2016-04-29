@@ -11,6 +11,42 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:id="@+id/txtActivityType"
+            android:text="@string/map_label_type"
+            style="@style/MapLabels" />
+
+        <TextView
+            android:id="@+id/txtAvgSpeed"
+            android:text="@string/map_label_avg_speed"
+            style="@style/MapLabels" />
+        <TextView
+            android:id="@+id/txtCurSpeed"
+            android:text="@string/map_label_cur_speed"
+            style="@style/MapLabels" />
+        <TextView
+            android:id="@+id/txtClimb"
+            android:text="@string/map_label_climb"
+            style="@style/MapLabels" />
+        <TextView
+            android:id="@+id/txtCalorie"
+            android:text="@string/map_label_calorie"
+            style="@style/MapLabels" />
+        <TextView
+            android:id="@+id/txtDistance"
+            android:text="@string/map_label_distance"
+            style="@style/MapLabels" />
+
+
+    </LinearLayout>
+
     <include
         android:id="@+id/lnrSaveCancel"
         layout="@layout/layout_save_cancel"

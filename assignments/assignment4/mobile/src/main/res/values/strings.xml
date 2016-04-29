@@ -5,7 +5,7 @@
     <string name="activity_label_maps">Maps</string>
     <string name="action_settings">Settings</string>
     <string name="action_delete">Delete</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="yes">Yes</string>
     <string name="value_saved">Value Saved</string>
     <string name="profile_saved">Profile saved successfully!</string>
@@ -46,9 +46,8 @@
     <string name="sync">Sync</string>
     <string name="in_miles">in miles</string>
     <string name="date_time">Date and Time</string>
-    <string name="deleting_message">Deleting...</string>
-    <string name="saving_entry">Saving entry...</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="deleting_message">Deleting&#8230;</string>
+    <string name="saving_entry">Saving entry&#8230;</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="automatic">Automatic</string>
     <string name="gps">GPS</string>
@@ -114,7 +113,13 @@
     <string name="chooser_web">Choose an application to browse</string>
     <string name="hint_track_comments">How did it go? Notes here</string>
     <string name="title_activity_entry_detail">Entry Detail</string>
-    <string name="title_activity_map_display">Excersice Map</string>
-
+    <string name="title_activity_map_display">Exercise Map</string>
+    <string name="map_label_type">Type: %1$s</string>
+    <string name="map_label_avg_speed">Avg speed: %1$s</string>
+    <string name="map_label_climb">Climb: %1$s</string>
+    <string name="map_label_cur_speed">Cur speed: %1$s</string>
+    <string name="map_label_calorie">Calorie: %1$s</string>
+    <string name="map_label_distance">Distance: %1$s</string>
+    <string name="label_notification_tracking">Tracking your location</string>
 
 </resources>

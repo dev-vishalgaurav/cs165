@@ -1,7 +1,11 @@
 package edu.cs.dartmouth.cs165.myruns.vishal.ui.activity;
 
+import android.content.ComponentName;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -13,20 +17,47 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import edu.cs.dartmouth.cs165.myruns.vishal.R;
+import edu.cs.dartmouth.cs165.myruns.vishal.services.TrackingBinder;
+import edu.cs.dartmouth.cs165.myruns.vishal.services.TrackingService;
+import edu.cs.dartmouth.cs165.myruns.vishal.storage.db.ExerciseEntry;
 
 public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallback {
+
+    public static final String EXTRA_VIEW_TYPE = "extra_view_type";
+    public static final String EXTRA_ENTRY = "extra_entry_id";
+
+    public static final int VIEW_TYPE_READ_ENTRY = 1;
+    public static final int VIEW_TYPE_CREATE_ENTRY = 2;
 
     private GoogleMap mMap;
     private Button mBtnSave = null;
     private Button mBtnCancel = null;
+    private TrackingBinder mBinder = null;
+    private int viewMode = VIEW_TYPE_CREATE_ENTRY;
+    private ExerciseEntry mExerciseEntry = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_display);
         initViews();
+        enableViewModeFromIntent();
     }
 
+    /**
+     * this method will check proper view type from intent and will the service accordingly
+     */
+    private void enableViewModeFromIntent() {
+        viewMode = getIntent().getIntExtra(EXTRA_VIEW_TYPE,VIEW_TYPE_CREATE_ENTRY);
+        if(viewMode == VIEW_TYPE_CREATE_ENTRY) {
+            TrackingService.start(this);
+            TrackingService.bind(this, mConnection);
+        }else if(viewMode == VIEW_TYPE_READ_ENTRY){
+            mExerciseEntry = (ExerciseEntry)getIntent().getSerializableExtra(EXTRA_ENTRY);
+        }else{
+            showToast(getString(R.string.error));
+        }
+    }
 
     /**
      * Manipulates the map once available.
@@ -66,16 +97,48 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
      * Exit map activity when save clicked
      */
     private void onSaveClicked() {
+        stopTracking();
         finish();
+    }
+
+    private void stopTracking() {
+        if(mBinder != null){
+            mBinder.stopService();
+        }
     }
 
     /**
      * Exit map activity when cancel clicked
      */
     private void onCancelClicked() {
-        //showToast(getString(R.string.discarded));
+        showToast(getString(R.string.discarded));
         finish();
+        stopTracking();
     }
+
+    @Override
+    public void onBackPressed() {
+        onCancelClicked();
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindService(mConnection);
+    }
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.e("VVV","Map :- Tracking service connected");
+            mBinder = (TrackingBinder) service;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.e("VVV","Map :- Tracking service disconnected");
+        }
+    };
 
     /**
      * Listener for the save and cancel buttons
