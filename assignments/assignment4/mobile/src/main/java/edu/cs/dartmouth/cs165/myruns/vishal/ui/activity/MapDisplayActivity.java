@@ -13,15 +13,21 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import edu.cs.dartmouth.cs165.myruns.vishal.R;
 import edu.cs.dartmouth.cs165.myruns.vishal.services.TrackingBinder;
 import edu.cs.dartmouth.cs165.myruns.vishal.services.TrackingService;
 import edu.cs.dartmouth.cs165.myruns.vishal.storage.db.ExerciseEntry;
 
-public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallback {
+public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallback, TrackingService.OnTrackingUpdateListener {
 
     public static final String EXTRA_VIEW_TYPE = "extra_view_type";
     public static final String EXTRA_ENTRY = "extra_entry_id";
@@ -132,6 +138,7 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
         public void onServiceConnected(ComponentName name, IBinder service) {
             Log.e("VVV","Map :- Tracking service connected");
             mBinder = (TrackingBinder) service;
+            mBinder.setOnTrackingUpdateListener(MapDisplayActivity.this);
         }
 
         @Override
@@ -158,4 +165,39 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
             }
         }
     };
+
+    @Override
+    public void onEntryUpdate(ExerciseEntry entry) {
+        Log.e("VVV","onEntryUpdate");
+        mExerciseEntry = entry;
+        updateTraceOnMap();
+    }
+
+    private void updateTraceOnMap() {
+        ArrayList<LatLng> locationList = mExerciseEntry.getLocationList();
+        if(locationList != null && locationList.size() > 0 && mMap != null){
+            Log.e("VVV", "start marker detected size = " + locationList.size());
+            LatLng start = locationList.get(0);
+            mMap.clear();
+            mMap.addMarker(new MarkerOptions().position(start).
+                    icon(BitmapDescriptorFactory.fromResource(R.drawable.red_dot)).
+                    title(getString(R.string.start_location)));
+            if(locationList.size() > 1 ){
+                Log.e("VVV", "end marker detected");
+                LatLng end = locationList.get(locationList.size() - 1);
+                mMap.addMarker(new MarkerOptions().position(end).
+                        icon(BitmapDescriptorFactory.fromResource(R.drawable.green_dot))
+                        .title(getString(R.string.end_location)));
+                PolylineOptions polyLine = new PolylineOptions();
+                polyLine.addAll(locationList);
+                mMap.addPolyline(polyLine).setColor(getResources().getColor(android.R.color.black));
+            }
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            for(LatLng loc : locationList) {
+                builder.include(loc);
+            }
+            int padding = 100;
+            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(),padding), 1000, null);
+        }
+    }
 }

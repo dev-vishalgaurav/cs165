@@ -121,5 +121,7 @@
     <string name="map_label_calorie">Calorie: %1$s</string>
     <string name="map_label_distance">Distance: %1$s</string>
     <string name="label_notification_tracking">Tracking your location</string>
+    <string name="start_location">Start location</string>
+    <string name="end_location">End location</string>
 
 </resources>

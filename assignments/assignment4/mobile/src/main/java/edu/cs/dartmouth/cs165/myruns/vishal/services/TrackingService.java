@@ -150,7 +150,10 @@ public class TrackingService extends Service {
             Log.e("VVV","onLocationChanged called location = " + changedLocation);
             LatLng updatedLocation = getLatLngFromLocation(changedLocation);
             if(updatedLocation!= null){
-
+                mExerciseEntry.getLocationList().add(updatedLocation);
+                if(mOnTrackingUpdateListener!=null) {
+                    mOnTrackingUpdateListener.onEntryUpdate(mExerciseEntry);
+                }
             }
         }
     };
