@@ -1,5 +1,7 @@
 package edu.cs.dartmouth.cs165.myruns.vishal.services;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -19,7 +21,9 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import edu.cs.dartmouth.cs165.myruns.vishal.R;
 import edu.cs.dartmouth.cs165.myruns.vishal.storage.db.ExerciseEntry;
+import edu.cs.dartmouth.cs165.myruns.vishal.ui.activity.MapDisplayActivity;
 
 public class TrackingService extends Service {
 
@@ -27,14 +31,15 @@ public class TrackingService extends Service {
 
         void onEntryUpdate(ExerciseEntry entry);
     }
-
+    public static final int TRACKING_SERVICE_NOTIFICATION_ID = 1;
     private OnTrackingUpdateListener mOnTrackingUpdateListener = null;
     private ExerciseEntry mExerciseEntry = null;
     private GoogleApiClient mGoogleApiClient = null;
     private boolean isGoogleApiConnected = false;
     private LocationRequest mLocationRequest = null;
     private boolean isRequestingLocationUpdates = false;
-
+    private Location lastLocation = null;
+    private long startTime  = System.currentTimeMillis();
     public TrackingService() {
         super();
         Log.e("VVV", "Tagging service()");
@@ -72,11 +77,19 @@ public class TrackingService extends Service {
      *
      */
     private void setUpNotification() {
-
+        Notification.Builder builder = new Notification.Builder(this);
+        builder.setTicker(getText(R.string.label_notification_tracking));
+        builder.setContentTitle(getText(R.string.app_name));
+        builder.setContentText(getText(R.string.label_notification_tracking));
+        builder.setSmallIcon(R.drawable.greend);
+        Intent notificationIntent = new Intent(this, MapDisplayActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+        builder.setContentIntent(pendingIntent);
+        startForeground(TRACKING_SERVICE_NOTIFICATION_ID, builder.build());
     }
 
     private void clearNotification() {
-
+        stopForeground(true);
     }
 
     private void initExerciseEntry() {
@@ -113,6 +126,7 @@ public class TrackingService extends Service {
     public void onDestroy() {
         super.onDestroy();
         Log.e("VVV", "Tagging service onDestroy");
+        clearNotification();
         stopRequestingLocationUpdates();
         mGoogleApiClient.disconnect();
     }

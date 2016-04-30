@@ -47,6 +47,7 @@
         <activity
             android:name="edu.cs.dartmouth.cs165.myruns.vishal.ui.activity.MapDisplayActivity"
             android:label="@string/title_activity_map_display"
+            android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
