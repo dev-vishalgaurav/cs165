@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -20,7 +21,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import edu.cs.dartmouth.cs165.myruns.vishal.R;
 import edu.cs.dartmouth.cs165.myruns.vishal.services.TrackingBinder;
@@ -41,6 +41,13 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
     private TrackingBinder mBinder = null;
     private int viewMode = VIEW_TYPE_CREATE_ENTRY;
     private ExerciseEntry mExerciseEntry = null;
+
+    private TextView txtActivityType = null;
+    private TextView txtAvgSpeed = null;
+    private TextView txtCurrSpeed = null;
+    private TextView txtClimb = null;
+    private TextView txtCalorie = null;
+    private TextView txtDisance = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,8 +102,15 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mBtnCancel = (Button) findViewById(R.id.btnCancel);
         mBtnSave = (Button) findViewById(R.id.btnSave);
+        txtActivityType = (TextView)findViewById(R.id.txtActivityType);
+        txtAvgSpeed = (TextView)findViewById(R.id.txtAvgSpeed);
+        txtCurrSpeed = (TextView)findViewById(R.id.txtCurSpeed);
+        txtClimb = (TextView)findViewById(R.id.txtClimb);
+        txtCalorie = (TextView)findViewById(R.id.txtCalorie);
+        txtDisance = (TextView)findViewById(R.id.txtDistance);
         mBtnCancel.setOnClickListener(mOnClickListener);
         mBtnSave.setOnClickListener(mOnClickListener);
+
     }
 
     /**
@@ -171,6 +185,16 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
         Log.e("VVV","onEntryUpdate");
         mExerciseEntry = entry;
         updateTraceOnMap();
+        updateTraceDataOnUi();
+    }
+
+    private void updateTraceDataOnUi(){
+        txtActivityType.setText(getResources().getStringArray(R.array.activity_type)[mExerciseEntry.getActivityType()]);
+        txtCalorie.setText(String.format(getString(R.string.map_label_calorie), ""+mExerciseEntry.getCalorie()));
+        txtAvgSpeed.setText(String.format(getString(R.string.map_label_avg_speed), ""+mExerciseEntry.getAvgPace()));
+        txtCurrSpeed.setText(String.format(getString(R.string.map_label_cur_speed), ""+mExerciseEntry.getCurrentSpeed()));
+        txtClimb.setText(String.format(getString(R.string.map_label_climb), ""+mExerciseEntry.getClimb()));
+        txtDisance.setText(String.format(getString(R.string.map_label_distance), ""+mExerciseEntry.getDistance()));
     }
 
     private void updateTraceOnMap() {

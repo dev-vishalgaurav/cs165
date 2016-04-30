@@ -40,6 +40,8 @@ public class TrackingService extends Service {
     private boolean isRequestingLocationUpdates = false;
     private Location lastLocation = null;
     private long startTime  = System.currentTimeMillis();
+    private double distanceTravelled = 0.0 ;
+    private double currentClimb = 0.0 ;
     public TrackingService() {
         super();
         Log.e("VVV", "Tagging service()");
@@ -121,6 +123,7 @@ public class TrackingService extends Service {
         createLocationRequest();
         isRequestingLocationUpdates = true;
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, mLocationListener);
+        startTime = System.currentTimeMillis();
     }
     @Override
     public void onDestroy() {
@@ -161,13 +164,25 @@ public class TrackingService extends Service {
         @Override
         public void onLocationChanged(Location changedLocation) {
 
-            Log.e("VVV","onLocationChanged called location = " + changedLocation);
+            Log.e("VVV","onLocationChanged called location = " + changedLocation + "Speed = " + changedLocation.hasSpeed() + " = " + changedLocation.getSpeed());
             LatLng updatedLocation = getLatLngFromLocation(changedLocation);
-            if(updatedLocation!= null){
+            if(updatedLocation != null){
+                if(lastLocation!=null){
+                    distanceTravelled = distanceTravelled + changedLocation.distanceTo(lastLocation);
+                    currentClimb =  changedLocation.getAltitude() - lastLocation.getAltitude();
+                }
+                double distanceInMiles = distanceTravelled/1600 ; // in miles
+                mExerciseEntry.setDistance(distanceInMiles);
+                double timeElapsed = (System.currentTimeMillis() - startTime)/3600; // in hrs
+                double avgSpeed = distanceTravelled / timeElapsed;
+                mExerciseEntry.setAvgPace(avgSpeed);
+                mExerciseEntry.setCurrentSpeed(changedLocation.getSpeed());
+                mExerciseEntry.setClimb(currentClimb);
                 mExerciseEntry.getLocationList().add(updatedLocation);
                 if(mOnTrackingUpdateListener!=null) {
                     mOnTrackingUpdateListener.onEntryUpdate(mExerciseEntry);
                 }
+                lastLocation = changedLocation;
             }
         }
     };

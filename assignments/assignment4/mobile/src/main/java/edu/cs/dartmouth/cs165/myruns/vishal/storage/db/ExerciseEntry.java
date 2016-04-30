@@ -36,7 +36,7 @@ public class ExerciseEntry implements Serializable {
     private int mHeartRate;        // Heart rate
     private String mComment;       // Comments
     private ArrayList<LatLng> mLocationList = new ArrayList<>(); // Location list
-
+    private double currentSpeed = 0.0;
     public ExerciseEntry(Cursor cursor) {
         id = cursor.getLong(cursor.getColumnIndexOrThrow(DBConstants.ExerciseEntryColumns._ID));
         mInputType = cursor.getInt(cursor.getColumnIndexOrThrow(DBConstants.ExerciseEntryColumns.INPUT_TYPE));
@@ -183,6 +183,15 @@ public class ExerciseEntry implements Serializable {
     public void setLocationList(ArrayList<LatLng> mLocationList) {
         this.mLocationList = mLocationList;
     }
+
+    public double getCurrentSpeed( ) {
+        return currentSpeed;
+    }
+
+    public void setCurrentSpeed(double currentSpeed) {
+        this.currentSpeed = currentSpeed;
+    }
+
 
     /**
      * Get formatted string for an entry
