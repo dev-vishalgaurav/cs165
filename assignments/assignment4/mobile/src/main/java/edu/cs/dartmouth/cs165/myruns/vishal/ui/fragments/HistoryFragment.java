@@ -37,7 +37,7 @@ import edu.cs.dartmouth.cs165.myruns.vishal.ui.adapters.HomeTabAdapter.OnFragmen
 public class HistoryFragment extends Fragment implements LoaderManager.LoaderCallbacks<ArrayList<ExerciseEntry>>, SharedPreferences.OnSharedPreferenceChangeListener {
 
     public interface OnItemSelectedListener {
-        void onItemSelected(long rowid);
+        void onItemSelected(ExerciseEntry entry);
     }
 
     private View mRootView = null;
@@ -158,7 +158,7 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Log.e("VVV","OnItemClick History fragment :- " + position);
             if (onItemSelectedListener != null) {
-                onItemSelectedListener.onItemSelected(id);
+                onItemSelectedListener.onItemSelected(historyAdapter.getItem(position));
             }
         }
     };

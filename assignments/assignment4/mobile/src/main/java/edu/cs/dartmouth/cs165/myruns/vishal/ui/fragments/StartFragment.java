@@ -113,6 +113,7 @@ public class StartFragment extends Fragment {
     private void onStartClicked() {
         if(mSpnInputType.getSelectedItemPosition() > 0){
             Intent intent = new Intent(getActivity(), MapDisplayActivity.class);
+            intent.putExtra(MapDisplayActivity.EXTRA_INPUT_TYPE,mSpnInputType.getSelectedItemPosition());
             startActivity(intent);
         }
         else {

@@ -2,6 +2,7 @@ package edu.cs.dartmouth.cs165.myruns.vishal.ui.activity;
 
 import android.content.ComponentName;
 import android.content.ServiceConnection;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.widget.Toolbar;
@@ -23,6 +24,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.util.ArrayList;
 
 import edu.cs.dartmouth.cs165.myruns.vishal.R;
+import edu.cs.dartmouth.cs165.myruns.vishal.global.MyRunsApp;
 import edu.cs.dartmouth.cs165.myruns.vishal.services.TrackingBinder;
 import edu.cs.dartmouth.cs165.myruns.vishal.services.TrackingService;
 import edu.cs.dartmouth.cs165.myruns.vishal.storage.db.ExerciseEntry;
@@ -31,7 +33,7 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
 
     public static final String EXTRA_VIEW_TYPE = "extra_view_type";
     public static final String EXTRA_ENTRY = "extra_entry_id";
-
+    public static final String EXTRA_INPUT_TYPE = "extra_input_type";
     public static final int VIEW_TYPE_READ_ENTRY = 1;
     public static final int VIEW_TYPE_CREATE_ENTRY = 2;
 
@@ -41,7 +43,7 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
     private TrackingBinder mBinder = null;
     private int viewMode = VIEW_TYPE_CREATE_ENTRY;
     private ExerciseEntry mExerciseEntry = null;
-
+    private int inputType = 1;
     private TextView txtActivityType = null;
     private TextView txtAvgSpeed = null;
     private TextView txtCurrSpeed = null;
@@ -61,13 +63,16 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
      * this method will check proper view type from intent and will the service accordingly
      */
     private void enableViewModeFromIntent() {
-        viewMode = getIntent().getIntExtra(EXTRA_VIEW_TYPE,VIEW_TYPE_CREATE_ENTRY);
-        if(viewMode == VIEW_TYPE_CREATE_ENTRY) {
+        viewMode = getIntent().getIntExtra(EXTRA_VIEW_TYPE, VIEW_TYPE_CREATE_ENTRY);
+        inputType = getIntent().getIntExtra(EXTRA_INPUT_TYPE,inputType);
+        if (viewMode == VIEW_TYPE_CREATE_ENTRY) {
+            findViewById(R.id.lnrSaveCancel).setVisibility(View.VISIBLE);
             TrackingService.start(this);
             TrackingService.bind(this, mConnection);
-        }else if(viewMode == VIEW_TYPE_READ_ENTRY){
-            mExerciseEntry = (ExerciseEntry)getIntent().getSerializableExtra(EXTRA_ENTRY);
-        }else{
+        } else if (viewMode == VIEW_TYPE_READ_ENTRY) {
+            findViewById(R.id.lnrSaveCancel).setVisibility(View.GONE);
+            mExerciseEntry = (ExerciseEntry) getIntent().getSerializableExtra(EXTRA_ENTRY);
+        } else {
             showToast(getString(R.string.error));
         }
     }
@@ -102,12 +107,12 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mBtnCancel = (Button) findViewById(R.id.btnCancel);
         mBtnSave = (Button) findViewById(R.id.btnSave);
-        txtActivityType = (TextView)findViewById(R.id.txtActivityType);
-        txtAvgSpeed = (TextView)findViewById(R.id.txtAvgSpeed);
-        txtCurrSpeed = (TextView)findViewById(R.id.txtCurSpeed);
-        txtClimb = (TextView)findViewById(R.id.txtClimb);
-        txtCalorie = (TextView)findViewById(R.id.txtCalorie);
-        txtDisance = (TextView)findViewById(R.id.txtDistance);
+        txtActivityType = (TextView) findViewById(R.id.txtActivityType);
+        txtAvgSpeed = (TextView) findViewById(R.id.txtAvgSpeed);
+        txtCurrSpeed = (TextView) findViewById(R.id.txtCurSpeed);
+        txtClimb = (TextView) findViewById(R.id.txtClimb);
+        txtCalorie = (TextView) findViewById(R.id.txtCalorie);
+        txtDisance = (TextView) findViewById(R.id.txtDistance);
         mBtnCancel.setOnClickListener(mOnClickListener);
         mBtnSave.setOnClickListener(mOnClickListener);
 
@@ -118,11 +123,18 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
      */
     private void onSaveClicked() {
         stopTracking();
-        finish();
+        // save data into DB in a background thread and finish the activity after it.
+        new SaveEntryTask().execute();
+    }
+
+    private long onSaveDataIntoDB() {
+        mExerciseEntry.setInputType(inputType);
+        long id = MyRunsApp.getDb(getBaseContext()).insertEntry(mExerciseEntry);
+        return id;
     }
 
     private void stopTracking() {
-        if(mBinder != null){
+        if (mBinder != null) {
             mBinder.stopService();
         }
     }
@@ -147,17 +159,18 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
         super.onDestroy();
         unbindService(mConnection);
     }
+
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            Log.e("VVV","Map :- Tracking service connected");
+            Log.e("VVV", "Map :- Tracking service connected");
             mBinder = (TrackingBinder) service;
             mBinder.setOnTrackingUpdateListener(MapDisplayActivity.this);
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            Log.e("VVV","Map :- Tracking service disconnected");
+            Log.e("VVV", "Map :- Tracking service disconnected");
         }
     };
 
@@ -182,31 +195,31 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
 
     @Override
     public void onEntryUpdate(ExerciseEntry entry) {
-        Log.e("VVV","onEntryUpdate");
+        Log.e("VVV", "onEntryUpdate");
         mExerciseEntry = entry;
         updateTraceOnMap();
         updateTraceDataOnUi();
     }
 
-    private void updateTraceDataOnUi(){
-        txtActivityType.setText(getResources().getStringArray(R.array.activity_type)[mExerciseEntry.getActivityType()]);
-        txtCalorie.setText(String.format(getString(R.string.map_label_calorie), ""+mExerciseEntry.getCalorie()));
-        txtAvgSpeed.setText(String.format(getString(R.string.map_label_avg_speed), ""+mExerciseEntry.getAvgPace()));
-        txtCurrSpeed.setText(String.format(getString(R.string.map_label_cur_speed), ""+mExerciseEntry.getCurrentSpeed()));
-        txtClimb.setText(String.format(getString(R.string.map_label_climb), ""+mExerciseEntry.getClimb()));
-        txtDisance.setText(String.format(getString(R.string.map_label_distance), ""+mExerciseEntry.getDistance()));
+    private void updateTraceDataOnUi() {
+        txtActivityType.setText(getString(R.string.unknown));
+        txtCalorie.setText(String.format(getString(R.string.map_label_calorie), "" + mExerciseEntry.getCalorie()));
+        txtAvgSpeed.setText(String.format(getString(R.string.map_label_avg_speed), "" + mExerciseEntry.getAvgPace()));
+        txtCurrSpeed.setText(String.format(getString(R.string.map_label_cur_speed), "" + mExerciseEntry.getCurrentSpeed()));
+        txtClimb.setText(String.format(getString(R.string.map_label_climb), "" + mExerciseEntry.getClimb()));
+        txtDisance.setText(String.format(getString(R.string.map_label_distance), "" + mExerciseEntry.getDistance()));
     }
 
     private void updateTraceOnMap() {
         ArrayList<LatLng> locationList = mExerciseEntry.getLocationList();
-        if(locationList != null && locationList.size() > 0 && mMap != null){
+        if (locationList != null && locationList.size() > 0 && mMap != null) {
             Log.e("VVV", "start marker detected size = " + locationList.size());
             LatLng start = locationList.get(0);
             mMap.clear();
             mMap.addMarker(new MarkerOptions().position(start).
                     icon(BitmapDescriptorFactory.fromResource(R.drawable.red_dot)).
                     title(getString(R.string.start_location)));
-            if(locationList.size() > 1 ){
+            if (locationList.size() > 1) {
                 Log.e("VVV", "end marker detected");
                 LatLng end = locationList.get(locationList.size() - 1);
                 mMap.addMarker(new MarkerOptions().position(end).
@@ -217,11 +230,40 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
                 mMap.addPolyline(polyLine).setColor(getResources().getColor(android.R.color.black));
             }
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
-            for(LatLng loc : locationList) {
+            for (LatLng loc : locationList) {
                 builder.include(loc);
             }
             int padding = 100;
-            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(),padding), 1000, null);
+            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), padding), 1000, null);
+        }
+    }
+
+    /**
+     * Asynctask for saving entry to database and finish the activity
+     */
+    private class SaveEntryTask extends AsyncTask<Void, Void, Long> {
+
+        @Override
+        protected void onPreExecute() {
+            showProgressDialog(getString(R.string.saving_entry), false);
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Long doInBackground(Void... params) {
+            return onSaveDataIntoDB();
+        }
+
+        @Override
+        protected void onPostExecute(Long result) {
+            dismissAlertDialog();
+            if (result > 0) {
+                showToast(getString(R.string.saved) + "#" + result);
+            } else {
+                showToast(getString(R.string.error));
+            }
+            finish();
+            super.onPostExecute(result);
         }
     }
 }

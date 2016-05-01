@@ -10,7 +10,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
+import java.util.Map;
+
 import edu.cs.dartmouth.cs165.myruns.vishal.R;
+import edu.cs.dartmouth.cs165.myruns.vishal.storage.db.ExerciseEntry;
 import edu.cs.dartmouth.cs165.myruns.vishal.ui.adapters.HomeTabAdapter;
 import edu.cs.dartmouth.cs165.myruns.vishal.ui.fragments.HistoryFragment;
 
@@ -46,11 +49,19 @@ public class HomeActivity extends BaseActivity implements HistoryFragment.OnItem
     }
 
     @Override
-    public void onItemSelected(long rowid) {
-        Log.e("VVV", "onItemSelected, ID = " + rowid);
-        Intent intent = new Intent(getBaseContext(), EntryDetailActivity.class);
-        intent.putExtra(EntryDetailActivity.EXTRA_ENTRY_ID, rowid);
-        startActivity(intent);
+    public void onItemSelected(ExerciseEntry entry) {
+        Log.e("VVV", "onItemSelected, ID = " + entry.getId());
+        if(entry.getInputType() == 0) {
+            Intent intent = new Intent(getBaseContext(), EntryDetailActivity.class);
+            intent.putExtra(EntryDetailActivity.EXTRA_ENTRY_ID, entry.getId());
+            startActivity(intent);
+        }else{
+            Intent intent = new Intent(getBaseContext(), MapDisplayActivity.class);
+            intent.putExtra(MapDisplayActivity.EXTRA_ENTRY, entry);
+            intent.putExtra(MapDisplayActivity.EXTRA_VIEW_TYPE,MapDisplayActivity.VIEW_TYPE_READ_ENTRY);
+            intent.putExtra(MapDisplayActivity.EXTRA_INPUT_TYPE,entry.getInputType());
+            startActivity(intent);
+        }
     }
 
     @Override
