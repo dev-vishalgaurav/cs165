@@ -54,7 +54,7 @@ public class EntryDetailActivity extends BaseActivity {
             mEdtActivityType.setText(getBaseContext().getResources().getStringArray(R.array.activity_type)[entry.getActivityType()]);
             mEdtDateTime.setText(new Date(entry.getDateTime()).toString());
             mEdtDuration.setText(entry.getDuration() + " " + getString(R.string.secs));
-            mEdtDistance.setText(entry.getDistance() + " " + PreferenceUtils.getDistanceUnit(getBaseContext()));
+            mEdtDistance.setText(entry.getDistance(PreferenceUtils.getUnitType(getBaseContext())) + " " + PreferenceUtils.getDistanceUnit(getBaseContext()));
             mEdtCalories.setText(entry.getCalorie() + " " + getString(R.string.cals));
             mEdtHeartRate.setText(entry.getHeartRate() + " " + getString(R.string.bpm));
         } else {
