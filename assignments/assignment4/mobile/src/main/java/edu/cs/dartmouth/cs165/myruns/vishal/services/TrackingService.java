@@ -18,6 +18,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -171,13 +172,16 @@ public class TrackingService extends Service {
                     distanceTravelled = distanceTravelled + changedLocation.distanceTo(lastLocation);
                     currentClimb =  changedLocation.getAltitude() - lastLocation.getAltitude();
                 }
+                DecimalFormat format = new DecimalFormat("0.00");
                 double distanceInMiles = distanceTravelled/1600 ; // in miles
-                mExerciseEntry.setDistance(distanceInMiles);
+                Log.e("VVV","Distance travelled in miles= " + distanceTravelled);
+                mExerciseEntry.setDistance(Double.valueOf(format.format(distanceInMiles)));
                 double timeElapsed = (System.currentTimeMillis() - startTime)/3600; // in hrs
-                double avgSpeed = distanceTravelled / timeElapsed;
-                mExerciseEntry.setAvgPace(avgSpeed);
-                mExerciseEntry.setCurrentSpeed(changedLocation.getSpeed());
-                mExerciseEntry.setClimb(currentClimb);
+                double avgSpeed = (timeElapsed == 0) ? 0.0 : distanceTravelled / timeElapsed;
+                // set formatted values to entry object
+                mExerciseEntry.setAvgPace(Double.valueOf(format.format(avgSpeed)));
+                mExerciseEntry.setCurrentSpeed(Double.valueOf(format.format(changedLocation.getSpeed())));
+                mExerciseEntry.setClimb(Double.valueOf(format.format(currentClimb)));
                 mExerciseEntry.getLocationList().add(updatedLocation);
                 if(mOnTrackingUpdateListener!=null) {
                     mOnTrackingUpdateListener.onEntryUpdate(mExerciseEntry);

@@ -10,8 +10,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
-import java.util.Map;
-
 import edu.cs.dartmouth.cs165.myruns.vishal.R;
 import edu.cs.dartmouth.cs165.myruns.vishal.storage.db.ExerciseEntry;
 import edu.cs.dartmouth.cs165.myruns.vishal.ui.adapters.HomeTabAdapter;
@@ -60,6 +58,7 @@ public class HomeActivity extends BaseActivity implements HistoryFragment.OnItem
             intent.putExtra(MapDisplayActivity.EXTRA_ENTRY, entry);
             intent.putExtra(MapDisplayActivity.EXTRA_VIEW_TYPE,MapDisplayActivity.VIEW_TYPE_READ_ENTRY);
             intent.putExtra(MapDisplayActivity.EXTRA_INPUT_TYPE,entry.getInputType());
+            intent.putExtra(MapDisplayActivity.EXTRA_ACTIVITY_TYPE,entry.getActivityType());
             startActivity(intent);
         }
     }

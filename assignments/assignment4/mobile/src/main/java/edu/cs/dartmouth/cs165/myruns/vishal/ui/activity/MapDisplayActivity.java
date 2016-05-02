@@ -34,6 +34,7 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
     public static final String EXTRA_VIEW_TYPE = "extra_view_type";
     public static final String EXTRA_ENTRY = "extra_entry_id";
     public static final String EXTRA_INPUT_TYPE = "extra_input_type";
+    public static final String EXTRA_ACTIVITY_TYPE = "extra_activity_type";
     public static final int VIEW_TYPE_READ_ENTRY = 1;
     public static final int VIEW_TYPE_CREATE_ENTRY = 2;
 
@@ -44,6 +45,7 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
     private int viewMode = VIEW_TYPE_CREATE_ENTRY;
     private ExerciseEntry mExerciseEntry = null;
     private int inputType = 1;
+    private int activityType = 0;
     private TextView txtActivityType = null;
     private TextView txtAvgSpeed = null;
     private TextView txtCurrSpeed = null;
@@ -65,6 +67,7 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
     private void enableViewModeFromIntent() {
         viewMode = getIntent().getIntExtra(EXTRA_VIEW_TYPE, VIEW_TYPE_CREATE_ENTRY);
         inputType = getIntent().getIntExtra(EXTRA_INPUT_TYPE,inputType);
+        activityType = getIntent().getIntExtra(EXTRA_ACTIVITY_TYPE,activityType);
         if (viewMode == VIEW_TYPE_CREATE_ENTRY) {
             findViewById(R.id.lnrSaveCancel).setVisibility(View.VISIBLE);
             TrackingService.start(this);
@@ -157,9 +160,17 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unbindService(mConnection);
+        unBindService();
     }
-
+    private void unBindService(){
+        try {
+            if(mConnection != null) {
+                unbindService(mConnection);
+            }
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+    }
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -202,7 +213,11 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
     }
 
     private void updateTraceDataOnUi() {
-        txtActivityType.setText(getString(R.string.unknown));
+        if(inputType == 1) { // GPS
+            txtActivityType.setText(String.format(getString(R.string.map_label_type), "" + getResources().getStringArray(R.array.activity_type)[activityType]));
+        }else{
+            txtActivityType.setText(String.format(getString(R.string.map_label_type), "" + getString(R.string.unknown)));
+        }
         txtCalorie.setText(String.format(getString(R.string.map_label_calorie), "" + mExerciseEntry.getCalorie()));
         txtAvgSpeed.setText(String.format(getString(R.string.map_label_avg_speed), "" + mExerciseEntry.getAvgPace()));
         txtCurrSpeed.setText(String.format(getString(R.string.map_label_cur_speed), "" + mExerciseEntry.getCurrentSpeed()));

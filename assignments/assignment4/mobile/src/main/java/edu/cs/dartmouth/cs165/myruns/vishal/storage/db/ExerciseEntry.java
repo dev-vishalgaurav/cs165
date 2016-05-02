@@ -208,9 +208,11 @@ public class ExerciseEntry implements Serializable {
         ArrayList<LatLng> result = new ArrayList<>();
         if (data != null) {
             try (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(data))) {
-                ArrayList<LatLng> list = (ArrayList<LatLng>) ois.readObject();
+                ArrayList<String> list = (ArrayList<String>) ois.readObject();
                 if (list != null)
-                    result.addAll(list);
+                    for (String values : list){
+                        result.add(getLatLngFromString(values));
+                    }
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -235,18 +237,31 @@ public class ExerciseEntry implements Serializable {
         return cv;
     }
 
+    private String getLatLngString(LatLng loc){
+        return ""+loc.latitude + "," + loc.longitude;
+    }
+    private LatLng getLatLngFromString(String string){
+        String[] values = string.split(",");
+        LatLng result = new LatLng(Double.valueOf(values[0]),Double.valueOf(values[1]));
+        return result;
+    }
     /**
      * returns the byte array for location list
      * @return
      */
     private byte[] getGpsBlob() {
+
         byte[] result = null;
+        ArrayList<String> values = new ArrayList<>();
+        for (LatLng latLng : mLocationList){
+            values.add(getLatLngString(latLng));
+        }
         try {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ObjectOutputStream oos = null;
             oos = new ObjectOutputStream(bos);
             // mArrayList is the ArrayList you want to store
-            oos.writeObject(mLocationList);
+            oos.writeObject(values);
             result = bos.toByteArray();
         } catch (Exception ex) {
             ex.printStackTrace();

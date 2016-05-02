@@ -89,7 +89,6 @@
     <string name="pref_privacy_title">Privacy Settings</string>
     <string name="pref_privacy_summary">Posting your records anonymously</string>
     <string name="pref_privacy_key">pref_privacy</string>
-
     <string name="pref_cat_additional">Additional Settings</string>
 
     <string name="pref_unit_title">Unit Preferences</string>
@@ -120,8 +119,8 @@
     <string name="map_label_cur_speed">Cur speed: %1$s miles/h</string>
     <string name="map_label_calorie">Calorie: %1$s cals</string>
     <string name="map_label_distance">Distance: %1$s miles</string>
+    <string name="unknown">Unknown</string>
     <string name="label_notification_tracking">Tracking your location</string>
     <string name="start_location">Start location</string>
     <string name="end_location">End location</string>
-    <string name="unknown">Unknown</string>
 </resources>
