@@ -20,28 +20,28 @@
 
         <TextView
             android:id="@+id/txtActivityType"
-            android:text="@string/map_label_type"
+            android:text=""
             style="@style/MapLabels" />
 
         <TextView
             android:id="@+id/txtAvgSpeed"
-            android:text="@string/map_label_avg_speed"
+            android:text=""
             style="@style/MapLabels" />
         <TextView
             android:id="@+id/txtCurSpeed"
-            android:text="@string/map_label_cur_speed"
+            android:text=""
             style="@style/MapLabels" />
         <TextView
             android:id="@+id/txtClimb"
-            android:text="@string/map_label_climb"
+            android:text=""
             style="@style/MapLabels" />
         <TextView
             android:id="@+id/txtCalorie"
-            android:text="@string/map_label_calorie"
+            android:text=""
             style="@style/MapLabels" />
         <TextView
             android:id="@+id/txtDistance"
-            android:text="@string/map_label_distance"
+            android:text=""
             style="@style/MapLabels" />
 
 

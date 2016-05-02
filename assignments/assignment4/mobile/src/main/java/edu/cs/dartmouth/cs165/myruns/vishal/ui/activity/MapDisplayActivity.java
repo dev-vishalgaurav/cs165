@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -69,17 +70,29 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
         inputType = getIntent().getIntExtra(EXTRA_INPUT_TYPE,inputType);
         activityType = getIntent().getIntExtra(EXTRA_ACTIVITY_TYPE,activityType);
         if (viewMode == VIEW_TYPE_CREATE_ENTRY) {
+            Log.e("VVV","View mode write ENTRY");
             findViewById(R.id.lnrSaveCancel).setVisibility(View.VISIBLE);
             TrackingService.start(this);
             TrackingService.bind(this, mConnection);
         } else if (viewMode == VIEW_TYPE_READ_ENTRY) {
+            Log.e("VVV", "View mode read ENTRY");
             findViewById(R.id.lnrSaveCancel).setVisibility(View.GONE);
-            mExerciseEntry = (ExerciseEntry) getIntent().getSerializableExtra(EXTRA_ENTRY);
+            long entryId = getIntent().getLongExtra(EXTRA_ENTRY, -1l);
+            Log.e("VVV", "Entry id = " + entryId);
+            mExerciseEntry = MyRunsApp.getDb(getBaseContext()).fetchEntryByIndex(entryId);
+            if(mExerciseEntry== null) {
+                showToast(getString(R.string.error));
+                finish();
+            }
         } else {
-            showToast(getString(R.string.error));
+            showToast(getString(R.string.error_invalid_mode));
         }
     }
-
+    @Override
+    protected void onResume(){
+        Log.e("VVV", "Map display onResume");
+        super.onResume();
+    }
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -91,11 +104,16 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        Log.e("VVV", "Map display onMapReady");
         mMap = googleMap;
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        updateData();
+    }
+
+    private void updateData(){
+        if(mExerciseEntry != null){
+            updateTraceDataOnUi();
+            updateTraceOnMap();
+        }
     }
 
     /**
@@ -153,7 +171,9 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
 
     @Override
     public void onBackPressed() {
-        onCancelClicked();
+        if(viewMode == VIEW_TYPE_CREATE_ENTRY) {
+            onCancelClicked();
+        }
         super.onBackPressed();
     }
 
@@ -163,12 +183,14 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
         unBindService();
     }
     private void unBindService(){
-        try {
-            if(mConnection != null) {
-                unbindService(mConnection);
+        if(viewMode == VIEW_TYPE_CREATE_ENTRY) {
+            try {
+                if (mConnection != null) {
+                    unbindService(mConnection);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
-        }catch(Exception ex){
-            ex.printStackTrace();
         }
     }
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -249,7 +271,9 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
                 builder.include(loc);
             }
             int padding = 100;
-            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), padding), 1000, null);
+            DisplayMetrics displaymetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(),displaymetrics.widthPixels,displaymetrics.heightPixels,padding), 1000, null);
         }
     }
 

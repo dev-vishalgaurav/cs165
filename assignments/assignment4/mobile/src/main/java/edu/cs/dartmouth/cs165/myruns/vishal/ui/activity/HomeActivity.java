@@ -55,7 +55,7 @@ public class HomeActivity extends BaseActivity implements HistoryFragment.OnItem
             startActivity(intent);
         }else{
             Intent intent = new Intent(getBaseContext(), MapDisplayActivity.class);
-            intent.putExtra(MapDisplayActivity.EXTRA_ENTRY, entry);
+            intent.putExtra(MapDisplayActivity.EXTRA_ENTRY, entry.getId());
             intent.putExtra(MapDisplayActivity.EXTRA_VIEW_TYPE,MapDisplayActivity.VIEW_TYPE_READ_ENTRY);
             intent.putExtra(MapDisplayActivity.EXTRA_INPUT_TYPE,entry.getInputType());
             intent.putExtra(MapDisplayActivity.EXTRA_ACTIVITY_TYPE,entry.getActivityType());
