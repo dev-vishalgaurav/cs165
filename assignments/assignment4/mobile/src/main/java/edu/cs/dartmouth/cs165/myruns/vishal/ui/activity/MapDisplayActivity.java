@@ -34,6 +34,7 @@ import edu.cs.dartmouth.cs165.myruns.vishal.global.MyRunsApp;
 import edu.cs.dartmouth.cs165.myruns.vishal.services.TrackingBinder;
 import edu.cs.dartmouth.cs165.myruns.vishal.services.TrackingService;
 import edu.cs.dartmouth.cs165.myruns.vishal.storage.db.ExerciseEntry;
+import edu.cs.dartmouth.cs165.myruns.vishal.storage.preferences.PreferenceUtils;
 
 public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallback, TrackingService.OnTrackingUpdateListener {
 
@@ -308,11 +309,13 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
         } else {
             txtActivityType.setText(String.format(getString(R.string.map_label_type), "" + getString(R.string.unknown)));
         }
+        int unitType = PreferenceUtils.getUnitType(getBaseContext());
+        String unit = PreferenceUtils.getDistanceUnit(getBaseContext());
         txtCalorie.setText(String.format(getString(R.string.map_label_calorie), "" + mExerciseEntry.getCalorie()));
-        txtAvgSpeed.setText(String.format(getString(R.string.map_label_avg_speed), "" + mExerciseEntry.getAvgPace()));
-        txtCurrSpeed.setText(String.format(getString(R.string.map_label_cur_speed), "" + mExerciseEntry.getCurrentSpeed()));
-        txtClimb.setText(String.format(getString(R.string.map_label_climb), "" + mExerciseEntry.getClimb()));
-        txtDistance.setText(String.format(getString(R.string.map_label_distance), "" + mExerciseEntry.getDistance()));
+        txtAvgSpeed.setText(String.format(getString(R.string.map_label_avg_speed), "" + ExerciseEntry.getDistanceAsPerUnit(mExerciseEntry.getAvgPace(),unitType),unit ));
+        txtCurrSpeed.setText(String.format(getString(R.string.map_label_cur_speed), "" + ExerciseEntry.getDistanceAsPerUnit(mExerciseEntry.getCurrentSpeed(),unitType), unit));
+        txtClimb.setText(String.format(getString(R.string.map_label_climb), "" + ExerciseEntry.getDistanceAsPerUnit(mExerciseEntry.getClimb(),unitType), unit));
+        txtDistance.setText(String.format(getString(R.string.map_label_distance), "" + ExerciseEntry.getDistanceAsPerUnit(mExerciseEntry.getDistance(), unitType), unit));
     }
 
     private void updateTraceOnMap() {

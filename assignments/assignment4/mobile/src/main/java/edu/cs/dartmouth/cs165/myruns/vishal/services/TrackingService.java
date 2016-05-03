@@ -33,6 +33,7 @@ public class TrackingService extends Service {
         void onEntryUpdate(ExerciseEntry entry);
     }
     public static final int TRACKING_SERVICE_NOTIFICATION_ID = 1;
+    public static final double AVERAGE_WEIGHT_OF_MAN = 74;
     private OnTrackingUpdateListener mOnTrackingUpdateListener = null;
     private ExerciseEntry mExerciseEntry = null;
     private GoogleApiClient mGoogleApiClient = null;
@@ -152,10 +153,6 @@ public class TrackingService extends Service {
     private void onGoogleApiEnabled(Bundle connectionHint) {
         isGoogleApiConnected = true;
         startRequestingLocationUpdates();
-        Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (lastLocation != null) {
-            mLocationListener.onLocationChanged(lastLocation);
-        }
     }
     private LatLng getLatLngFromLocation(Location location){
         return (location!=null) ? new LatLng(location.getLatitude(), location.getLongitude()) : null ;
@@ -165,24 +162,29 @@ public class TrackingService extends Service {
         @Override
         public void onLocationChanged(Location changedLocation) {
 
-            Log.e("VVV","onLocationChanged called location = " + changedLocation + "Speed = " + changedLocation.hasSpeed() + " = " + changedLocation.getSpeed());
+            Log.e("VVV","onLocationChanged called location = " + changedLocation + "Altitude = " + changedLocation.getAltitude() + " Speed = " + changedLocation.hasSpeed() + " = " + changedLocation.getSpeed());
             LatLng updatedLocation = getLatLngFromLocation(changedLocation);
             if(updatedLocation != null){
                 if(lastLocation!=null){
                     distanceTravelled = distanceTravelled + changedLocation.distanceTo(lastLocation);
-                    currentClimb =  changedLocation.getAltitude() - lastLocation.getAltitude();
+                    if(changedLocation.getAltitude() > lastLocation.getAltitude()) {
+                        currentClimb += changedLocation.getAltitude() - lastLocation.getAltitude();
+                    }
                 }
                 DecimalFormat format = new DecimalFormat("0.00");
                 double distanceInMiles = distanceTravelled/1600 ; // in miles
+                double climbInMiles = currentClimb / 1600;
                 Log.e("VVV","Distance travelled in miles= " + distanceTravelled);
                 mExerciseEntry.setDistance(Double.valueOf(format.format(distanceInMiles)));
                 double timeElapsed = (System.currentTimeMillis() - startTime)/3600; // in hrs
-                double avgSpeed = (timeElapsed == 0) ? 0.0 : distanceTravelled / timeElapsed;
+                double avgSpeed = (timeElapsed == 0) ? 0.0 : distanceInMiles / timeElapsed;
+                int calorieBurnt = (int)((AVERAGE_WEIGHT_OF_MAN / 400 ) * distanceTravelled ); // some random formula from internet
                 // set formatted values to entry object
                 mExerciseEntry.setAvgPace(Double.valueOf(format.format(avgSpeed)));
                 mExerciseEntry.setCurrentSpeed(Double.valueOf(format.format(changedLocation.getSpeed())));
-                mExerciseEntry.setClimb(Double.valueOf(format.format(currentClimb)));
+                mExerciseEntry.setClimb(Double.valueOf(format.format(climbInMiles)));
                 mExerciseEntry.getLocationList().add(updatedLocation);
+                mExerciseEntry.setCalorie(calorieBurnt);
                 if(mOnTrackingUpdateListener!=null) {
                     mOnTrackingUpdateListener.onEntryUpdate(mExerciseEntry);
                 }
