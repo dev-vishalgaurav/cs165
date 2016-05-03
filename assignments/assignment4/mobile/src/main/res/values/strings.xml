@@ -115,11 +115,11 @@
     <string name="title_activity_entry_detail">Entry Detail</string>
     <string name="title_activity_map_display">Exercise Map</string>
     <string name="map_label_type">Type: %1$s</string>
-    <string name="map_label_avg_speed">Avg speed: %1$s miles/h</string>
-    <string name="map_label_climb">Climb: %1$s mts</string>
-    <string name="map_label_cur_speed">Cur speed: %1$s miles/h</string>
+    <string name="map_label_avg_speed">Avg speed: %1$s %2$s/h</string>
+    <string name="map_label_climb">Climb: %1$s %2$s</string>
+    <string name="map_label_cur_speed">Cur speed: %1$s %2$s/h</string>
     <string name="map_label_calorie">Calorie: %1$s cals</string>
-    <string name="map_label_distance">Distance: %1$s miles</string>
+    <string name="map_label_distance">Distance: %1$s %2$s</string>
     <string name="unknown">Unknown</string>
     <string name="label_notification_tracking">Tracking your location</string>
     <string name="start_location">Start location</string>

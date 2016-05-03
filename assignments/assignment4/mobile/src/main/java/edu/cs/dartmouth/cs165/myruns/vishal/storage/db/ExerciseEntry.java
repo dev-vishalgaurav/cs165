@@ -269,6 +269,13 @@ public class ExerciseEntry implements Serializable {
         return result;
     }
 
+    public static double getDistanceAsPerUnit(double distanceInMiles, int unitType) {
+        if (unitType == 2) {// miles\
+            return distanceInMiles;
+        } else {
+            return distanceInMiles * 1.6; // convert to KMs
+        }
+    }
     public static ArrayList<ExerciseEntry> getListFromCursorList(Cursor cursor) {
         ArrayList<ExerciseEntry> result = new ArrayList<>();
         while (cursor.moveToNext()) {
