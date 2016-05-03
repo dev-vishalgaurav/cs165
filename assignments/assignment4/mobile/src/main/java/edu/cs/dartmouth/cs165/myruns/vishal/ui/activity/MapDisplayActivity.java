@@ -325,8 +325,7 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
             LatLng start = locationList.get(0);
             mMap.clear();
             mMap.addMarker(new MarkerOptions().position(start).
-                    icon(BitmapDescriptorFactory.fromResource(R.drawable.red_dot)).
-                    title(getString(R.string.start_location)));
+                    icon(BitmapDescriptorFactory.fromResource(R.drawable.red_dot)).title(getString(R.string.start_location)));
             if (locationList.size() > 1) {
                 Log.e("VVV", "end marker detected");
                 LatLng end = locationList.get(locationList.size() - 1);

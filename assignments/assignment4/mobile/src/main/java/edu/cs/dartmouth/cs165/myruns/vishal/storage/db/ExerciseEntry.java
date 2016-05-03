@@ -198,8 +198,27 @@ public class ExerciseEntry implements Serializable {
      */
     public String getFormattedString(Context context, int unitType) {
         return context.getResources().getStringArray(R.array.input_type)[mInputType] + ":" + context.getResources().getStringArray(R.array.activity_type)[mActivityType] +
-                ", " + DateTimeUtils.getFormattedDate(mDateTime, DateTimeUtils.EXCERCISE_ENTRY_FORMAT) + " " + getDistance(unitType) + " " + PreferenceUtils.getDistanceUnit(context) + " , " + mDuration + " " + context.getString(R.string.secs);
+                ", " + DateTimeUtils.getFormattedDate(mDateTime, DateTimeUtils.EXCERCISE_ENTRY_FORMAT) + " " + getDistance(unitType) + " " + PreferenceUtils.getDistanceUnit(context) + " , " + getDurationString(context,getDuration());
     }
+
+    private String getDurationString(Context context, int seconds){
+            int hours = seconds/3600;
+            int mins = (seconds / 60) - (hours * 60);
+            int sec = seconds - (hours * 3600) + (mins * 60);
+            StringBuilder sb = new StringBuilder();
+            if(hours > 0){
+                sb.append(hours + " " + context.getString(R.string.hours) + " ");
+                sb.append(mins + " " + context.getString(R.string.mins) + " ");
+                sb.append(sec + " " + context.getString(R.string.secs));
+            }else if(mins > 0){
+                sb.append(mins + " " + context.getString(R.string.mins) + " ");
+                sb.append(sec + " " + context.getString(R.string.secs));
+            }else{
+                sb.append(sec + " " + context.getString(R.string.secs));
+            }
+            return sb.toString();
+    }
+
     /**
      * returns the list from byte array for location list
      * @return

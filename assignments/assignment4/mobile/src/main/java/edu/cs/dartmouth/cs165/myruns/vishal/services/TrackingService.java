@@ -176,7 +176,8 @@ public class TrackingService extends Service {
                 double climbInMiles = currentClimb / 1600;
                 Log.e("VVV","Distance travelled in miles= " + distanceTravelled);
                 mExerciseEntry.setDistance(Double.valueOf(format.format(distanceInMiles)));
-                double timeElapsed = (System.currentTimeMillis() - startTime)/3600; // in hrs
+                double timeElapsedSecs = (System.currentTimeMillis() - startTime)/1000;
+                double timeElapsed =timeElapsedSecs/3600; // in hrs
                 double avgSpeed = (timeElapsed == 0) ? 0.0 : distanceInMiles / timeElapsed;
                 int calorieBurnt = (int)((AVERAGE_WEIGHT_OF_MAN / 400 ) * distanceTravelled ); // some random formula from internet
                 // set formatted values to entry object
@@ -185,6 +186,7 @@ public class TrackingService extends Service {
                 mExerciseEntry.setClimb(Double.valueOf(format.format(climbInMiles)));
                 mExerciseEntry.getLocationList().add(updatedLocation);
                 mExerciseEntry.setCalorie(calorieBurnt);
+                mExerciseEntry.setDuration((int)timeElapsedSecs);
                 if(mOnTrackingUpdateListener!=null) {
                     mOnTrackingUpdateListener.onEntryUpdate(mExerciseEntry);
                 }
