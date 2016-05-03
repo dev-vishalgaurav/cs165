@@ -1,6 +1,9 @@
 package edu.cs.dartmouth.cs165.myruns.vishal.ui.activity;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.ServiceConnection;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,6 +11,8 @@ import android.os.IBinder;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -52,7 +57,9 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
     private TextView txtCurrSpeed = null;
     private TextView txtClimb = null;
     private TextView txtCalorie = null;
-    private TextView txtDisance = null;
+    private TextView txtDistance = null;
+    private AlertDialog mDeleteConfirmDialog = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +74,10 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
      */
     private void enableViewModeFromIntent() {
         viewMode = getIntent().getIntExtra(EXTRA_VIEW_TYPE, VIEW_TYPE_CREATE_ENTRY);
-        inputType = getIntent().getIntExtra(EXTRA_INPUT_TYPE,inputType);
-        activityType = getIntent().getIntExtra(EXTRA_ACTIVITY_TYPE,activityType);
+        inputType = getIntent().getIntExtra(EXTRA_INPUT_TYPE, inputType);
+        activityType = getIntent().getIntExtra(EXTRA_ACTIVITY_TYPE, activityType);
         if (viewMode == VIEW_TYPE_CREATE_ENTRY) {
-            Log.e("VVV","View mode write ENTRY");
+            Log.e("VVV", "View mode write ENTRY");
             findViewById(R.id.lnrSaveCancel).setVisibility(View.VISIBLE);
             TrackingService.start(this);
             TrackingService.bind(this, mConnection);
@@ -80,7 +87,7 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
             long entryId = getIntent().getLongExtra(EXTRA_ENTRY, -1l);
             Log.e("VVV", "Entry id = " + entryId);
             mExerciseEntry = MyRunsApp.getDb(getBaseContext()).fetchEntryByIndex(entryId);
-            if(mExerciseEntry== null) {
+            if (mExerciseEntry == null) {
                 showToast(getString(R.string.error));
                 finish();
             }
@@ -88,11 +95,70 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
             showToast(getString(R.string.error_invalid_mode));
         }
     }
+
     @Override
-    protected void onResume(){
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if(viewMode == VIEW_TYPE_READ_ENTRY) {
+            getMenuInflater().inflate(R.menu.menu_entry_details, menu);
+            return true;
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_delete: {
+                showDiscardConfirmDialog();
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Show message upon entry discarding
+     */
+    private void showDiscardConfirmDialog() {
+        initDiscardConfirmDialog();
+        mDeleteConfirmDialog.show();
+    }
+
+    /**
+     * Confirm entry deletion by the user
+     */
+    private void initDiscardConfirmDialog() {
+        Dialog.OnClickListener mOnDialogClickDiscardConfirm = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case Dialog.BUTTON_POSITIVE: {
+                        new DeleteTask().execute(mExerciseEntry.getId());
+                    }
+                    break;
+                    case Dialog.BUTTON_NEGATIVE: {
+                    }
+                    break;
+                }
+            }
+        };
+        if (mDeleteConfirmDialog == null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MapDisplayActivity.this);
+            builder.setTitle(R.string.dialog_title_delete_confirm);
+            builder.setMessage(String.format(getString(R.string.dialog_message_delete_confirm), mExerciseEntry.getId()));
+            builder.setPositiveButton(getString(R.string.yes), mOnDialogClickDiscardConfirm);
+            builder.setNegativeButton(getString(R.string.no), mOnDialogClickDiscardConfirm);
+            mDeleteConfirmDialog = builder.create();
+        }
+    }
+
+    @Override
+    protected void onResume() {
         Log.e("VVV", "Map display onResume");
         super.onResume();
     }
+
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -109,8 +175,8 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
         updateData();
     }
 
-    private void updateData(){
-        if(mExerciseEntry != null){
+    private void updateData() {
+        if (mExerciseEntry != null) {
             updateTraceDataOnUi();
             updateTraceOnMap();
         }
@@ -133,7 +199,7 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
         txtCurrSpeed = (TextView) findViewById(R.id.txtCurSpeed);
         txtClimb = (TextView) findViewById(R.id.txtClimb);
         txtCalorie = (TextView) findViewById(R.id.txtCalorie);
-        txtDisance = (TextView) findViewById(R.id.txtDistance);
+        txtDistance = (TextView) findViewById(R.id.txtDistance);
         mBtnCancel.setOnClickListener(mOnClickListener);
         mBtnSave.setOnClickListener(mOnClickListener);
 
@@ -171,7 +237,7 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
 
     @Override
     public void onBackPressed() {
-        if(viewMode == VIEW_TYPE_CREATE_ENTRY) {
+        if (viewMode == VIEW_TYPE_CREATE_ENTRY) {
             onCancelClicked();
         }
         super.onBackPressed();
@@ -182,8 +248,9 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
         super.onDestroy();
         unBindService();
     }
-    private void unBindService(){
-        if(viewMode == VIEW_TYPE_CREATE_ENTRY) {
+
+    private void unBindService() {
+        if (viewMode == VIEW_TYPE_CREATE_ENTRY) {
             try {
                 if (mConnection != null) {
                     unbindService(mConnection);
@@ -193,6 +260,7 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
             }
         }
     }
+
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -235,16 +303,16 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
     }
 
     private void updateTraceDataOnUi() {
-        if(inputType == 1) { // GPS
+        if (inputType == 1) { // GPS
             txtActivityType.setText(String.format(getString(R.string.map_label_type), "" + getResources().getStringArray(R.array.activity_type)[activityType]));
-        }else{
+        } else {
             txtActivityType.setText(String.format(getString(R.string.map_label_type), "" + getString(R.string.unknown)));
         }
         txtCalorie.setText(String.format(getString(R.string.map_label_calorie), "" + mExerciseEntry.getCalorie()));
         txtAvgSpeed.setText(String.format(getString(R.string.map_label_avg_speed), "" + mExerciseEntry.getAvgPace()));
         txtCurrSpeed.setText(String.format(getString(R.string.map_label_cur_speed), "" + mExerciseEntry.getCurrentSpeed()));
         txtClimb.setText(String.format(getString(R.string.map_label_climb), "" + mExerciseEntry.getClimb()));
-        txtDisance.setText(String.format(getString(R.string.map_label_distance), "" + mExerciseEntry.getDistance()));
+        txtDistance.setText(String.format(getString(R.string.map_label_distance), "" + mExerciseEntry.getDistance()));
     }
 
     private void updateTraceOnMap() {
@@ -273,8 +341,18 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
             int padding = 100;
             DisplayMetrics displaymetrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(),displaymetrics.widthPixels,displaymetrics.heightPixels,padding), 1000, null);
+            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), displaymetrics.widthPixels, displaymetrics.heightPixels, padding), 1000, null);
         }
+    }
+
+    /**
+     * Delete entry associated with the provided ID
+     */
+    private boolean onDeleteEntry(long id) {
+        if (MyRunsApp.getDb(getBaseContext()).removeEntry(id) > 0) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -302,6 +380,35 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
                 showToast(getString(R.string.error));
             }
             finish();
+            super.onPostExecute(result);
+        }
+    }
+
+    /**
+     * Entry deletion
+     */
+    private class DeleteTask extends AsyncTask<Long, Void, Boolean> {
+        @Override
+        protected void onPreExecute() {
+            showProgressDialog(getString(R.string.deleting_message), false);
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Boolean doInBackground(Long... params) {
+            return onDeleteEntry(params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            dismissAlertDialog();
+            if (result) {
+                showToast(getString(R.string.success));
+                finish();
+            } else {
+                showToast(getString(R.string.error_in_delete));
+                finish();
+            }
             super.onPostExecute(result);
         }
     }
