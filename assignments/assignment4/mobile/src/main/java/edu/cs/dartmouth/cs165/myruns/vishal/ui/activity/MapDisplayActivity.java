@@ -36,6 +36,9 @@ import edu.cs.dartmouth.cs165.myruns.vishal.services.TrackingService;
 import edu.cs.dartmouth.cs165.myruns.vishal.storage.db.ExerciseEntry;
 import edu.cs.dartmouth.cs165.myruns.vishal.storage.preferences.PreferenceUtils;
 
+/**
+ * For the use and display of Google Maps
+ */
 public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallback, TrackingService.OnTrackingUpdateListener {
 
     public static final String EXTRA_VIEW_TYPE = "extra_view_type";
@@ -71,18 +74,20 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
     }
 
     /**
-     * this method will check proper view type from intent and will the service accordingly
+     * Check proper view type from intent and service accordingly
      */
     private void enableViewModeFromIntent() {
         viewMode = getIntent().getIntExtra(EXTRA_VIEW_TYPE, VIEW_TYPE_CREATE_ENTRY);
         inputType = getIntent().getIntExtra(EXTRA_INPUT_TYPE, inputType);
         activityType = getIntent().getIntExtra(EXTRA_ACTIVITY_TYPE, activityType);
+
         if (viewMode == VIEW_TYPE_CREATE_ENTRY) {
             Log.e("VVV", "View mode write ENTRY");
             findViewById(R.id.lnrSaveCancel).setVisibility(View.VISIBLE);
             TrackingService.start(this);
             TrackingService.bind(this, mConnection);
-        } else if (viewMode == VIEW_TYPE_READ_ENTRY) {
+        }
+        else if (viewMode == VIEW_TYPE_READ_ENTRY) {
             Log.e("VVV", "View mode read ENTRY");
             findViewById(R.id.lnrSaveCancel).setVisibility(View.GONE);
             long entryId = getIntent().getLongExtra(EXTRA_ENTRY, -1l);
@@ -92,7 +97,8 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
                 showToast(getString(R.string.error));
                 finish();
             }
-        } else {
+        }
+        else {
             showToast(getString(R.string.error_invalid_mode));
         }
     }
@@ -225,6 +231,9 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
         return -1;
     }
 
+    /**
+     * Stop tracking activity
+     */
     private void stopTracking() {
         if (mBinder != null) {
             mBinder.stopService();
@@ -254,6 +263,9 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
         unBindService();
     }
 
+    /**
+     * Unbind service
+     */
     private void unBindService() {
         if (viewMode == VIEW_TYPE_CREATE_ENTRY) {
             try {
@@ -307,6 +319,9 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
         updateTraceDataOnUi();
     }
 
+    /**
+     * Update trace data
+     */
     private void updateTraceDataOnUi() {
         if (inputType == 1) { // GPS
             txtActivityType.setText(String.format(getString(R.string.map_label_type), "" + getResources().getStringArray(R.array.activity_type)[activityType]));
@@ -324,6 +339,9 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
     private String getFormattedDouble(double d){
         return String.format("%.2f",d);
     }
+    /**
+     * Update map trace
+     */
     private void updateTraceOnMap() {
         ArrayList<LatLng> locationList = mExerciseEntry.getLocationList();
         if (locationList != null && locationList.size() > 0 && mMap != null) {
@@ -364,7 +382,7 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
     }
 
     /**
-     * Asynctask for saving entry to database and finish the activity
+     * AsyncTask for saving entry to database and finish the activity
      */
     private class SaveEntryTask extends AsyncTask<Void, Void, Long> {
 
