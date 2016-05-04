@@ -200,7 +200,7 @@ public class ExerciseEntry implements Serializable {
      */
     public String getFormattedString(Context context, int unitType) {
         return context.getResources().getStringArray(R.array.input_type)[mInputType] + ":" + getProperActivityType(context) +
-                ", " + DateTimeUtils.getFormattedDate(mDateTime, DateTimeUtils.EXCERCISE_ENTRY_FORMAT) + " " + getDistance(unitType) + " " + PreferenceUtils.getDistanceUnit(context) + " , " + getDurationString(context, getDuration());
+                ", " + DateTimeUtils.getFormattedDate(mDateTime, DateTimeUtils.EXCERCISE_ENTRY_FORMAT) + " " + getFormattedDouble(getDistance(unitType)) + " " + PreferenceUtils.getDistanceUnit(context) + " , " + getDurationString(context, getDuration());
     }
 
     private String getDurationString(Context context, int seconds) {
@@ -221,7 +221,9 @@ public class ExerciseEntry implements Serializable {
         }
         return sb.toString();
     }
-
+    private String getFormattedDouble(double d){
+        return String.format("%.2f", d);
+    }
     /**
      * returns the list from byte array for location list
      *
