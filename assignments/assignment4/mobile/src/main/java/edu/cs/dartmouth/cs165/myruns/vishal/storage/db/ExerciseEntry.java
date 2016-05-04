@@ -199,7 +199,7 @@ public class ExerciseEntry implements Serializable {
      * Get formatted string for an entry
      */
     public String getFormattedString(Context context, int unitType) {
-        return context.getResources().getStringArray(R.array.input_type)[mInputType] + ":" + context.getResources().getStringArray(R.array.activity_type)[mActivityType] +
+        return context.getResources().getStringArray(R.array.input_type)[mInputType] + ":" + getProperActivityType(context) +
                 ", " + DateTimeUtils.getFormattedDate(mDateTime, DateTimeUtils.EXCERCISE_ENTRY_FORMAT) + " " + getDistance(unitType) + " " + PreferenceUtils.getDistanceUnit(context) + " , " + getDurationString(context, getDuration());
     }
 
@@ -246,7 +246,7 @@ public class ExerciseEntry implements Serializable {
     public ContentValues toContentValues() {
         ContentValues cv = new ContentValues();
         cv.put(DBConstants.ExerciseEntryColumns.INPUT_TYPE, mInputType);
-        cv.put(DBConstants.ExerciseEntryColumns.ACTIVITY_TYPE, mInputType);
+        cv.put(DBConstants.ExerciseEntryColumns.ACTIVITY_TYPE, mActivityType);
         cv.put(DBConstants.ExerciseEntryColumns.DATE_TIME, mDateTime);
         cv.put(DBConstants.ExerciseEntryColumns.DURATION, mDuration);
         cv.put(DBConstants.ExerciseEntryColumns.DISTANCE, mDistance);
@@ -309,5 +309,9 @@ public class ExerciseEntry implements Serializable {
             result.add(new ExerciseEntry(cursor));
         }
         return result;
+    }
+
+    public String getProperActivityType(Context context) {
+        return (mActivityType == 2) ? context.getString(R.string.unknown) : context.getResources().getStringArray(R.array.activity_type)[mActivityType];
     }
 }

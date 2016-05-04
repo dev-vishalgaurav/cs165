@@ -216,9 +216,13 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
     }
 
     private long onSaveDataIntoDB() {
-        mExerciseEntry.setInputType(inputType);
-        long id = MyRunsApp.getDb(getBaseContext()).insertEntry(mExerciseEntry);
-        return id;
+        if(mExerciseEntry!=null) {
+            mExerciseEntry.setInputType(inputType);
+            mExerciseEntry.setActivityType(activityType);
+            long id = MyRunsApp.getDb(getBaseContext()).insertEntry(mExerciseEntry);
+            return id;
+        }
+        return -1;
     }
 
     private void stopTracking() {
