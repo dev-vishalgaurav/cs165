@@ -184,7 +184,8 @@ public class TrackingService extends Service {
                 mExerciseEntry.setClimb(Double.parseDouble(String.format("%.2f", climbInMiles))); // in miles
                 mExerciseEntry.getLocationList().add(updatedLocation);
                 mExerciseEntry.setCalorie(calorieBurnt);
-                mExerciseEntry.setDuration((int)timeElapsedSecs);
+                mExerciseEntry.setDuration((int) timeElapsedSecs);
+                Log.e("VVV","" + String.format("%.2f", avgSpeed) + " "  +String.format("%.2f", climbInMiles) + " " + " " + String.format("%.2f", changedLocation.getSpeed()) + " " + String.format("%.2f", changedLocation.getSpeed()) ) ;
                 if(mOnTrackingUpdateListener!=null) {
                     mOnTrackingUpdateListener.onEntryUpdate(mExerciseEntry);
                 }

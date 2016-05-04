@@ -316,12 +316,14 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
         int unitType = PreferenceUtils.getUnitType(getBaseContext());
         String unit = PreferenceUtils.getDistanceUnit(getBaseContext());
         txtCalorie.setText(String.format(getString(R.string.map_label_calorie), "" + mExerciseEntry.getCalorie()));
-        txtAvgSpeed.setText(String.format(getString(R.string.map_label_avg_speed), "" + ExerciseEntry.getDistanceAsPerUnit(mExerciseEntry.getAvgPace(),unitType),unit ));
-        txtCurrSpeed.setText(String.format(getString(R.string.map_label_cur_speed), "" + ExerciseEntry.getDistanceAsPerUnit(mExerciseEntry.getCurrentSpeed(),unitType), unit));
-        txtClimb.setText(String.format(getString(R.string.map_label_climb), "" + ExerciseEntry.getDistanceAsPerUnit(mExerciseEntry.getClimb(),unitType), unit));
-        txtDistance.setText(String.format(getString(R.string.map_label_distance), "" + ExerciseEntry.getDistanceAsPerUnit(mExerciseEntry.getDistance(), unitType), unit));
+        txtAvgSpeed.setText(String.format(getString(R.string.map_label_avg_speed), "" +getFormattedDouble(ExerciseEntry.getDistanceAsPerUnit(mExerciseEntry.getAvgPace(), unitType)), unit));
+        txtCurrSpeed.setText(String.format(getString(R.string.map_label_cur_speed), "" + getFormattedDouble(ExerciseEntry.getDistanceAsPerUnit(mExerciseEntry.getCurrentSpeed(), unitType)), unit));
+        txtClimb.setText(String.format(getString(R.string.map_label_climb), "" + getFormattedDouble(ExerciseEntry.getDistanceAsPerUnit(mExerciseEntry.getClimb(), unitType)), unit));
+        txtDistance.setText(String.format(getString(R.string.map_label_distance), "" + getFormattedDouble(ExerciseEntry.getDistanceAsPerUnit(mExerciseEntry.getDistance(), unitType)), unit));
     }
-
+    private String getFormattedDouble(double d){
+        return String.format("%.2f",d);
+    }
     private void updateTraceOnMap() {
         ArrayList<LatLng> locationList = mExerciseEntry.getLocationList();
         if (locationList != null && locationList.size() > 0 && mMap != null) {
