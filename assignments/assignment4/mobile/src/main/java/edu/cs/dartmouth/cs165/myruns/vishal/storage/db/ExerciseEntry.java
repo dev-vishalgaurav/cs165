@@ -312,6 +312,6 @@ public class ExerciseEntry implements Serializable {
     }
 
     public String getProperActivityType(Context context) {
-        return (mActivityType == 2) ? context.getString(R.string.unknown) : context.getResources().getStringArray(R.array.activity_type)[mActivityType];
+        return (mInputType == 2) ? context.getString(R.string.unknown) : context.getResources().getStringArray(R.array.activity_type)[mActivityType];
     }
 }
