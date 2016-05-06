@@ -18,7 +18,6 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -171,20 +170,22 @@ public class TrackingService extends Service {
                         currentClimb += changedLocation.getAltitude() - lastLocation.getAltitude();
                     }
                 }
-                DecimalFormat format = new DecimalFormat("0.00");
                 double distanceInMiles = distanceTravelled/1600 ; // in miles
                 double climbInMiles = currentClimb / 1600;
                 Log.e("VVV","Distance travelled in miles= " + distanceTravelled);
-                mExerciseEntry.setDistance(Double.valueOf(format.format(distanceInMiles)));
-                double timeElapsed = (System.currentTimeMillis() - startTime)/3600; // in hrs
+                mExerciseEntry.setDistance(Double.parseDouble(String.format("%.2f", distanceInMiles)));
+                double timeElapsedSecs = (System.currentTimeMillis() - startTime)/1000; // in secs
+                double timeElapsed =timeElapsedSecs/3600; // in hrs
                 double avgSpeed = (timeElapsed == 0) ? 0.0 : distanceInMiles / timeElapsed;
                 int calorieBurnt = (int)((AVERAGE_WEIGHT_OF_MAN / 400 ) * distanceTravelled ); // some random formula from internet
                 // set formatted values to entry object
-                mExerciseEntry.setAvgPace(Double.valueOf(format.format(avgSpeed)));
-                mExerciseEntry.setCurrentSpeed(Double.valueOf(format.format(changedLocation.getSpeed())));
-                mExerciseEntry.setClimb(Double.valueOf(format.format(climbInMiles)));
+                mExerciseEntry.setAvgPace(Double.parseDouble(String.format("%.2f", avgSpeed)));
+                mExerciseEntry.setCurrentSpeed(Double.parseDouble(String.format("%.2f", changedLocation.getSpeed())));
+                mExerciseEntry.setClimb(Double.parseDouble(String.format("%.2f", climbInMiles))); // in miles
                 mExerciseEntry.getLocationList().add(updatedLocation);
                 mExerciseEntry.setCalorie(calorieBurnt);
+                mExerciseEntry.setDuration((int) timeElapsedSecs);
+                Log.e("VVV","" + String.format("%.2f", avgSpeed) + " "  +String.format("%.2f", climbInMiles) + " " + " " + String.format("%.2f", changedLocation.getSpeed()) + " " + String.format("%.2f", changedLocation.getSpeed()) ) ;
                 if(mOnTrackingUpdateListener!=null) {
                     mOnTrackingUpdateListener.onEntryUpdate(mExerciseEntry);
                 }
