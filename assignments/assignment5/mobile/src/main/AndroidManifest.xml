@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="edu.cs.dartmouth.cs165.myruns.vishal">
+
+    <uses-sdk
+        android:maxSdkVersion="22"
+        android:targetSdkVersion="22" />
+
+    <uses-feature android:name="android.hardware.camera" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <application
+        android:name=".global.MyRunsApp"
+        android:allowBackup="true"
+        android:icon="@mipmap/running"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".ui.activity.HomeActivity"
+            android:label="@string/activity_label_home"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activity.TrackingStartActivity"
+            android:label="@string/activity_label_profile_settings"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="edu.cs.dartmouth.cs165.myruns.vishal.ui.activity.MapDisplayActivity"
+            android:label="@string/title_activity_map_display"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.cs.dartmouth.cs165.myruns.vishal.ui.activity.HomeActivity" />
+        </activity>
+        <activity
+            android:name=".ui.activity.ProfileSettings"
+            android:label="@string/activity_label_profile_settings"
+            android:parentActivityName=".ui.activity.HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.cs.dartmouth.cs165.myruns.vishal.ui.activity.HomeActivity" />
+        </activity>
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
+        <activity
+            android:name=".ui.activity.EntryDetailActivity"
+            android:label="@string/title_activity_entry_detail"
+            android:parentActivityName=".ui.activity.HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.cs.dartmouth.cs165.myruns.vishal.ui.activity.HomeActivity" />
+        </activity>
+
+        <service
+            android:name=".services.TrackingService"
+            android:enabled="true"
+            android:exported="true"></service>
+    </application>
+</manifest>
