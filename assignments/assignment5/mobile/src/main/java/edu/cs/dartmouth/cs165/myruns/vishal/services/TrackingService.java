@@ -1,6 +1,5 @@
 package edu.cs.dartmouth.cs165.myruns.vishal.services;
 
-import android.app.Activity;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -46,6 +45,7 @@ public class TrackingService extends Service implements SensorEventListener {
 
         void onEntryUpdate(ExerciseEntry entry);
     }
+
     private static final int WINDOW_SIZE = 3;
     public static final int TRACKING_SERVICE_NOTIFICATION_ID = 1;
     public static final double AVERAGE_WEIGHT_OF_MAN = 74;
@@ -56,9 +56,9 @@ public class TrackingService extends Service implements SensorEventListener {
     private LocationRequest mLocationRequest = null;
     private boolean isRequestingLocationUpdates = false;
     private Location lastLocation = null;
-    private long startTime  = System.currentTimeMillis();
-    private double distanceTravelled = 0.0 ;
-    private double currentClimb = 0.0 ;
+    private long startTime = System.currentTimeMillis();
+    private double distanceTravelled = 0.0;
+    private double currentClimb = 0.0;
     /*declaring activity recognition variables*/
     private static final int mFeatLen = Globals.ACCELEROMETER_BLOCK_CAPACITY + 2;
 
@@ -98,6 +98,7 @@ public class TrackingService extends Service implements SensorEventListener {
     public void setOnTrackingUpdateListener(OnTrackingUpdateListener mOnTrackingUpdateListener) {
         this.mOnTrackingUpdateListener = mOnTrackingUpdateListener;
     }
+
     private void stopRequestingLocationUpdates() {
         if (isRequestingLocationUpdates) {
             clearNotification();
@@ -105,6 +106,7 @@ public class TrackingService extends Service implements SensorEventListener {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, mLocationListener);
         }
     }
+
     /**
      *
      */
@@ -125,20 +127,18 @@ public class TrackingService extends Service implements SensorEventListener {
     }
 
     private void initExerciseEntry() {
-        mExerciseEntry =  new ExerciseEntry(-1l,0,0, Calendar.getInstance().getTimeInMillis(),0,0,0,0,0,0,0,"");
+        mExerciseEntry = new ExerciseEntry(-1l, 0, 0, Calendar.getInstance().getTimeInMillis(), 0, 0, 0, 0, 0, 0, 0, "");
         mExerciseEntry.setLocationList(new ArrayList<LatLng>());
     }
 
     private void startActivityUpdate() {
         Log.e("VVV", "startActivityUpdate :- onStartCommand");
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        mAccelerometer = mSensorManager
-                .getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
-
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
+        Log.e("VVV","mAccelerometer = " + mAccelerometer);
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_FASTEST);
-
         mServiceTaskType = Globals.SERVICE_TASK_TYPE_COLLECT;
-
+        mAccBuffer = new ArrayBlockingQueue<Double>(Globals.ACCELEROMETER_BUFFER_CAPACITY);
         // Create the container for attributes
         ArrayList<Attribute> allAttr = new ArrayList<Attribute>();
 
@@ -168,10 +168,11 @@ public class TrackingService extends Service implements SensorEventListener {
         mAsyncTask.execute();
     }
 
-    private void stopActivityUpdate(){
+    private void stopActivityUpdate() {
         mAsyncTask.cancel(true);
         mSensorManager.unregisterListener(this);
     }
+
     private synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this).addConnectionCallbacks(mGoogleApiCallback).addOnConnectionFailedListener(mConnectionFailedCallback)
                 .addApi(LocationServices.API).build();
@@ -184,10 +185,11 @@ public class TrackingService extends Service implements SensorEventListener {
             mLocationRequest = new LocationRequest();
             mLocationRequest.setInterval(100);
             mLocationRequest.setFastestInterval(500);
-            mLocationRequest.setSmallestDisplacement (0.0f);
+            mLocationRequest.setSmallestDisplacement(0.0f);
             mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         }
     }
+
     private void startRequestingLocationUpdates() {
         setUpNotification();
         createLocationRequest();
@@ -195,11 +197,12 @@ public class TrackingService extends Service implements SensorEventListener {
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, mLocationListener);
         startTime = System.currentTimeMillis();
     }
+
     @Override
     public void onSensorChanged(SensorEvent event) {
 
         if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
-
+            Log.e("VVV","onSensorChanged :- Linear Acceleration");
             String record = event.values[0] + "," + event.values[1] + "," + event.values[2] + "\n";
             double m = Math.sqrt(event.values[0] * event.values[0]
                     + event.values[1] * event.values[1] + event.values[2]
@@ -228,6 +231,7 @@ public class TrackingService extends Service implements SensorEventListener {
             }
         }
     }
+
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
@@ -253,6 +257,7 @@ public class TrackingService extends Service implements SensorEventListener {
         Log.e("VVV", "Tagging service onBind called");
         return new TrackingBinder(this);
     }
+
     private class OnSensorChangedTask extends AsyncTask<Void, Void, Void> {
         private int[] windowBuffer = new int[WINDOW_SIZE];
         private boolean isWindowBufferFull = false;
@@ -277,6 +282,7 @@ public class TrackingService extends Service implements SensorEventListener {
                     if (isCancelled() == true) {
                         return null;
                     }
+
 
                     // Dumping buffer
                     accBlock[blockSize++] = mAccBuffer.take().doubleValue();
@@ -305,7 +311,7 @@ public class TrackingService extends Service implements SensorEventListener {
                         inst.setValue(Globals.ACCELEROMETER_BLOCK_CAPACITY, max);
                         //inst.setValue(mClassAttribute, mLabel);
                         mDataset.add(inst);
-                        Log.i("new instance", mDataset.size() + "");
+                        Log.i("VVV", mDataset.size() + "");
                         Double[] array = getDoubleArray(inst.toDoubleArray());
                         int label = (int) WekaClassifier.classify(array);
                         Log.e("VVV", "Label :-" + label);
@@ -359,7 +365,7 @@ public class TrackingService extends Service implements SensorEventListener {
         }
 
         private void sendResultToReceiver(int result) {
-            Log.e("VVV","update result in entry, recognition result = " + result);
+            Log.e("VVV", "update result in entry, recognition result = " + result);
 //            if (mReciver != null) {
 //                Bundle resultBundle = new Bundle();
 //                resultBundle.putInt(Globals.EXTRA_RESULT, result);
@@ -388,45 +394,49 @@ public class TrackingService extends Service implements SensorEventListener {
         }
 
     }
+
     private void onGoogleApiDisabled() {
         isGoogleApiConnected = false;
     }
+
     private void onGoogleApiEnabled(Bundle connectionHint) {
         isGoogleApiConnected = true;
         startRequestingLocationUpdates();
     }
-    private LatLng getLatLngFromLocation(Location location){
-        return (location!=null) ? new LatLng(location.getLatitude(), location.getLongitude()) : null ;
+
+    private LatLng getLatLngFromLocation(Location location) {
+        return (location != null) ? new LatLng(location.getLatitude(), location.getLongitude()) : null;
     }
+
     private LocationListener mLocationListener = new LocationListener() {
 
         @Override
         public void onLocationChanged(Location changedLocation) {
 
-            Log.e("VVV","onLocationChanged called location = " + changedLocation + "Altitude = " + changedLocation.getAltitude() + " Speed = " + changedLocation.hasSpeed() + " = " + changedLocation.getSpeed());
+            Log.e("VVV", "onLocationChanged called location = " + changedLocation + "Altitude = " + changedLocation.getAltitude() + " Speed = " + changedLocation.hasSpeed() + " = " + changedLocation.getSpeed());
             LatLng updatedLocation = getLatLngFromLocation(changedLocation);
-            if(updatedLocation != null){
-                if(lastLocation!=null){
+            if (updatedLocation != null) {
+                if (lastLocation != null) {
                     distanceTravelled = distanceTravelled + changedLocation.distanceTo(lastLocation);
-                    if(changedLocation.getAltitude() > lastLocation.getAltitude()) {
+                    if (changedLocation.getAltitude() > lastLocation.getAltitude()) {
                         currentClimb += changedLocation.getAltitude() - lastLocation.getAltitude();
                     }
                 }
                 DecimalFormat format = new DecimalFormat("0.00");
-                double distanceInMiles = distanceTravelled/1600 ; // in miles
+                double distanceInMiles = distanceTravelled / 1600; // in miles
                 double climbInMiles = currentClimb / 1600;
-                Log.e("VVV","Distance travelled in miles= " + distanceTravelled);
+                Log.e("VVV", "Distance travelled in miles= " + distanceTravelled);
                 mExerciseEntry.setDistance(Double.valueOf(format.format(distanceInMiles)));
-                double timeElapsed = (System.currentTimeMillis() - startTime)/3600; // in hrs
+                double timeElapsed = (System.currentTimeMillis() - startTime) / 3600; // in hrs
                 double avgSpeed = (timeElapsed == 0) ? 0.0 : distanceInMiles / timeElapsed;
-                int calorieBurnt = (int)((AVERAGE_WEIGHT_OF_MAN / 400 ) * distanceTravelled ); // some random formula from internet
+                int calorieBurnt = (int) ((AVERAGE_WEIGHT_OF_MAN / 400) * distanceTravelled); // some random formula from internet
                 // set formatted values to entry object
                 mExerciseEntry.setAvgPace(Double.valueOf(format.format(avgSpeed)));
                 mExerciseEntry.setCurrentSpeed(Double.valueOf(format.format(changedLocation.getSpeed())));
                 mExerciseEntry.setClimb(Double.valueOf(format.format(climbInMiles)));
                 mExerciseEntry.getLocationList().add(updatedLocation);
                 mExerciseEntry.setCalorie(calorieBurnt);
-                if(mOnTrackingUpdateListener!=null) {
+                if (mOnTrackingUpdateListener != null) {
                     mOnTrackingUpdateListener.onEntryUpdate(mExerciseEntry);
                 }
                 lastLocation = changedLocation;
@@ -449,17 +459,18 @@ public class TrackingService extends Service implements SensorEventListener {
 
         @Override
         public void onConnected(Bundle connectionHint) {
-            Log.e("VVV","OnGoogleApiConnected");
+            Log.e("VVV", "OnGoogleApiConnected");
             onGoogleApiEnabled(connectionHint);
         }
     };
 
-    public static void start(Context context){
-        Intent intent = new Intent(context,TrackingService.class);
+    public static void start(Context context) {
+        Intent intent = new Intent(context, TrackingService.class);
         context.startService(intent);
     }
-    public static void bind(Context context, ServiceConnection mConnection){
-        Intent intent = new Intent(context,TrackingService.class);
-        context.bindService(intent,mConnection,BIND_AUTO_CREATE);
+
+    public static void bind(Context context, ServiceConnection mConnection) {
+        Intent intent = new Intent(context, TrackingService.class);
+        context.bindService(intent, mConnection, BIND_AUTO_CREATE);
     }
 }
