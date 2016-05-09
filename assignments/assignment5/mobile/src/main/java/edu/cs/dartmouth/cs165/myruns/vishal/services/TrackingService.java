@@ -46,6 +46,7 @@ public class TrackingService extends Service implements SensorEventListener {
         void onEntryUpdate(ExerciseEntry entry);
     }
 
+    public static final String EXTRA_INPUT_TYPE = "extra_input_type";
     private static final int WINDOW_SIZE = 3;
     public static final int TRACKING_SERVICE_NOTIFICATION_ID = 1;
     public static final double AVERAGE_WEIGHT_OF_MAN = 74;
@@ -135,7 +136,7 @@ public class TrackingService extends Service implements SensorEventListener {
         Log.e("VVV", "startActivityUpdate :- onStartCommand");
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
-        Log.e("VVV","mAccelerometer = " + mAccelerometer);
+        Log.e("VVV", "mAccelerometer = " + mAccelerometer);
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_FASTEST);
         mServiceTaskType = Globals.SERVICE_TASK_TYPE_COLLECT;
         mAccBuffer = new ArrayBlockingQueue<Double>(Globals.ACCELEROMETER_BUFFER_CAPACITY);
@@ -202,7 +203,6 @@ public class TrackingService extends Service implements SensorEventListener {
     public void onSensorChanged(SensorEvent event) {
 
         if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
-            Log.e("VVV","onSensorChanged :- Linear Acceleration");
             String record = event.values[0] + "," + event.values[1] + "," + event.values[2] + "\n";
             double m = Math.sqrt(event.values[0] * event.values[0]
                     + event.values[1] * event.values[1] + event.values[2]
@@ -301,8 +301,7 @@ public class TrackingService extends Service implements SensorEventListener {
                         fft.fft(re, im);
 
                         for (int i = 0; i < re.length; i++) {
-                            double mag = Math.sqrt(re[i] * re[i] + im[i]
-                                    * im[i]);
+                            double mag = Math.sqrt(re[i] * re[i] + im[i] * im[i]);
                             inst.setValue(i, mag);
                             im[i] = .0; // Clear the field
                         }
@@ -365,12 +364,10 @@ public class TrackingService extends Service implements SensorEventListener {
         }
 
         private void sendResultToReceiver(int result) {
-            Log.e("VVV", "update result in entry, recognition result = " + result);
-//            if (mReciver != null) {
-//                Bundle resultBundle = new Bundle();
-//                resultBundle.putInt(Globals.EXTRA_RESULT, result);
-//                mReciver.send(Activity.RESULT_OK, resultBundle);
-//            }
+            Log.e("VVV", "update result in entry, recognition result = " + getBaseContext().getResources().getStringArray(R.array.activity_type)[Globals.mLabelsIndex[result]]);
+            if(mExerciseEntry!=null){
+                mExerciseEntry.setActivityType(Globals.mLabelsIndex[result]);
+            }
         }
 
         private Double[] getDoubleArray(double[] arrayToCast) {
@@ -422,21 +419,23 @@ public class TrackingService extends Service implements SensorEventListener {
                         currentClimb += changedLocation.getAltitude() - lastLocation.getAltitude();
                     }
                 }
-                DecimalFormat format = new DecimalFormat("0.00");
-                double distanceInMiles = distanceTravelled / 1600; // in miles
+                double distanceInMiles = distanceTravelled/1600 ; // in miles
                 double climbInMiles = currentClimb / 1600;
-                Log.e("VVV", "Distance travelled in miles= " + distanceTravelled);
-                mExerciseEntry.setDistance(Double.valueOf(format.format(distanceInMiles)));
-                double timeElapsed = (System.currentTimeMillis() - startTime) / 3600; // in hrs
+                Log.e("VVV","Distance travelled in miles= " + distanceTravelled);
+                mExerciseEntry.setDistance(Double.parseDouble(String.format("%.2f", distanceInMiles)));
+                double timeElapsedSecs = (System.currentTimeMillis() - startTime)/1000; // in secs
+                double timeElapsed =timeElapsedSecs/3600; // in hrs
                 double avgSpeed = (timeElapsed == 0) ? 0.0 : distanceInMiles / timeElapsed;
-                int calorieBurnt = (int) ((AVERAGE_WEIGHT_OF_MAN / 400) * distanceTravelled); // some random formula from internet
+                int calorieBurnt = (int)((AVERAGE_WEIGHT_OF_MAN / 400 ) * distanceTravelled ); // some random formula from internet
                 // set formatted values to entry object
-                mExerciseEntry.setAvgPace(Double.valueOf(format.format(avgSpeed)));
-                mExerciseEntry.setCurrentSpeed(Double.valueOf(format.format(changedLocation.getSpeed())));
-                mExerciseEntry.setClimb(Double.valueOf(format.format(climbInMiles)));
+                mExerciseEntry.setAvgPace(Double.parseDouble(String.format("%.2f", avgSpeed)));
+                mExerciseEntry.setCurrentSpeed(Double.parseDouble(String.format("%.2f", changedLocation.getSpeed())));
+                mExerciseEntry.setClimb(Double.parseDouble(String.format("%.2f", climbInMiles))); // in miles
                 mExerciseEntry.getLocationList().add(updatedLocation);
                 mExerciseEntry.setCalorie(calorieBurnt);
-                if (mOnTrackingUpdateListener != null) {
+                mExerciseEntry.setDuration((int) timeElapsedSecs);
+                Log.e("VVV","" + String.format("%.2f", avgSpeed) + " "  +String.format("%.2f", climbInMiles) + " " + " " + String.format("%.2f", changedLocation.getSpeed()) + " " + String.format("%.2f", changedLocation.getSpeed()) ) ;
+                if(mOnTrackingUpdateListener!=null) {
                     mOnTrackingUpdateListener.onEntryUpdate(mExerciseEntry);
                 }
                 lastLocation = changedLocation;
@@ -464,8 +463,9 @@ public class TrackingService extends Service implements SensorEventListener {
         }
     };
 
-    public static void start(Context context) {
+    public static void start(Context context, int inputType) {
         Intent intent = new Intent(context, TrackingService.class);
+        intent.putExtra(EXTRA_INPUT_TYPE,inputType);
         context.startService(intent);
     }
 

@@ -51,6 +51,7 @@ public abstract class Globals {
     public static final String[] mLabels = {Globals.CLASS_LABEL_STANDING,
             Globals.CLASS_LABEL_WALKING, Globals.CLASS_LABEL_RUNNING,
             Globals.CLASS_LABEL_OTHER};
+    public static final int[] mLabelsIndex = {2,1,0,13};
     public static final int[] mLabelColor = {android.R.color.holo_green_light,
             android.R.color.holo_blue_light, android.R.color.holo_red_light,
             android.R.color.holo_orange_light};

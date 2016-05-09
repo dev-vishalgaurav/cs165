@@ -110,6 +110,9 @@
     <string name="miles">miles</string>
     <string name="kms">kms</string>
     <string name="secs">secs</string>
+    <string name="hours">hrs</string>
+    <string name="mins">mins</string>
+
     <string name="chooser_web">Choose an application to browse</string>
     <string name="hint_track_comments">How did it go? Notes here</string>
     <string name="title_activity_entry_detail">Entry Detail</string>

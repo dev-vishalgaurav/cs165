@@ -3,6 +3,7 @@ package edu.cs.dartmouth.cs165.myruns.vishal.storage.db;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -37,6 +38,7 @@ public class ExerciseEntry implements Serializable {
     private String mComment;       // Comments
     private ArrayList<LatLng> mLocationList = new ArrayList<>(); // Location list
     private double currentSpeed = 0.0;
+
     public ExerciseEntry(Cursor cursor) {
         id = cursor.getLong(cursor.getColumnIndexOrThrow(DBConstants.ExerciseEntryColumns._ID));
         mInputType = cursor.getInt(cursor.getColumnIndexOrThrow(DBConstants.ExerciseEntryColumns.INPUT_TYPE));
@@ -184,7 +186,7 @@ public class ExerciseEntry implements Serializable {
         this.mLocationList = mLocationList;
     }
 
-    public double getCurrentSpeed( ) {
+    public double getCurrentSpeed() {
         return currentSpeed;
     }
 
@@ -197,11 +199,34 @@ public class ExerciseEntry implements Serializable {
      * Get formatted string for an entry
      */
     public String getFormattedString(Context context, int unitType) {
-        return context.getResources().getStringArray(R.array.input_type)[mInputType] + ":" + context.getResources().getStringArray(R.array.activity_type)[mActivityType] +
-                ", " + DateTimeUtils.getFormattedDate(mDateTime, DateTimeUtils.EXCERCISE_ENTRY_FORMAT) + " " + getDistance(unitType) + " " + PreferenceUtils.getDistanceUnit(context) + " , " + mDuration + " " + context.getString(R.string.secs);
+        return context.getResources().getStringArray(R.array.input_type)[mInputType] + ":" + getProperActivityType(context) +
+                ", " + DateTimeUtils.getFormattedDate(mDateTime, DateTimeUtils.EXCERCISE_ENTRY_FORMAT) + " " + getFormattedDouble(getDistance(unitType)) + " " + PreferenceUtils.getDistanceUnit(context) + " , " + getDurationString(context, getDuration());
+    }
+
+    private String getDurationString(Context context, int seconds) {
+        Log.e("VVV", "getDurationString = " + seconds);
+        int hours = seconds / 3600;
+        int mins = (seconds / 60) - (hours * 60);
+        int sec = seconds - ((hours * 3600) + (mins * 60));
+        StringBuilder sb = new StringBuilder();
+        if (hours > 0) {
+            sb.append(hours + " " + context.getString(R.string.hours) + " ");
+            sb.append(mins + " " + context.getString(R.string.mins) + " ");
+            sb.append(sec + " " + context.getString(R.string.secs));
+        } else if (mins > 0) {
+            sb.append(mins + " " + context.getString(R.string.mins) + " ");
+            sb.append(sec + " " + context.getString(R.string.secs));
+        } else {
+            sb.append(sec + " " + context.getString(R.string.secs));
+        }
+        return sb.toString();
+    }
+    private String getFormattedDouble(double d){
+        return String.format("%.2f", d);
     }
     /**
      * returns the list from byte array for location list
+     *
      * @return
      */
     private ArrayList<LatLng> getListFromBlob(byte[] data) {
@@ -210,7 +235,7 @@ public class ExerciseEntry implements Serializable {
             try (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(data))) {
                 ArrayList<String> list = (ArrayList<String>) ois.readObject();
                 if (list != null)
-                    for (String values : list){
+                    for (String values : list) {
                         result.add(getLatLngFromString(values));
                     }
             } catch (Exception ex) {
@@ -223,7 +248,7 @@ public class ExerciseEntry implements Serializable {
     public ContentValues toContentValues() {
         ContentValues cv = new ContentValues();
         cv.put(DBConstants.ExerciseEntryColumns.INPUT_TYPE, mInputType);
-        cv.put(DBConstants.ExerciseEntryColumns.ACTIVITY_TYPE, mInputType);
+        cv.put(DBConstants.ExerciseEntryColumns.ACTIVITY_TYPE, mActivityType);
         cv.put(DBConstants.ExerciseEntryColumns.DATE_TIME, mDateTime);
         cv.put(DBConstants.ExerciseEntryColumns.DURATION, mDuration);
         cv.put(DBConstants.ExerciseEntryColumns.DISTANCE, mDistance);
@@ -237,23 +262,26 @@ public class ExerciseEntry implements Serializable {
         return cv;
     }
 
-    private String getLatLngString(LatLng loc){
-        return ""+loc.latitude + "," + loc.longitude;
+    private String getLatLngString(LatLng loc) {
+        return "" + loc.latitude + "," + loc.longitude;
     }
-    private LatLng getLatLngFromString(String string){
+
+    private LatLng getLatLngFromString(String string) {
         String[] values = string.split(",");
-        LatLng result = new LatLng(Double.valueOf(values[0]),Double.valueOf(values[1]));
+        LatLng result = new LatLng(Double.valueOf(values[0]), Double.valueOf(values[1]));
         return result;
     }
+
     /**
      * returns the byte array for location list
+     *
      * @return
      */
     private byte[] getGpsBlob() {
 
         byte[] result = null;
         ArrayList<String> values = new ArrayList<>();
-        for (LatLng latLng : mLocationList){
+        for (LatLng latLng : mLocationList) {
             values.add(getLatLngString(latLng));
         }
         try {
@@ -276,11 +304,16 @@ public class ExerciseEntry implements Serializable {
             return distanceInMiles * 1.6; // convert to KMs
         }
     }
+
     public static ArrayList<ExerciseEntry> getListFromCursorList(Cursor cursor) {
         ArrayList<ExerciseEntry> result = new ArrayList<>();
         while (cursor.moveToNext()) {
             result.add(new ExerciseEntry(cursor));
         }
         return result;
+    }
+
+    public String getProperActivityType(Context context) {
+        return context.getResources().getStringArray(R.array.activity_type)[mActivityType];
     }
 }
