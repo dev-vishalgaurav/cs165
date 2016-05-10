@@ -335,7 +335,7 @@ public class TrackingService extends Service implements SensorEventListener {
                 windowBuffer[windowSize] = label;
                 int dominantLabel = getDominantLabel(windowBuffer);
                 windowSize = (windowSize == WINDOW_SIZE - 1) ? 0 : windowSize + 1;
-                sendResultToReceiver(dominantLabel);
+                updateActivity(dominantLabel);
             }
             //printBuffer();
         }
@@ -363,10 +363,11 @@ public class TrackingService extends Service implements SensorEventListener {
             }
         }
 
-        private void sendResultToReceiver(int result) {
+        private void updateActivity(int result) {
             Log.e("VVV", "update result in entry, recognition result = " + getBaseContext().getResources().getStringArray(R.array.activity_type)[Globals.mLabelsIndex[result]]);
             if(mExerciseEntry!=null){
                 mExerciseEntry.setActivityType(Globals.mLabelsIndex[result]);
+                mExerciseEntry.updateVote(result);
             }
         }
 

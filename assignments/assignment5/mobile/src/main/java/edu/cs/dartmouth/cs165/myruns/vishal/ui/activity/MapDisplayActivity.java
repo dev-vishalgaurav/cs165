@@ -30,6 +30,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.util.ArrayList;
 
 import edu.cs.dartmouth.cs165.myruns.vishal.R;
+import edu.cs.dartmouth.cs165.myruns.vishal.classifier.Globals;
 import edu.cs.dartmouth.cs165.myruns.vishal.global.MyRunsApp;
 import edu.cs.dartmouth.cs165.myruns.vishal.services.TrackingBinder;
 import edu.cs.dartmouth.cs165.myruns.vishal.services.TrackingService;
@@ -225,6 +226,10 @@ public class MapDisplayActivity extends BaseActivity implements OnMapReadyCallba
         if(mExerciseEntry!=null) {
             mExerciseEntry.setInputType(inputType);
             mExerciseEntry.setActivityType(activityType);
+            if(inputType == 2 ){ // automatic
+                // set the max voted activity
+                mExerciseEntry.setActivityType(Globals.mLabelsIndex[mExerciseEntry.getMaxVotedActivity()]);
+            }
             long id = MyRunsApp.getDb(getBaseContext()).insertEntry(mExerciseEntry);
             return id;
         }

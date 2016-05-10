@@ -39,6 +39,8 @@ public class ExerciseEntry implements Serializable {
     private ArrayList<LatLng> mLocationList = new ArrayList<>(); // Location list
     private double currentSpeed = 0.0;
 
+    private int[] activityVotes = {0,0,0,0};
+
     public ExerciseEntry(Cursor cursor) {
         id = cursor.getLong(cursor.getColumnIndexOrThrow(DBConstants.ExerciseEntryColumns._ID));
         mInputType = cursor.getInt(cursor.getColumnIndexOrThrow(DBConstants.ExerciseEntryColumns.INPUT_TYPE));
@@ -194,7 +196,24 @@ public class ExerciseEntry implements Serializable {
         this.currentSpeed = currentSpeed;
     }
 
+    public void updateVote(int label){
+        activityVotes[label]++;
+    }
 
+    public int getMaxVotedActivity(){
+        int maxIndex = activityVotes.length - 1 ; // others
+        for(int i = 0 ; i < activityVotes.length -1 ; i++){
+            if(activityVotes[maxIndex] <= activityVotes[i]){
+                maxIndex = i;
+            }
+        }
+        return  maxIndex;
+    }
+    public void resetVotes(){
+        for(int i =0 ; i < activityVotes.length ; i++){
+            activityVotes[i] = 0;
+        }
+    }
     /**
      * Get formatted string for an entry
      */
