@@ -13,7 +13,7 @@ public class DateTimeUtils {
     public static final String EXCERCISE_ENTRY_FORMAT = "HH:mm:ss MMMM dd yyyy";
 
     /**
-     * return formatted date according to the format passed
+     * Returns formatted date according to the format passed
      * @param timeInMillis
      * @param format
      * @return

@@ -46,6 +46,9 @@ public class TrackingService extends Service implements SensorEventListener {
         void onEntryUpdate(ExerciseEntry entry);
     }
 
+    /**
+     * Declare and init variables
+     */
     public static final String EXTRA_INPUT_TYPE = "extra_input_type";
     private static final int WINDOW_SIZE = 3;
     public static final int TRACKING_SERVICE_NOTIFICATION_ID = 1;
@@ -60,7 +63,10 @@ public class TrackingService extends Service implements SensorEventListener {
     private long startTime = System.currentTimeMillis();
     private double distanceTravelled = 0.0;
     private double currentClimb = 0.0;
-    /*declaring activity recognition variables*/
+
+    /**
+     * Declare activity recognition variables
+     */
     private static final int mFeatLen = Globals.ACCELEROMETER_BLOCK_CAPACITY + 2;
 
     private SensorManager mSensorManager;
@@ -100,6 +106,9 @@ public class TrackingService extends Service implements SensorEventListener {
         this.mOnTrackingUpdateListener = mOnTrackingUpdateListener;
     }
 
+    /**
+     * Stop requests for location updates
+     */
     private void stopRequestingLocationUpdates() {
         if (isRequestingLocationUpdates) {
             clearNotification();
@@ -109,7 +118,7 @@ public class TrackingService extends Service implements SensorEventListener {
     }
 
     /**
-     *
+     * Set up tracking notification
      */
     private void setUpNotification() {
         Notification.Builder builder = new Notification.Builder(this);
@@ -123,15 +132,24 @@ public class TrackingService extends Service implements SensorEventListener {
         startForeground(TRACKING_SERVICE_NOTIFICATION_ID, builder.build());
     }
 
+    /**
+     * Dismiss notification
+     */
     private void clearNotification() {
         stopForeground(true);
     }
 
+    /**
+     * Initialize exercise entry
+     */
     private void initExerciseEntry() {
         mExerciseEntry = new ExerciseEntry(-1l, 0, 0, Calendar.getInstance().getTimeInMillis(), 0, 0, 0, 0, 0, 0, 0, "");
         mExerciseEntry.setLocationList(new ArrayList<LatLng>());
     }
 
+    /**
+     * Start activity update
+     */
     private void startActivityUpdate() {
         Log.e("VVV", "startActivityUpdate :- onStartCommand");
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -169,17 +187,26 @@ public class TrackingService extends Service implements SensorEventListener {
         mAsyncTask.execute();
     }
 
+    /**
+     * Stop activity update
+     */
     private void stopActivityUpdate() {
         mAsyncTask.cancel(true);
         mSensorManager.unregisterListener(this);
     }
 
+    /**
+     * Build Google API client
+     */
     private synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this).addConnectionCallbacks(mGoogleApiCallback).addOnConnectionFailedListener(mConnectionFailedCallback)
                 .addApi(LocationServices.API).build();
         mGoogleApiClient.connect();
     }
 
+    /**
+     * Create location request
+     */
     private void createLocationRequest() {
         if (mLocationRequest == null) {
             // currently hard coded parameters are set
@@ -191,6 +218,9 @@ public class TrackingService extends Service implements SensorEventListener {
         }
     }
 
+    /**
+     * Start requests for location updates
+     */
     private void startRequestingLocationUpdates() {
         setUpNotification();
         createLocationRequest();
@@ -322,6 +352,9 @@ public class TrackingService extends Service implements SensorEventListener {
             }
         }
 
+        /**
+         * Update buffer
+         */
         private void updateBufferAndNotify(int label) {
             if (!isWindowBufferFull) {
                 Log.e("VVV", "Window is not full :- " + label);
@@ -341,6 +374,9 @@ public class TrackingService extends Service implements SensorEventListener {
         }
 
 
+        /**
+         * Get the dominant label
+         */
         private int getDominantLabel(int[] windowBuffer) {
             int dominant = 0;
             int[] counts = new int[windowBuffer.length];
@@ -363,6 +399,10 @@ public class TrackingService extends Service implements SensorEventListener {
             }
         }
 
+        /**
+         * Update exercise activity
+         * @param result
+         */
         private void updateActivity(int result) {
             Log.e("VVV", "update result in entry, recognition result = " + getBaseContext().getResources().getStringArray(R.array.activity_type)[Globals.mLabelsIndex[result]]);
             if(mExerciseEntry!=null){
