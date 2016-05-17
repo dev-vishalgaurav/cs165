@@ -15,12 +15,12 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="edu.cs.dartmouth.cs165.myruns.vishal.permission.C2D_MESSAGE" />
 
     <permission
         android:name="edu.cs.dartmouth.cs165.myruns.vishal.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="edu.cs.dartmouth.cs165.myruns.vishal.permission.C2D_MESSAGE" />
 
     <application
         android:name=".global.MyRunsApp"
@@ -108,10 +108,6 @@
             android:name=".services.TrackingService"
             android:enabled="true"
             android:exported="true" />
-        <service
-            android:name=".services.MyRunsInstanceIDListenerService"
-            android:enabled="true"
-            android:exported="true"></service>
     </application>
 
 </manifest>
