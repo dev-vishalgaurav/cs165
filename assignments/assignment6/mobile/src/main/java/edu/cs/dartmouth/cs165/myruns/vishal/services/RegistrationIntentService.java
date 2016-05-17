@@ -18,8 +18,6 @@ package edu.cs.dartmouth.cs165.myruns.vishal.services;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -33,17 +31,15 @@ import edu.cs.dartmouth.cs165.myruns.vishal.storage.preferences.PreferenceUtils;
 
 public class RegistrationIntentService extends IntentService {
 
-    private static final String TAG = "RegIntentService";
     private static final String[] TOPICS = {"global"};
 
     public RegistrationIntentService() {
-        super(TAG);
+        super(RegistrationIntentService.class.getName());
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
+        Log.e("VVV","RegistrationIntentService :- onHandleIntent");
         try {
             // [START register_for_gcm]
             // Initially this call goes out to the network to retrieve the token, subsequent calls
@@ -52,10 +48,9 @@ public class RegistrationIntentService extends IntentService {
             // See https://developers.google.com/cloud-messaging/android/start for details on this file.
             // [START get_token]
             InstanceID instanceID = InstanceID.getInstance(this);
-            String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
-                    GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+            String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
             // [END get_token]
-            Log.i(TAG, "GCM Registration Token: " + token);
+            Log.e("VVV", "GCM Registration Token: " + token);
 
             // TODO: Implement this method to send any registration to your app's servers.
             sendRegistrationToServer(token);
@@ -66,7 +61,7 @@ public class RegistrationIntentService extends IntentService {
             PreferenceUtils.putBoolean(getBaseContext(),PreferenceUtils.PREF_SENT_TOKEN_TO_SERVER,true);
             // [END register_for_gcm]
         } catch (Exception e) {
-            Log.d(TAG, "Failed to complete token refresh", e);
+            Log.e("VVV", "Failed to complete token refresh", e);
             // If an exception happens while fetching the new token or updating our registration data
             // on a third-party server, this ensures that we'll attempt the update at a later time.
             PreferenceUtils.putBoolean(getBaseContext(),PreferenceUtils.PREF_SENT_TOKEN_TO_SERVER,false);
@@ -87,6 +82,7 @@ public class RegistrationIntentService extends IntentService {
     private void sendRegistrationToServer(String token) {
         // Add custom implementation, as needed.
         //TODO send key to my app engine app :D
+        Log.e("VVV", "sendRegistrationToServer -> " + token);
     }
 
     /**

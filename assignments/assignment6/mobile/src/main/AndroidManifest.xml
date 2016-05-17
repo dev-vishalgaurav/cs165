@@ -85,8 +85,7 @@
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-
-                <category android:name="com.example.gcm" />
+                <category android:name="edu.cs.dartmouth.cs165.myruns.vishal" />
             </intent-filter>
         </receiver>
 
@@ -104,6 +103,9 @@
                 <action android:name="com.google.android.gms.iid.InstanceID" />
             </intent-filter>
         </service>
+        <service
+            android:name=".services.RegistrationIntentService"
+            android:exported="false"></service>
         <service
             android:name=".services.TrackingService"
             android:enabled="true"

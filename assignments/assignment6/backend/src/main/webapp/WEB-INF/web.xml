@@ -20,8 +20,42 @@
         <servlet-name>SystemServiceServlet</servlet-name>
         <url-pattern>/_ah/spi/*</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>query</servlet-name>
+        <servlet-class>edu.cs.dartmouth.cs165.myruns.vishal.backend.QueryServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>query</servlet-name>
+        <url-pattern>/query.do</url-pattern>
+    </servlet-mapping>
 
+    <servlet>
+        <servlet-name>add</servlet-name>
+        <servlet-class>edu.cs.dartmouth.cs165.myruns.vishal.backend.AddServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>add</servlet-name>
+        <url-pattern>/add.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>delete</servlet-name>
+        <servlet-class>edu.cs.dartmouth.cs165.myruns.vishal.backend.DeleteServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>delete</servlet-name>
+        <url-pattern>/delete.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>update</servlet-name>
+        <servlet-class>edu.cs.dartmouth.cs165.myruns.vishal.backend.UpdateServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>update</servlet-name>
+        <url-pattern>/update.do</url-pattern>
+    </servlet-mapping>
     <welcome-file-list>
-        <welcome-file>index.html</welcome-file>
+        <welcome-file>query.do</welcome-file>
     </welcome-file-list>
 </web-app>

@@ -3,7 +3,6 @@ package edu.cs.dartmouth.cs165.myruns.vishal.storage.db;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -223,7 +222,7 @@ public class ExerciseEntry implements Serializable {
     }
 
     private String getDurationString(Context context, int seconds) {
-        Log.e("VVV", "getDurationString = " + seconds);
+        //Log.e("VVV", "getDurationString = " + seconds);
         int hours = seconds / 3600;
         int mins = (seconds / 60) - (hours * 60);
         int sec = seconds - ((hours * 3600) + (mins * 60));
