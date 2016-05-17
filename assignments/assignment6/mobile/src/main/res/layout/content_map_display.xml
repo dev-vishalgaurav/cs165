@@ -1,0 +1,56 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="edu.cs.dartmouth.cs165.myruns.vishal.ui.activity.MapDisplayActivity"
+    tools:showIn="@layout/activity_map_display">
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:id="@+id/txtActivityType"
+            android:text=""
+            style="@style/MapLabels" />
+
+        <TextView
+            android:id="@+id/txtAvgSpeed"
+            android:text=""
+            style="@style/MapLabels" />
+        <TextView
+            android:id="@+id/txtCurSpeed"
+            android:text=""
+            style="@style/MapLabels" />
+        <TextView
+            android:id="@+id/txtClimb"
+            android:text=""
+            style="@style/MapLabels" />
+        <TextView
+            android:id="@+id/txtCalorie"
+            android:text=""
+            style="@style/MapLabels" />
+        <TextView
+            android:id="@+id/txtDistance"
+            android:text=""
+            style="@style/MapLabels" />
+
+
+    </LinearLayout>
+
+    <include
+        android:id="@+id/lnrSaveCancel"
+        layout="@layout/layout_save_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"></include>
+</RelativeLayout>

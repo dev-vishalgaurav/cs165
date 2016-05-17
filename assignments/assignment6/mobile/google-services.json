@@ -1,0 +1,35 @@
+{
+  "project_info": {
+    "project_number": "422719794471",
+    "project_id": "myruns-cs165"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:422719794471:android:98f9306fcf5a9748",
+        "android_client_info": {
+          "package_name": "edu.cs.dartmouth.cs165.myruns.vishal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcVK6fLhK2ckLTgjAgrUeMHgr_YW8l2VE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
