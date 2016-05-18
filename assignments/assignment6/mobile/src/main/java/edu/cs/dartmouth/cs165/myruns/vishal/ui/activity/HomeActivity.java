@@ -66,7 +66,7 @@ public class HomeActivity extends BaseActivity implements HistoryFragment.OnItem
     }
 
     private void initGCM(){
-        boolean isRegistrationNeeded = PreferenceUtils.getBoolean(getBaseContext(),PreferenceUtils.PREF_REGISTRATION_COMPLETE,false);
+        boolean isRegistrationNeeded = PreferenceUtils.getBoolean(getBaseContext(),PreferenceUtils.PREF_SENT_TOKEN_TO_SERVER,false);
         if(!isRegistrationNeeded) {
             mRegistrationBroadcastReceiver = new BroadcastReceiver() {
                 @Override

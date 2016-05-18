@@ -31,7 +31,8 @@ dependencies {
 }
 
 appengine {
-  downloadSdk = true
+    httpAddress = "0.0.0.0"
+    downloadSdk = true
   appcfg {
     oauth2 = true
   }

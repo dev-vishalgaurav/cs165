@@ -23,10 +23,15 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
+import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 
 import java.io.IOException;
 
 import edu.cs.dartmouth.cs165.myruns.vishal.R;
+import edu.cs.dartmouth.cs165.myruns.vishal.backend.registration.Registration;
 import edu.cs.dartmouth.cs165.myruns.vishal.storage.preferences.PreferenceUtils;
 
 public class RegistrationIntentService extends IntentService {
@@ -79,10 +84,24 @@ public class RegistrationIntentService extends IntentService {
      *
      * @param token The new token.
      */
-    private void sendRegistrationToServer(String token) {
+    private void sendRegistrationToServer(String token) throws  IOException{
         // Add custom implementation, as needed.
         //TODO send key to my app engine app :D
         Log.e("VVV", "sendRegistrationToServer -> " + token);
+        Registration.Builder builder = new Registration.Builder(AndroidHttp.newCompatibleTransport(),
+                new AndroidJsonFactory(), null)
+                // Need setRootUrl and setGoogleClientRequestInitializer only for local testing,
+                // otherwise they can be skipped
+                .setRootUrl("http://10.31.123.105:8080/_ah/api/")
+                .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
+                    @Override
+                    public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest)
+                            throws IOException {
+                        abstractGoogleClientRequest.setDisableGZipContent(true);
+                    }
+                });
+        Registration regService = builder.build();
+        regService.register(token).execute();
     }
 
     /**
