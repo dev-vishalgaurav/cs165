@@ -32,8 +32,8 @@ public class ExerciseEntryDataStore {
 
     public static boolean add(ExerciseEntry entry) {
         if (getEntryById(entry.id, null) != null) {
-            mLogger.log(Level.INFO, "entry exists");
-            return false;
+            mLogger.log(Level.INFO, "entry exists updating");
+            return update(entry);
         }
         Key parentKey = getKey();
         Entity entity = new Entity(ExerciseEntry.EXERCISE_ENTRY_ENTITY_NAME, entry.id, parentKey);
@@ -79,6 +79,23 @@ public class ExerciseEntryDataStore {
         }
         return false;
     }
+
+    public static void deleteAll(){
+        mDatastore.delete(getKey());
+    }
+
+    public Entity getEntityFromId(String id){
+        // query
+        Query.Filter filter = new Query.FilterPredicate(ExerciseEntry.ExerciseEntryColumns._ID, Query.FilterOperator.EQUAL, id);
+
+        Query query = new Query(ExerciseEntry.EXERCISE_ENTRY_ENTITY_NAME);
+        query.setFilter(filter);
+        // Use PreparedQuery interface to retrieve results
+        PreparedQuery pq = mDatastore.prepare(query);
+        Entity result = pq.asSingleEntity();
+        return  result;
+    }
+
     public static boolean delete(String id) {
         // you can also use name to get key, then use the key to delete the
         // entity from datastore directly
@@ -130,7 +147,7 @@ public class ExerciseEntryDataStore {
     public static ExerciseEntry getEntryById(String id, Transaction txn) {
         Entity result = null;
         try {
-            result = mDatastore.get(KeyFactory.createKey(getKey(), ExerciseEntry.EXERCISE_ENTRY_ENTITY_NAME, id));
+            result = mDatastore.get(KeyFactory.createKey(getKey(), ExerciseEntry.ExerciseEntryColumns._ID,id));
         } catch (Exception ex) {
 
         }
@@ -141,20 +158,19 @@ public class ExerciseEntryDataStore {
         if (entity == null) {
             return null;
         }
-        return new ExerciseEntry(
-                (String) entity.getProperty(ExerciseEntry.ExerciseEntryColumns._ID),
-                (Integer) entity.getProperty(ExerciseEntry.ExerciseEntryColumns.INPUT_TYPE),
-                (Integer) entity.getProperty(ExerciseEntry.ExerciseEntryColumns.ACTIVITY_TYPE),
-                ((Date) entity.getProperty(ExerciseEntry.ExerciseEntryColumns.DATE_TIME)).getTime(),
-                (Integer) entity.getProperty(ExerciseEntry.ExerciseEntryColumns.DURATION),
-                (Double) entity.getProperty(ExerciseEntry.ExerciseEntryColumns.DISTANCE),
-                (Double) entity.getProperty(ExerciseEntry.ExerciseEntryColumns.AVG_PACE),
-                (Double) entity.getProperty(ExerciseEntry.ExerciseEntryColumns.AVG_SPEED),
-                (Integer) entity.getProperty(ExerciseEntry.ExerciseEntryColumns.CALORIE),
-                (Double) entity.getProperty(ExerciseEntry.ExerciseEntryColumns.CLIMB),
-                (Integer) entity.getProperty(ExerciseEntry.ExerciseEntryColumns.HEART_RATE),
-                (String) entity.getProperty(ExerciseEntry.ExerciseEntryColumns.COMMENT)
-        );
+        String id =  (String)entity.getProperty(ExerciseEntry.ExerciseEntryColumns._ID);
+        int inputType = Integer.parseInt(entity.getProperty(ExerciseEntry.ExerciseEntryColumns.INPUT_TYPE).toString());
+        int activityType = Integer.parseInt(entity.getProperty(ExerciseEntry.ExerciseEntryColumns.ACTIVITY_TYPE).toString());
+        long date = ((Date) entity.getProperty(ExerciseEntry.ExerciseEntryColumns.DATE_TIME)).getTime();
+        int duration =  Integer.parseInt(entity.getProperty(ExerciseEntry.ExerciseEntryColumns.DURATION).toString());
+        double distance = Double.parseDouble(entity.getProperty(ExerciseEntry.ExerciseEntryColumns.DISTANCE).toString());
+        double avgPace =  Double.parseDouble(entity.getProperty(ExerciseEntry.ExerciseEntryColumns.AVG_PACE).toString());
+        double avgSpeed = Double.parseDouble(entity.getProperty(ExerciseEntry.ExerciseEntryColumns.AVG_SPEED).toString());
+        int calorie =     Integer.parseInt(entity.getProperty(ExerciseEntry.ExerciseEntryColumns.CALORIE).toString());
+        double climb =    Double.parseDouble(entity.getProperty(ExerciseEntry.ExerciseEntryColumns.CLIMB).toString());
+        int heartRate =   Integer.parseInt(entity.getProperty(ExerciseEntry.ExerciseEntryColumns.HEART_RATE).toString());
+        String comment = (String) entity.getProperty(ExerciseEntry.ExerciseEntryColumns.COMMENT);
+        return new ExerciseEntry(id,inputType,activityType,date,duration,distance,avgPace,avgSpeed,calorie,climb,heartRate,comment);
     }
 
 }

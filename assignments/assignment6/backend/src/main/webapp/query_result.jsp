@@ -29,9 +29,9 @@
 			ArrayList<ExerciseEntry> resultList = (ArrayList<ExerciseEntry>) request.getAttribute("result");
 			if (resultList != null) {
 				for (ExerciseEntry entry : resultList) {
-		%> Name:<%=entry.id%>&nbsp; Address:<%=entry.mInputType%>&nbsp;
-		PhoneNumber:<%=entry.mActivityType%>&nbsp; &nbsp;&nbsp; <a
-		href="/delete.do?name=<%=entry.id%>">delete</a> <br> <%
+		%> ID:<%=entry.id%>&nbsp; InputType:<%=entry.mInputType%>&nbsp;
+		ActivityType:<%=entry.mActivityType%>&nbsp; &nbsp;&nbsp; <a
+		href="/delete.do?<%=ExerciseEntry.ExerciseEntryColumns._ID%>=<%=entry.id%>">delete</a> <br> <%
  	}
  	}
  %>

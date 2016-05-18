@@ -3,6 +3,7 @@
  */
 package edu.cs.dartmouth.cs165.myruns.vishal.ui.activity;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -17,7 +18,12 @@ import android.util.Log;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import edu.cs.dartmouth.cs165.myruns.vishal.R;
+import edu.cs.dartmouth.cs165.myruns.vishal.global.MyRunsApp;
+import edu.cs.dartmouth.cs165.myruns.vishal.services.MyRunsSyncService;
 import edu.cs.dartmouth.cs165.myruns.vishal.services.RegistrationIntentService;
 import edu.cs.dartmouth.cs165.myruns.vishal.storage.db.ExerciseEntry;
 import edu.cs.dartmouth.cs165.myruns.vishal.storage.preferences.PreferenceUtils;
@@ -29,14 +35,17 @@ import edu.cs.dartmouth.cs165.myruns.vishal.ui.fragments.HistoryFragment;
  * Common parent for most of the activities of this app.
  * Should not be used as an activity to display layouts.
  */
-public class HomeActivity extends BaseActivity implements HistoryFragment.OnItemSelectedListener {
+public class HomeActivity extends BaseActivity implements HistoryFragment.OnItemSelectedListener, HomeTabAdapter.OnFragmentInteractionListener {
     public static final int COUNT_TABS_HOME_SCREEN = 3;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private ViewPager mVpContents = null;
     private HomeTabAdapter mTabAdapter = null;
 
     private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private BroadcastReceiver mSyncBroadcastReceiver;
     private boolean isReceiverRegistered;
+    private boolean isSyncReceiverRegistered;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,19 +54,52 @@ public class HomeActivity extends BaseActivity implements HistoryFragment.OnItem
         setContentView(R.layout.activity_home);
         initViews();
         initGCM();
+        printEntryJson();
+    }
+    private void printEntryJson(){
+        try {
+            JSONObject json = ExerciseEntry.getEntriesInJson(MyRunsApp.getDb(getBaseContext()).fetchAllEntryCursor());
+            Log.e("VVV",json.toString());
+        }catch (JSONException ex){
+            Log.e("VVV","Error in getting json :- " + ex.getMessage());
+        }
     }
     @Override
     protected void onResume(){
         super.onResume();
         registerReceiver();
+        registerSyncReceiver();
     }
 
     @Override
     protected void onPause(){
         super.onPause();
         unRegisterReceiver();
+        unRegisterSyncReceiver();
     }
 
+    private void registerSyncReceiver(){
+        if(!isSyncReceiverRegistered) {
+            mSyncBroadcastReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    if (intent.getIntExtra(MyRunsSyncService.EXTRA_RESULT, Activity.RESULT_CANCELED) == Activity.RESULT_OK) {
+                        showToast("SYNC successful");
+                    } else {
+                        showToast("SYNC Error");
+                    }
+                }
+            };
+            LocalBroadcastManager.getInstance(this).registerReceiver(mSyncBroadcastReceiver, new IntentFilter(MyRunsSyncService.BROADCAST_SYNC_COMPLETE));
+            isSyncReceiverRegistered = true;
+        }
+    }
+    private void unRegisterSyncReceiver(){
+        if(isSyncReceiverRegistered) {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+            isReceiverRegistered = false;
+        }
+    }
     private void unRegisterReceiver(){
         if(isReceiverRegistered) {
             LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
@@ -118,7 +160,10 @@ public class HomeActivity extends BaseActivity implements HistoryFragment.OnItem
             startActivity(intent);
         }
     }
-
+    @Override
+    public void onSyncClicked(){
+        MyRunsSyncService.start(getBaseContext());
+    }
     @Override
     protected void onNewIntent(Intent intent) {
         Log.e("VVV","HomeActivity :- onNewIntent");
@@ -132,8 +177,7 @@ public class HomeActivity extends BaseActivity implements HistoryFragment.OnItem
     }
     private void registerReceiver(){
         if(!isReceiverRegistered) {
-            LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
-                    new IntentFilter(PreferenceUtils.PREF_REGISTRATION_COMPLETE));
+            LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver, new IntentFilter(PreferenceUtils.PREF_REGISTRATION_COMPLETE));
             isReceiverRegistered = true;
         }
     }

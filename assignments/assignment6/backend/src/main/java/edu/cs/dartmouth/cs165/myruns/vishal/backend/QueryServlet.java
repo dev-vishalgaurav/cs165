@@ -18,8 +18,7 @@ public class QueryServlet extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws IOException, ServletException {
+	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 		String id = req.getParameter(ExerciseEntry.ExerciseEntryColumns._ID);
 		ArrayList<ExerciseEntry> result = ExerciseEntryDataStore.query(id);
 		req.setAttribute("result", result);

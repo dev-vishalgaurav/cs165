@@ -1,10 +1,12 @@
 package edu.cs.dartmouth.cs165.myruns.vishal.ui.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import android.widget.Spinner;
 import edu.cs.dartmouth.cs165.myruns.vishal.R;
 import edu.cs.dartmouth.cs165.myruns.vishal.ui.activity.MapDisplayActivity;
 import edu.cs.dartmouth.cs165.myruns.vishal.ui.activity.TrackingStartActivity;
+import edu.cs.dartmouth.cs165.myruns.vishal.ui.adapters.HomeTabAdapter;
 import edu.cs.dartmouth.cs165.myruns.vishal.ui.adapters.HomeTabAdapter.OnFragmentInteractionListener;
 
 
@@ -87,18 +90,23 @@ public class StartFragment extends Fragment {
         initViews();
         return mRootView;
     }
-    
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        Log.e("VVV", "StartFragment : onAttach");
+        if (context instanceof HomeTabAdapter.OnFragmentInteractionListener) {
+            mListener = (HomeTabAdapter.OnFragmentInteractionListener) context;
+        }
     }
-
+    @Override
+    public void onAttach(Activity context) {
+        super.onAttach(context);
+        Log.e("VVV", "StartFragment : onAttach");
+        if (context instanceof HomeTabAdapter.OnFragmentInteractionListener) {
+            mListener = (HomeTabAdapter.OnFragmentInteractionListener) context;
+        }
+    }
     @Override
     public void onDetach() {
         super.onDetach();
@@ -126,7 +134,9 @@ public class StartFragment extends Fragment {
     }
 
     private void onSyncClicked() {
-        //nothing for now
+       if(mListener != null){
+           mListener.onSyncClicked();
+       }
     }
 
     private void onItemClickInputType(View view, int position, long id){

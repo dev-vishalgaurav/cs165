@@ -4,6 +4,8 @@ import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 
+import org.json.simple.JSONObject;
+
 /**
  * Created by Vishal Gaurav on 5/17/16.
  */
@@ -46,6 +48,21 @@ public class ExerciseEntry {
     public double mClimb;         // Climb. Either in meters or feet.
     public int mHeartRate;        // Heart rate
     public String mComment;       // Comments
+
+    public ExerciseEntry(JSONObject obj){
+        this.id = "" + Long.parseLong(obj.get(ExerciseEntryColumns._ID).toString());
+        this.mInputType = Integer.parseInt(obj.get(ExerciseEntryColumns.INPUT_TYPE).toString());
+        this.mActivityType = Integer.parseInt(obj.get(ExerciseEntryColumns.ACTIVITY_TYPE).toString());
+        this.mDateTime = Long.parseLong(obj.get(ExerciseEntryColumns.DATE_TIME).toString());
+        this.mDuration = Integer.parseInt(obj.get(ExerciseEntryColumns.DURATION).toString());
+        this.mDistance = Double.parseDouble(obj.get(ExerciseEntryColumns.DISTANCE).toString());
+        this.mAvgPace = Double.parseDouble(obj.get(ExerciseEntryColumns.AVG_PACE).toString());
+        this.mAvgSpeed = Double.parseDouble(obj.get(ExerciseEntryColumns.AVG_SPEED).toString());
+        this.mCalorie = Integer.parseInt(obj.get(ExerciseEntryColumns.CALORIE).toString());
+        this.mClimb = Double.parseDouble(obj.get(ExerciseEntryColumns.CLIMB).toString());
+        this.mHeartRate = Integer.parseInt(obj.get(ExerciseEntryColumns.HEART_RATE).toString());
+        this.mComment = (String) obj.get(ExerciseEntryColumns.COMMENT);;
+    }
 
     public ExerciseEntry(String id, int mInputType, int mActivityType, long mDateTime, int mDuration, double mDistance, double mAvgPace, double mAvgSpeed, int mCalorie, double mClimb, int mHeartRate, String mComment) {
         this.id = id;

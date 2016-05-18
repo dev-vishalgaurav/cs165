@@ -5,6 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.api.client.json.Json;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -22,6 +27,8 @@ import edu.cs.dartmouth.cs165.myruns.vishal.utils.DateTimeUtils;
  * Created by Vishal Gaurav
  */
 public class ExerciseEntry implements Serializable {
+
+    public static final String VALUES_JSON_DATA = "json_data";
 
     private Long id;
     private int mInputType;        // Manual, GPS or automatic
@@ -279,6 +286,22 @@ public class ExerciseEntry implements Serializable {
         cv.put(DBConstants.ExerciseEntryColumns.GPS_DATA, getGpsBlob());
         return cv;
     }
+    public JSONObject toJson() throws JSONException{
+        JSONObject cv = new JSONObject();
+        cv.put(DBConstants.ExerciseEntryColumns._ID, id);
+        cv.put(DBConstants.ExerciseEntryColumns.INPUT_TYPE, mInputType);
+        cv.put(DBConstants.ExerciseEntryColumns.ACTIVITY_TYPE, mActivityType);
+        cv.put(DBConstants.ExerciseEntryColumns.DATE_TIME, mDateTime);
+        cv.put(DBConstants.ExerciseEntryColumns.DURATION, mDuration);
+        cv.put(DBConstants.ExerciseEntryColumns.DISTANCE, mDistance);
+        cv.put(DBConstants.ExerciseEntryColumns.AVG_PACE, mAvgPace);
+        cv.put(DBConstants.ExerciseEntryColumns.AVG_SPEED, mAvgSpeed);
+        cv.put(DBConstants.ExerciseEntryColumns.CALORIE, mCalorie);
+        cv.put(DBConstants.ExerciseEntryColumns.CLIMB, mClimb);
+        cv.put(DBConstants.ExerciseEntryColumns.HEART_RATE, mHeartRate);
+        cv.put(DBConstants.ExerciseEntryColumns.COMMENT, mComment);
+        return cv;
+    }
 
     private String getLatLngString(LatLng loc) {
         return "" + loc.latitude + "," + loc.longitude;
@@ -330,7 +353,18 @@ public class ExerciseEntry implements Serializable {
         }
         return result;
     }
-
+    public static JSONObject getEntriesInJson(Cursor cursor) throws JSONException{
+        JSONArray jArray = new JSONArray();
+        while (cursor.moveToNext()) {
+            ExerciseEntry entry = new ExerciseEntry(cursor);
+            if(entry != null){
+                jArray.put(entry.toJson());
+            }
+        }
+        JSONObject json = new JSONObject();
+        json.put(VALUES_JSON_DATA,jArray);
+        return json;
+    }
     public String getProperActivityType(Context context) {
         return context.getResources().getStringArray(R.array.activity_type)[mActivityType];
     }

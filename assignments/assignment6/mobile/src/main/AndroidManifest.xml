@@ -21,7 +21,6 @@
         android:name="edu.cs.dartmouth.cs165.myruns.vishal.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-
     <application
         android:name=".global.MyRunsApp"
         android:allowBackup="true"
@@ -85,6 +84,7 @@
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
                 <category android:name="edu.cs.dartmouth.cs165.myruns.vishal" />
             </intent-filter>
         </receiver>
@@ -105,11 +105,14 @@
         </service>
         <service
             android:name=".services.RegistrationIntentService"
-            android:exported="true"></service>
+            android:exported="true" />
         <service
             android:name=".services.TrackingService"
             android:enabled="true"
             android:exported="true" />
+        <service
+            android:name=".services.MyRunsSyncService"
+            android:exported="false"></service>
     </application>
 
 </manifest>

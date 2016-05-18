@@ -20,7 +20,7 @@ import edu.cs.dartmouth.cs165.myruns.vishal.ui.fragments.StartFragment;
 public class HomeTabAdapter extends FragmentPagerAdapter {
 
     public interface OnFragmentInteractionListener{
-        void onFragmentInteraction(Uri uri);
+        void onSyncClicked();
     }
 
     private Context mContext;
