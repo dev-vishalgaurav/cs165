@@ -7,8 +7,47 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Query Result</title>
+<style>
+table {
+    width:100%;
+}
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px;
+    text-align: left;
+}
+table#t01 tr:nth-child(even) {
+    background-color: #eee;
+}
+table#t01 tr:nth-child(odd) {
+   background-color:#fff;
+}
+table#t01 th {
+    background-color: black;
+    color: white;
+}
+</style>
 </head>
 <body>
+<table>
+          <tr>
+            <th>ID</th>
+            <th>InputType</th>
+            <th>ActivityType</th>
+            <th>Date</th>
+            <th>Duration</th>
+            <th>Distance</th>
+            <th>Avg Pace</th>
+            <th>Avg Speed</th>
+            <th>Calorie</th>
+            <th>Climb</th>
+            <th>Heart Rate</th>
+            <th>Comment</th>
+            <th>Action Delete</th>
+          </tr>
 	<%
 		String retStr = (String) request.getAttribute("_retStr");
 		if (retStr != null) {
@@ -18,38 +57,30 @@
 		}
 	%>
 	<center>
-		<b>Query Result</b>
-		<form name="input" action="/query.do" method="get">
-			Name: <input type="text" name="_id"> <input type="submit" value="OK">
-		</form>
+		<b>My Runs 6 Exercise Entries</b>
 	</center>
 	<b>
-		---------------------------------------------------------------------<br>
 		<%
 			ArrayList<ExerciseEntry> resultList = (ArrayList<ExerciseEntry>) request.getAttribute("result");
 			if (resultList != null) {
 				for (ExerciseEntry entry : resultList) {
-		%> ID:<%=entry.id%>&nbsp; InputType:<%=entry.mInputType%>&nbsp;
-		ActivityType:<%=entry.mActivityType%>&nbsp; &nbsp;&nbsp; <a
-		href="/delete.do?<%=ExerciseEntry.ExerciseEntryColumns._ID%>=<%=entry.id%>">delete</a> <br> <%
+				         %> <tr><%
+		%> <th><%=entry.id%></th>
+		<th><%=entry.mInputType%></th>
+		<th><%=entry.mActivityType%></th>
+		<th><%=new Date(entry.mDateTime).toString()%></th>
+		<th><%=entry.mDuration%></th>
+		<th><%=entry.mDistance%></th>
+		<th><%=entry.mAvgPace%></th>
+		<th><%=entry.mAvgSpeed%></th>
+		<th><%=entry.mCalorie%></th>
+		<th><%=entry.mClimb%></th>
+		<th><%=entry.mHeartRate%></th>
+		<th><%=entry.mComment%></th>
+		<th><a href="/delete.do?<%=ExerciseEntry.ExerciseEntryColumns._ID%>=<%=entry.id%>">delete</a></th> <%
  	}
  	}
- %>
-		---------------------------------------------------------------------<br>
-	</b> Add new entry:
-	<br>
-	<form name="input" action="/add.do" method="post">
-		ID: <input type="text" name="_id"> InputType: <input
-			type="text" name="input_type"> ActivityType: <input type="text"
-			name="activity_type"> <input type="submit" value="Add">
-	</form>
-	---------------------------------------------------------------------
-	<br>
-	<form name="input" action="/update.do" method="post">
-		Id: <input type="text" name="_id">
-		InputType: <input type="text" name="input_type">
-		ActivityType: <input type="text" name="activity_type">
-		<input type="submit" value="Update">
-	</form>
+ %></tr>
+
 </body>
 </html>
