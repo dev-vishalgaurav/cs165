@@ -33,6 +33,7 @@ import java.io.IOException;
 import edu.cs.dartmouth.cs165.myruns.vishal.R;
 import edu.cs.dartmouth.cs165.myruns.vishal.backend.registration.Registration;
 import edu.cs.dartmouth.cs165.myruns.vishal.storage.preferences.PreferenceUtils;
+import edu.cs.dartmouth.cs165.myruns.vishal.utils.NetworkUtils;
 
 public class RegistrationIntentService extends IntentService {
 
@@ -86,20 +87,19 @@ public class RegistrationIntentService extends IntentService {
      */
     private void sendRegistrationToServer(String token) throws  IOException{
         // Add custom implementation, as needed.
-        //TODO send key to my app engine app :D
         Log.e("VVV", "sendRegistrationToServer -> " + token);
         Registration.Builder builder = new Registration.Builder(AndroidHttp.newCompatibleTransport(),
                 new AndroidJsonFactory(), null)
                 // Need setRootUrl and setGoogleClientRequestInitializer only for local testing,
                 // otherwise they can be skipped
-                .setRootUrl("http://10.31.123.105:8080/_ah/api/")
-                .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
+                .setRootUrl(NetworkUtils.URL_REGISTRATION.toString())
+                /*.setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
                     @Override
                     public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest)
                             throws IOException {
                         abstractGoogleClientRequest.setDisableGZipContent(true);
                     }
-                });
+                })*/;
         Registration regService = builder.build();
         regService.register(token).execute();
     }

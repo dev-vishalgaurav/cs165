@@ -4,11 +4,15 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.AsyncTaskLoader;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,8 +26,11 @@ import java.util.ArrayList;
 
 import edu.cs.dartmouth.cs165.myruns.vishal.R;
 import edu.cs.dartmouth.cs165.myruns.vishal.global.MyRunsApp;
+import edu.cs.dartmouth.cs165.myruns.vishal.services.MyRunsGcmListenerService;
+import edu.cs.dartmouth.cs165.myruns.vishal.services.MyRunsSyncService;
 import edu.cs.dartmouth.cs165.myruns.vishal.storage.db.ExerciseEntry;
 import edu.cs.dartmouth.cs165.myruns.vishal.storage.preferences.PreferenceUtils;
+import edu.cs.dartmouth.cs165.myruns.vishal.ui.activity.BaseActivity;
 import edu.cs.dartmouth.cs165.myruns.vishal.ui.adapters.HomeTabAdapter.OnFragmentInteractionListener;
 
 /**
@@ -47,6 +54,9 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
     ArrayList<ExerciseEntry> historyData = new ArrayList<>();
     private HistoryAdapter historyAdapter = null;
     private OnItemSelectedListener onItemSelectedListener = null;
+    private BroadcastReceiver mGCMBroadcastReceiver;
+    private boolean isGCMReceiverRegistered;
+
 
     public HistoryFragment() {
         // Required empty public constructor
@@ -118,11 +128,36 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
 
     @Override
     public void onResume() {
-        Log.e("VVV", "History : onAttach");
+        Log.e("VVV", "History : onResume");
         super.onResume();
         getLoaderManager().initLoader(0, null, this);
+        registerSyncReceiver();
     }
-
+    @Override
+    public void onPause(){
+        Log.e("VVV", "History : onPause");
+        super.onPause();
+        unRegisterSyncReceiver();
+    }
+    private void registerSyncReceiver(){
+        if(!isGCMReceiverRegistered) {
+            mGCMBroadcastReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    getLoaderManager().restartLoader(0, null, HistoryFragment.this);
+                    ((BaseActivity)getActivity()).showToast("Updated");
+                }
+            };
+            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mGCMBroadcastReceiver, new IntentFilter(MyRunsGcmListenerService.BROADCAST_TYPE_DATA_UPDATE));
+            isGCMReceiverRegistered = true;
+        }
+    }
+    private void unRegisterSyncReceiver(){
+        if(isGCMReceiverRegistered) {
+            LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mGCMBroadcastReceiver);
+            isGCMReceiverRegistered = false;
+        }
+    }
     @Override
     public void onDetach() {
         Log.e("VVV", "History : onDeAttach");

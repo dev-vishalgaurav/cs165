@@ -96,8 +96,8 @@ public class HomeActivity extends BaseActivity implements HistoryFragment.OnItem
     }
     private void unRegisterSyncReceiver(){
         if(isSyncReceiverRegistered) {
-            LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
-            isReceiverRegistered = false;
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(mSyncBroadcastReceiver);
+            isSyncReceiverRegistered = false;
         }
     }
     private void unRegisterReceiver(){

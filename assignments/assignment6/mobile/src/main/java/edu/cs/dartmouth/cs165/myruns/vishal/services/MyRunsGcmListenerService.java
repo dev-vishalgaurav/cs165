@@ -24,17 +24,28 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import edu.cs.dartmouth.cs165.myruns.vishal.R;
+import edu.cs.dartmouth.cs165.myruns.vishal.global.MyRunsApp;
+import edu.cs.dartmouth.cs165.myruns.vishal.storage.db.ExerciseEntryDbHelper;
 import edu.cs.dartmouth.cs165.myruns.vishal.ui.activity.HomeActivity;
 
 public class MyRunsGcmListenerService extends GcmListenerService {
 
-    private static final String TAG = "MyGcmListenerService";
-
+    private static final String TAG = "VVV";
+    public static final String BROADCAST_TYPE_DATA_UPDATE = "broadcast_data_update";
+    public static final String KEY_EVENT_TYPE = "key_event_type";
+    public static final String KEY_IDS = "ids";
+    public static final String TYPE_DELETE = "delete";
+    /*{"key_event_type" : "delete","ids":[1,2]}*/
     /**
      * Called when message is received.
      *
@@ -48,12 +59,24 @@ public class MyRunsGcmListenerService extends GcmListenerService {
         String message = data.getString("message");
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Message: " + message);
-
-        if (from.startsWith("/topics/")) {
-            // message received from some topic.
-        } else {
-            // normal downstream message.
+        try {
+            JSONObject obj = new JSONObject(message);
+            if(obj.has(KEY_EVENT_TYPE)){
+                if(obj.getString(KEY_EVENT_TYPE).equalsIgnoreCase(TYPE_DELETE)){
+                    JSONArray jArray = obj.getJSONArray(KEY_IDS);
+                    ExerciseEntryDbHelper db = MyRunsApp.getDb(getBaseContext());
+                    for(int i = 0 ; i < jArray.length() ; i++){
+                        db.removeEntry(jArray.getLong(i));
+                    }
+                    sendDataUpdateBroadcast();
+                }
+            }
+        }catch (JSONException ex){
+            ex.printStackTrace();
+        }catch (NumberFormatException ex){
+            ex.printStackTrace();
         }
+
 
         // [START_EXCLUDE]
         /**
@@ -67,8 +90,13 @@ public class MyRunsGcmListenerService extends GcmListenerService {
          * In some cases it may be useful to show a notification indicating to the user
          * that a message was received.
          */
-        sendNotification(message);
+        //sendNotification(message);
         // [END_EXCLUDE]
+    }
+
+    private void sendDataUpdateBroadcast() {
+        Intent syncComplete = new Intent(BROADCAST_TYPE_DATA_UPDATE);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(syncComplete);
     }
     // [END receive_message]
 

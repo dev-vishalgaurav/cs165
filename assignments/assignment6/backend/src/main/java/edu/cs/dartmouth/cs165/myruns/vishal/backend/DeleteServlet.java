@@ -17,6 +17,7 @@ public class DeleteServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 		String name = req.getParameter(ExerciseEntry.ExerciseEntryColumns._ID);
 		ExerciseEntryDataStore.delete(name);
+		MessagingEndpoint.sendDeleteBroadcast(name);
 		resp.sendRedirect("/query.do");
 	}
 
