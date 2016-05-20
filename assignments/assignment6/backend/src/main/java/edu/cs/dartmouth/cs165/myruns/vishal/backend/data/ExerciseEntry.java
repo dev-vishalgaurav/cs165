@@ -28,6 +28,8 @@ public class ExerciseEntry {
         public static final String COMMENT = "comment";
     }
 
+    public static String[] INPUT_TYPE = {"Manual","GPS","Automatic","Other"};
+    public static String[] ACTIVITY_TYPE = {"Running","Walking","Standing","Cycling","Hiking","Downhill Skiing","Cross-Country Skiing","Snowboarding","Skating","Swimming","Biking","Wheel Chair","Elliptical","Other"};
     public static final String EXERCISE_ENTRY_PARENT_ENTITY_NAME = "EntryParent";
     public static final String EXERCISE_ENTRY_PARENT_KEY_NAME = "EntryParent";
     public static final String EXERCISE_ENTRY_ENTITY_NAME = "Entry";
@@ -77,5 +79,18 @@ public class ExerciseEntry {
         this.mClimb = mClimb;
         this.mHeartRate = mHeartRate;
         this.mComment = mComment;
+    }
+
+    public String getInputType(){
+        if(mInputType >= INPUT_TYPE.length || mInputType < 0){
+            return INPUT_TYPE[INPUT_TYPE.length - 1];
+        }
+        return INPUT_TYPE[mInputType];
+    }
+    public String getActivityType(){
+        if(mActivityType >= ACTIVITY_TYPE.length || mActivityType < 0){
+            return ACTIVITY_TYPE[ACTIVITY_TYPE.length - 1];
+        }
+        return ACTIVITY_TYPE[mActivityType];
     }
 }

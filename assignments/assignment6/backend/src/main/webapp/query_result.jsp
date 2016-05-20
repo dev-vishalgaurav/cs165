@@ -66,8 +66,8 @@ table#t01 th {
 				for (ExerciseEntry entry : resultList) {
 				         %> <tr><%
 		%> <th><%=entry.id%></th>
-		<th><%=entry.mInputType%></th>
-		<th><%=entry.mActivityType%></th>
+		<th><%=entry.getInputType()%></th>
+		<th><%=entry.getActivityType()%></th>
 		<th><%=new Date(entry.mDateTime).toString()%></th>
 		<th><%=entry.mDuration%></th>
 		<th><%=entry.mDistance%></th>
