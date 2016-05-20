@@ -69,14 +69,14 @@ table#t01 th {
 		<th><%=entry.getInputType()%></th>
 		<th><%=entry.getActivityType()%></th>
 		<th><%=new Date(entry.mDateTime).toString()%></th>
-		<th><%=entry.mDuration%></th>
-		<th><%=entry.mDistance%></th>
-		<th><%=entry.mAvgPace%></th>
-		<th><%=entry.mAvgSpeed%></th>
-		<th><%=entry.mCalorie%></th>
-		<th><%=entry.mClimb%></th>
-		<th><%=entry.mHeartRate%></th>
-		<th><%=entry.mComment%></th>
+		<th><%=entry.mDuration + " secs"%></th>
+		<th><%=entry.mDistance + " miles"%></th>
+		<th><%=entry.mAvgPace + " miles/h"%></th>
+		<th><%=entry.mAvgSpeed + " miles/h" %></th>
+		<th><%=entry.mCalorie + " cals"%></th>
+		<th><%=entry.mClimb + " miles"%></th>
+		<th><%=entry.mHeartRate + " bpm"%></th>
+		<th><%=entry.mComment %></th>
 		<th><a href="/delete.do?<%=ExerciseEntry.ExerciseEntryColumns._ID%>=<%=entry.id%>">delete</a></th> <%
  	}
  	}
